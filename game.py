@@ -10,9 +10,11 @@ app.secret_key = 'your_secret_key'
 # Initialize global variables
 all_products = database.get_products()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -23,10 +25,11 @@ def login():
         if user:
             session['username'] = user.username
             flash('Login successful!', 'success')
-            return redirect(request.args.get('next') or url_for('products'))
+            return redirect(url_for('products'))
         else:
             flash('Invalid username or password.', 'error')
     return render_template('login.html')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -44,6 +47,7 @@ def signup():
             return redirect(request.args.get('next') or url_for('products'))
     return render_template('signup.html')
 
+
 @app.route('/products')
 def products():
     if 'username' not in session:
@@ -52,6 +56,7 @@ def products():
 
     products = database.get_products()
     return render_template('products.html', products=products)
+
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -62,14 +67,21 @@ def add_to_cart():
     product_id = int(request.form.get('product_id'))
     if 1 <= product_id <= len(all_products):
         product = all_products[product_id - 1]
-        if 'cart' not in session:
-            session['cart'] = Cart(session['username'])
-        session['cart'].add_product(product,1)
+
+        cart = Cart(session["username"])
+
+        if "cart" in session:
+            cart.from_dict(session["cart"])
+
+        cart.add_product(product, 1)
+        session["cart"] = cart.to_dict()
         flash('Product added to cart successfully!', 'success')
+        print(session["cart"])
         return redirect(url_for('products'))
     else:
         flash('Invalid product ID.', 'error')
         return redirect(url_for('products'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
