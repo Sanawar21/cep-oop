@@ -9,6 +9,8 @@ app.secret_key = 'your_secret_key'
 
 # Initialize global variables
 all_products = database.get_products()
+cart = Cart(None)
+user = None
 
 
 @app.route('/')
@@ -18,12 +20,13 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    global user
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = authenticate.login(username, password)
         if user:
-            session['username'] = user.username
+            cart.owner = user.username
             flash('Login successful!', 'success')
             return redirect(url_for('products'))
         else:
@@ -33,6 +36,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    global user
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -42,7 +46,8 @@ def signup():
         if type(result) == tuple:
             flash(result[1], 'error')
         else:
-            session['username'] = result.username
+            user = result
+            cart.owner = username
             flash('Signup successful!', 'success')
             return redirect(request.args.get('next') or url_for('products'))
     return render_template('signup.html')
@@ -50,7 +55,7 @@ def signup():
 
 @app.route('/products')
 def products():
-    if 'username' not in session:
+    if not user:
         flash('Please log in to view products.', 'error')
         return redirect(url_for('login', next=request.url))
 
@@ -60,23 +65,15 @@ def products():
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    if 'username' not in session:
+    if not user:
         flash('Please log in to add products to your cart.', 'error')
         return redirect(url_for('login', next=request.url))
     all_products = database.get_products()
     product_id = int(request.form.get('product_id'))
     if 1 <= product_id <= len(all_products):
         product = all_products[product_id - 1]
-
-        cart = Cart(session["username"])
-
-        if "cart" in session:
-            cart.from_dict(session["cart"])
-
         cart.add_product(product, 1)
-        session["cart"] = cart.to_dict()
         flash('Product added to cart successfully!', 'success')
-        print(session["cart"])
         return redirect(url_for('products'))
     else:
         flash('Invalid product ID.', 'error')
