@@ -7,29 +7,27 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color:#50514F;
+            background-color: rgb(49, 49, 49); /* White background */
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-
-            
+            font-style: bold;
         }
 
         .login-container {
-            background-color: #247BA0;
+            background-color: #FFD700; /* Yellow background */
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             padding: 40px;
             max-width: 400px;
             width: 100%;
-
         }
 
         .login-title {
-            color:white;
+            color: #000000; /* Black color */
             font-size: 36px;
             text-align: center;
             margin-bottom: 20px;
@@ -45,26 +43,31 @@
         }
 
         .form-label {
-            color:white;
+            color: #000000; /* Black color */
             font-size: large;
             font-weight: 400;
             margin-bottom: 15px;
-
         }
 
         .form-input {
             font-weight: bold;
             width: 380px;
             padding: 10px;
-            border: 1px solid #50514F;
+            border: none; /* Black border */
             border-radius: 4px;
             font-size: 16px;
-            background-color: #50514F;
+            background-color: #FFFFFF;
+            margin-top: 5px;/* White background */
+        }
+
+        .form-input:focus {
+            outline: none; /* Remove default focus outline */
+            border-color: #000000; /* Black border color when focused */
         }
 
         .login-button {
-            background-color:#50514F;
-            color:white;
+            background-color: #000000; /* Black background */
+            color: #FFFFFF; /* White text */
             font-size: large;
             font-weight: bold;
             border: none;
@@ -76,16 +79,15 @@
         }
 
         .login-button:hover {
-            background-color: #6e706c;
+            background-color: #333333; /* Slightly darker black on hover */
         }
 
         .back-link {
             display: block;
             margin-top: 10px;
             text-align: center;
-            color: #50514F;
+            color: #000000; /* Black color */
             text-decoration: none;
-            color: white;
         }
     </style>
 </head>

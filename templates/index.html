@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>Online Shopping Store</title>
@@ -11,23 +11,31 @@
 
         /* Centering content */
         body {
+            background-image: url('static/images/image1.avif'); 
+            background-size: cover; /* Cover the entire page */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Prevent image from repeating */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color:#50514F; /* Default background color */
+            font-family: 'Arial', sans-serif; /* Modern font */
+            color: white; /* Set default text color */
         }
 
         /* Styling the container */
         .container {
             text-align: center;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         /* Styling the heading */
         .heading {
             font-size: 48px;
             margin-bottom: 30px;
-            color: #247BA0;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for contrast */
         }
 
         /* Styling the links */
@@ -36,21 +44,24 @@
             text-decoration: none;
             padding: 12px 24px;
             margin: 10px;
-            border: 2px solid #007bff;
+            border: 2px solid black; /* Black border */
             border-radius: 30px;
             font-size: 18px;
             font-weight: bold;
-            color: #FFFCFF ;
-            background-color: #247BA0;
-            transition: background-color 0.3s ease;
+            color: white; /* White text */
+            background-color: black; /* Black background */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .button:hover {
-            background-color: #0056b3;
+            background-color: #333333; /* Slightly darker black on hover */
+            transform: scale(1.05);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
-<body> <!-- Change background color here -->
+<body>
     <div class="container">
         <h1 class="heading">Welcome to Online Shopping Store!</h1>
         <a href="{{ url_for('login') }}" class="button">Login</a>
