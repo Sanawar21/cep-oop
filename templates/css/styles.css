@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+}
+h1, h2 {
+    color: #333;
+}
+form {
+    margin-bottom: 20px;
+}
+label {
+    display: inline-block;
+    width: 100px;
+}
+input {
+    margin-bottom: 10px;
+}
+button {
+    display: block;
+    margin-top: 10px;
+}
+a {
+    margin-right: 10px;
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+    <title>Cart</title>
+</head>
+<body>
+    <h1>Shopping Cart</h1>
+    {% if cart.items %}
+    <ul>
+        {% for item in cart.items %}
+        <li>{{ item.product.title }} - Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</li>
+        {% endfor %}
+    </ul>
+    <p>Total Bill: Rs.{{ cart.bill }}</p>
+    <a href="{{ url_for('checkout') }}">Checkout</a>
+    {% else %}
+    <p>Your cart is empty.</p>
+    {% endif %}
+    <a href="{{ url_for('products') }}">Back to Products</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

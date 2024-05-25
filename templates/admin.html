@@ -1,0 +1,48 @@
+<!-- templates/admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <h2>Add Product</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+        <label for="price">Price:</label>
+        <input type="number" step="0.01" id="price" name="price" required><br>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Remove Product</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="remove">
+        <label for="product_title">Product Title:</label>
+        <input type="text" id="product_title" name="product_title" required><br>
+        <button type="submit">Remove Product</button>
+    </form>
+
+    <h2>Change Product Price</h2>
+    <form method="POST">
+        <input type="hidden" name="action" value="change_price">
+        <label for="product_title">Product Title:</label>
+        <input type="text" id="product_title" name="product_title" required><br>
+        <label for="new_price">New Price:</label>
+        <input type="number" step="0.01" id="new_price" name="new_price" required><br>
+        <button type="submit">Change Price</button>
+    </form>
+
+    <h2>Current Products</h2>
+    <ul>
+        {% for product in products %}
+        <li>
+            <p>Title: {{ product.title }}</p>
+            <p>Price: ${{ product.price }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
