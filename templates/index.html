@@ -2,10 +2,59 @@
 <html>
 <head>
     <title>Online Shopping Store</title>
+    <style>
+        /* Resetting default margin and padding */
+        body, h1, a {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Centering content */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color:#50514F; /* Default background color */
+        }
+
+        /* Styling the container */
+        .container {
+            text-align: center;
+        }
+
+        /* Styling the heading */
+        .heading {
+            font-size: 48px;
+            margin-bottom: 30px;
+            color: #247BA0;
+        }
+
+        /* Styling the links */
+        .button {
+            display: inline-block;
+            text-decoration: none;
+            padding: 12px 24px;
+            margin: 10px;
+            border: 2px solid #007bff;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFFCFF ;
+            background-color: #247BA0;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
-<body>
-    <h1>Welcome to Online Shopping Store!</h1>
-    <a href="{{ url_for('login') }}">Login</a>
-    <a href="{{ url_for('signup') }}">Sign Up</a>
+<body> <!-- Change background color here -->
+    <div class="container">
+        <h1 class="heading">Welcome to Online Shopping Store!</h1>
+        <a href="{{ url_for('login') }}" class="button">Login</a>
+        <a href="{{ url_for('signup') }}" class="button">Sign Up</a>
+    </div>
 </body>
 </html>

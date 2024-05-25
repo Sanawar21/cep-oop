@@ -12,7 +12,7 @@
         <li>
             {{ product.title }} - ${{ product.price }}
             <form action="{{ url_for('add_to_cart') }}" method="post">
-                <input type="hidden" name="product_id" value="{{ loop.index }}">
+                <input type="hidden" name="product_id" value="{{ products.index(product) }}">
                 <button type="submit">Add to Cart</button>
             </form>
         </li>
