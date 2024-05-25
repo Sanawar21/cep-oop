@@ -49,7 +49,7 @@ def signup():
             user = result
             cart.owner = username
             flash('Signup successful!', 'success')
-            return redirect(request.args.get('next') or url_for('products'))
+            return redirect(url_for('products'))
     return render_template('signup.html')
 
 
