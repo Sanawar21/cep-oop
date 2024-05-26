@@ -112,7 +112,7 @@
             margin-bottom: 10px;
             color: black;
             font-style: italic;
-            
+
         }
 
         .small-container {
@@ -170,7 +170,7 @@
         <ul class="product-list">
             {% for product in products %}
             <li class="product">
-                <img class="product-image" src="static/images/mango.jpeg" alt="{{ product.title }}">
+                <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
                 <div class="product-info">
                     <p class="product-name">{{ product.title }}</p>
                     <p class="product-price">${{ product.price }}</p>

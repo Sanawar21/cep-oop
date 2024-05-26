@@ -107,12 +107,13 @@
         .quantifier {
             display: flex;
             flex-direction: row;
-            gap:8px;
+            gap: 8px;
             margin-left: 56px;
 
 
         }
-        .cart-button{
+
+        .cart-button {
             width: 25px;
             height: 25px;
             background-color: #ffcc00;
@@ -123,11 +124,11 @@
             border-radius: 6px;
 
         }
-        .quantifier p{
+
+        .quantifier p {
             font-size: 16px;
             font-weight: bold;
         }
-      
     </style>
 </head>
 
@@ -138,22 +139,18 @@
         <ul class="cart-list">
             {% for item in cart.items %}
             <li class="cart-item">
-                <img src="static/images/apple.jpeg" alt="{{ item.product.title }}">
+                <img src="{{ item.product.image_path }}" alt="{{ item.product.title }}">
                 <div class="cart-info">
                     <p>{{ item.product.title }}</p>
                     <p>Rs.{{item.product.price}}
                     </p>
                     <div class="quantifier">
-                        <form class="cart-form"
-                            action="{{ url_for('add_to_cart')}}"
-                            method="post">
+                        <form class="cart-form" action="{{ url_for('add_to_cart')}}" method="post">
                             <input type="hidden" name="product_id" value="{{ products.index(item.product) }}">
                             <button class="cart-button" type="submit">+</button>
                         </form>
                         <p class="para">{{item.quantity}}</p>
-                        <form class="cart-form"
-                            action="{{ url_for('remove_from_cart')}}"
-                            method="post">
+                        <form class="cart-form" action="{{ url_for('remove_from_cart')}}" method="post">
                             <input type="hidden" name="product_id" value="{{ products.index(item.product) }}">
                             <button class="cart-button" type="submit">-</button>
                         </form>
