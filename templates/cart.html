@@ -130,6 +130,35 @@
             font-weight: bold;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.cart-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the form from submitting the traditional way
+
+                const $form = $(this);
+                const actionUrl = $form.attr('action');
+                const formData = $form.serialize();
+
+                $.ajax({
+                    type: 'POST',
+                    url: actionUrl,
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Reload the page to update the cart
+                            location.reload();
+                        } else {
+                            alert(response.error || 'An error occurred.');
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred while processing your request.');
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -154,12 +183,8 @@
                             <input type="hidden" name="product_id" value="{{ products.index(item.product) }}">
                             <button class="cart-button" type="submit">-</button>
                         </form>
-
-
                     </div>
                 </div>
-
-
             </li>
             {% endfor %}
         </ul>
