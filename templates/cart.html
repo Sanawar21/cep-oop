@@ -1,22 +1,121 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            width: 100%;
+            max-width: 1200px; /* Limit the width of the container */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .cart-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-item {
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .cart-item img {
+            width: 100%;
+            height: auto;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            object-fit: cover;
+        }
+
+        .cart-info {
+            padding: 20px;
+        }
+
+        .cart-info p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .cart-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cart-actions a {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            background-color: #ffd633;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin: 0 10px;
+        }
+
+        .cart-actions a:hover {
+            background-color: #ffcc00;
+        }
+    </style>
 </head>
 <body>
-    <h1>Shopping Cart</h1>
-    {% if cart.items %}
-    <ul>
-        {% for item in cart.items %}
-        <li>{{ item.product.title }} - Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</li>
-        {% endfor %}
-    </ul>
-    <p>Total Bill: Rs.{{ cart.bill }}</p>
-    <a href="{{ url_for('checkout') }}">Checkout</a>
-    {% else %}
-    <p>Your cart is empty.</p>
-    {% endif %}
-    <a href="{{ url_for('products') }}">Back to Products</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <div class="container">
+        <h1>Shopping Cart</h1>
+        {% if cart.items %}
+        <ul class="cart-list">
+            {% for item in cart.items %}
+            <li class="cart-item">
+                <img src="{{ item.product.image }}" alt="{{ item.product.title }}">
+                <div class="cart-info">
+                    <p>{{ item.product.title }}</p>
+                    <p>Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <p class="cart-total">Total Bill: Rs.{{ cart.bill }}</p>
+        <div class="cart-actions">
+            <a href="{{ url_for('checkout') }}">Checkout</a>
+            <a href="{{ url_for('products') }}">Back to Products</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+        {% else %}
+        <p>Your cart is empty.</p>
+        {% endif %}
+    </div>
 </body>
 </html>

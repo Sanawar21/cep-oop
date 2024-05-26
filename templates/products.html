@@ -4,19 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: transparent;
+        }
+
+        .product-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0 -10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .product {
+            width: calc(33.33% - 20px);
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .product:hover {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product img {
+            display: block;
+            margin: 0 auto 10px;
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            object-fit: cover;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .product:hover img {
+            border-color: #ffcc00;
+        }
+
+        .product-info {
+            text-align: center;
+        }
+
+        .product-info p {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .add-to-cart, .remove-from-cart {
+            display: block;
+            margin: 0 auto;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-cart {
+            background-color: #ffcc00;
+            color: #333;
+        }
+
+        .add-to-cart:hover {
+            background-color: #ffd633;
+        }
+
+        .remove-from-cart {
+            background-color: #ff3333;
+            color: #fff;
+        }
+
+        .remove-from-cart:hover {
+            background-color: #ff6666;
+        }
+    </style>
 </head>
 <body>
-    <h1>Products</h1>
-    <ul>
-        {% for product in products %}
-        <li>
-            {{ product.title }} - ${{ product.price }}
-            <form action="{{ url_for('add_to_cart') }}" method="post">
-                <input type="hidden" name="product_id" value="{{ products.index(product) }}">
-                <button type="submit">Add to Cart</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1 class="title">Products</h1>
+        <ul class="product-list">
+            {% for product in products %}
+            <li class="product">
+                <img class="product-image" src="{{ product.image }}" alt="{{ product.title }}">
+                <div class="product-info">
+                    <p class="product-name">{{ product.title }}</p>
+                    <p class="product-price">${{ product.price }}</p>
+                </div>
+                {% set in_cart = false %}
+                {% for item in cart.items %}
+                    {% if item.product.title == product.title %}
+                        {% set in_cart = true %}
+                        {% break %}
+                    {% endif %}
+                {% endfor %}
+                {% if in_cart %}
+                <form action="{{ url_for('remove_from_cart') }}" method="post">
+                    <input type="hidden" name="product_title" value="{{ product.title }}">
+                    <button class="remove-from-cart" type="submit">Remove from Cart</button>
+                </form>
+                {% else %}
+                <form action="{{ url_for('add_to_cart') }}" method="post">
+                    <input type="hidden" name="product_title" value="{{ product.title }}">
+                    <button class="add-to-cart" type="submit">Add to Cart</button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
