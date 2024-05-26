@@ -113,21 +113,15 @@
                     <p class="product-name">{{ product.title }}</p>
                     <p class="product-price">${{ product.price }}</p>
                 </div>
-                {% set in_cart = false %}
-                {% for item in cart.items %}
-                    {% if item.product.title == product.title %}
-                        {% set in_cart = true %}
-                        {% break %}
-                    {% endif %}
-                {% endfor %}
+                {% set in_cart = product in cart.items %}
                 {% if in_cart %}
                 <form action="{{ url_for('remove_from_cart') }}" method="post">
-                    <input type="hidden" name="product_title" value="{{ product.title }}">
+                    <input type="hidden" name="product_id" value="{{ products.index(product) }}">
                     <button class="remove-from-cart" type="submit">Remove from Cart</button>
                 </form>
                 {% else %}
                 <form action="{{ url_for('add_to_cart') }}" method="post">
-                    <input type="hidden" name="product_title" value="{{ product.title }}">
+                    <input type="hidden" name="product_id" value="{{ products.index(product) }}">
                     <button class="add-to-cart" type="submit">Add to Cart</button>
                 </form>
                 {% endif %}
