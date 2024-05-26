@@ -6,7 +6,7 @@ from models.user import User
 from src import routines
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-
+import time
 # Initialize global variables
 all_products = database.get_products()
 cart = Cart(None)
@@ -72,7 +72,7 @@ def add_to_cart():
     product_id = int(request.form.get('product_id'))
     if 1 <= product_id <= len(all_products):
         product = all_products[product_id - 1]
-        cart.add_product(product, 1)
+        cart.add_product(product, 5)
         flash('Product added to cart successfully!', 'success')
         return redirect(url_for('products'))
     else:
@@ -83,34 +83,20 @@ def add_to_cart():
     
     
 @app.route('/cart')
-def Cart():
+def cart_():
     if not user:
         flash('Please log in to view your cart.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    if not cart.items:
-        flash('Your cart is empty.', 'info')
-        return redirect(url_for('products'))
+    # if not cart.items:
+    #     flash('Your cart is empty.', 'info')
+    #     return redirect(url_for('products'))
+   
 
-    return render_template('cart.html', cart=cart)
+    products = database.get_products()
+    return render_template('cart.html', products=products,cart=cart)
 
-@app.route('/checkout', methods=['GET', 'POST'])
-def checkout():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    if request.method == 'POST':
-        user_cart = session.get('cart', None)
-        username = session['username']
-        user = [u for u in database.get_users() if u.username == username][0]
-        if user and user_cart:
-            success = routines.checkout_routine(user_cart, user)
-            if success:
-                session.pop('cart', None)
-                flash('Checkout successful!')
-                return redirect(url_for('history'))
-            else:
-                flash('Checkout failed.')
-    return render_template('checkout.html')
+
 
 @app.route('/remove_from_cart', methods=['POST'])
 def remove_from_cart():
@@ -122,11 +108,46 @@ def remove_from_cart():
     cart.remove_product(product)
     flash('Product removed from cart successfully!', 'success')
     return redirect(url_for('products'))
+@app.route('/checkout', methods=['GET', 'POST'])
+def checkout():
+    if not user:
+        flash('Please log in to checkout.', 'error')
+        return redirect(url_for('login', next=request.url))
+
+    if request.method == 'POST':
+        bank_name = request.form['bank_name']
+        password = request.form['password']
+        if password == user.password:
+            cart.bank_name = bank_name
+            cart.timestamp = time.asctime()
+            # Calculate total bill
+            total_bill = sum(item.product.price * item.quantity for item in cart.items)
+            database.write_cart(user, cart)
+            flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: Rs.{}'.format(total_bill), 'success')
+            return redirect(url_for('products'))
+        else:
+            flash('Invalid account password.', 'error')
+    return render_template('checkout.html')
+
+
+@app.route('/history')
+def history():
+    if not user:
+        flash('Please log in to view your order history.', 'error')
+        return redirect(url_for('login', next=request.url))
+
+    carts = database.read_carts(user)
+    return render_template('history.html', carts=carts)
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    global user, cart
+    user = None
+    cart = Cart(None)
+    flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

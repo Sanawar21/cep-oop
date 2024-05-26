@@ -222,3 +222,8 @@ def display_orders_summary(carts: list[Cart]):
         for cart in carts
     ]
     display_table(data, headers, title)
+
+
+
+
+    

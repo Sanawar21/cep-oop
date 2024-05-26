@@ -1,24 +1,109 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: #000000;
+            margin-bottom: 20px;
+        }
+
+        .order {
+            background-color: #FFD700;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .order-id {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 0;
+            display: inline-block;
+        }
+
+        .order-items {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .order-item {
+            background-color: #FFD700;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .total-bill {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .no-history {
+            text-align: center;
+            color: #000000;
+            margin-top: 20px;
+        }
+
+        .btn {
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #000000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background-color: #333333;
+        }
+    </style>
 </head>
 <body>
-    <h1>Order History</h1>
-    {% if carts %}
-    {% for cart in carts %}
-    <h2>Order ID: {{ loop.index }}</h2>
-    <ul>
-        {% for item in cart.items %}
-        <li>{{ item.product.title }} - Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</li>
+    <div class="container">
+        <h1 class="title">Order History</h1>
+        {% if carts %}
+        {% for cart in carts %}
+        <div class="order">
+            <h2 class="order-id">Order ID: {{ loop.index }}</h2>
+            <ul class="order-items">
+                {% for item in cart.items %}
+                <li class="order-item">{{ item.product.title }} - Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</li>
+                {% endfor %}
+            </ul>
+            <p class="total-bill">Total Bill: Rs.{{ cart.bill }}</p>
+        </div>
         {% endfor %}
-    </ul>
-    <p>Total Bill: Rs.{{ cart.bill }}</p>
-    {% endfor %}
-    {% else %}
-    <p>You have no order history.</p>
-    {% endif %}
-    <a href="{{ url_for('products') }}">Back to Products</a>
-    <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <p class="no-history">You have no order history.</p>
+        {% endif %}
+        <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
+        <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+    </div>
 </body>
 </html>

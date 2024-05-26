@@ -1,17 +1,93 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(49,49,49);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .checkout-container {
+            background-color: #FFD700;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .checkout-title {
+            color: #000000;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            color: #000000;
+            font-size: large;
+            font-weight: 400;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: #ffffff;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .checkout-button {
+            background-color: #000000;
+            color: #ffffff;
+            font-size: large;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-button:hover {
+            background-color: #333333;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+            color: #000000;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Checkout</h1>
-    <form method="post">
-        <label for="bank_name">Bank Name:</label>
-        <input type="text" id="bank_name" name="bank_name"><br>
-        <label for="password">Account Password:</label>
-        <input type="password" id="password" name="password"><br>
-        <button type="submit">Checkout</button>
-    </form>
-    <a href="{{ url_for('cart') }}">Back to Cart</a>
+    <div class="checkout-container">
+        <h1 class="checkout-title">Checkout</h1>
+        <form method="post">
+            <label class="form-label" for="bank_name">Bank Name:</label>
+            <input class="form-input" type="text" id="bank_name" name="bank_name">
+            <label class="form-label" for="password">Account Password:</label>
+            <input class="form-input" type="password" id="password" name="password">
+            <button class="checkout-button" type="submit">Checkout</button>
+        </form>
+        <a class="back-link" href="{{ url_for('cart_') }}">Back to Cart</a>
+    </div>
 </body>
 </html>

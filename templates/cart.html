@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +21,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin: 20px auto;
             width: 100%;
-            max-width: 1200px; /* Limit the width of the container */
+            max-width: 1200px;
         }
 
         h1 {
@@ -33,22 +34,31 @@
             list-style-type: none;
             padding: 0;
             margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .cart-item {
-            margin-bottom: 20px;
+            margin: 10px;
             background-color: #f9f9f9;
             border-radius: 10px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 200px;
         }
 
         .cart-item img {
-            width: 100%;
-            height: auto;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+            margin-top: 20px;
+            width: 150px;
+            height: 100px;
+            border-radius: 5px;
             object-fit: cover;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
         }
 
         .cart-info {
@@ -92,6 +102,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Shopping Cart</h1>
@@ -99,11 +110,13 @@
         <ul class="cart-list">
             {% for item in cart.items %}
             <li class="cart-item">
-                <img src="{{ item.product.image }}" alt="{{ item.product.title }}">
+                <img src="static/images/apple.jpeg" alt="{{ item.product.title }}">
                 <div class="cart-info">
                     <p>{{ item.product.title }}</p>
-                    <p>Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</p>
+                    <p>Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}
+                    </p>
                 </div>
+
             </li>
             {% endfor %}
         </ul>
@@ -118,4 +131,5 @@
         {% endif %}
     </div>
 </body>
+
 </html>

@@ -3,27 +3,27 @@
 <head>
     <title>Online Shopping Store</title>
     <style>
-        /* Resetting default margin and padding */
+    
         body, h1, a {
             margin: 0;
             padding: 0;
         }
 
-        /* Centering content */
+        
         body {
             background-image: url('static/images/image1.avif'); 
-            background-size: cover; /* Cover the entire page */
-            background-position: center; /* Center the background image */
-            background-repeat: no-repeat; /* Prevent image from repeating */
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Arial', sans-serif; /* Modern font */
-            color: white; /* Set default text color */
+            font-family: 'Arial', sans-serif; 
+            color: white; 
         }
 
-        /* Styling the container */
+        
         .container {
             text-align: center;
             padding: 50px;
@@ -31,31 +31,31 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Styling the heading */
+   
         .heading {
             font-size: 48px;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Subtle shadow for contrast */
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        /* Styling the links */
+        
         .button {
             display: inline-block;
             text-decoration: none;
             padding: 12px 24px;
             margin: 10px;
-            border: 2px solid black; /* Black border */
+            border: 2px solid black; 
             border-radius: 30px;
             font-size: 18px;
             font-weight: bold;
-            color: white; /* White text */
-            background-color: black; /* Black background */
+            color: white; 
+            background-color: black; 
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .button:hover {
-            background-color: #333333; /* Slightly darker black on hover */
+            background-color: #333333; 
             transform: scale(1.05);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
         }
@@ -66,6 +66,7 @@
         <h1 class="heading">Welcome to Online Shopping Store!</h1>
         <a href="{{ url_for('login') }}" class="button">Login</a>
         <a href="{{ url_for('signup') }}" class="button">Sign Up</a>
+    
     </div>
 </body>
 </html>
