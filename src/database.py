@@ -20,7 +20,7 @@ def get_products() -> "list[Product]":
         lines = file.readlines()
         for line in lines:
             attrs = line.split(SEP)
-            products.append(Product(attrs[0], int(attrs[1])))
+            products.append(Product(attrs[0], int(attrs[1]), uid=attrs[2]))
 
     return products
 
@@ -32,7 +32,7 @@ def save_products(products: "list[Product]"):
 
     with open("database/products.txt", "a") as file:
         file.writelines([
-            f"{product.title}{SEP}{product.price}\n"
+            f"{product.title}{SEP}{product.price}{SEP}{product.uid}\n"
             for product in products
         ])
 

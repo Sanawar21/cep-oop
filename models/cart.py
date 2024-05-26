@@ -21,7 +21,8 @@ class Item:
             return False
 
     def __str__(self) -> str:
-        as_string = f"Title: {self.product.title}\nPrice: Rs.{self.product.price}\nQuantity: {self.quantity}"
+        as_string = f"Title: {self.product.title}\nPrice: Rs.{
+            self.product.price}\nQuantity: {self.quantity}"
 
         return as_string
 
@@ -47,10 +48,12 @@ class Cart:
             "timestamp": self.timestamp,
             "bank_name": self.bank_name,
             "items": [
-                {"title": item.product.title,
-                 "price": item.product.price,
-                 "quantity": item.quantity,
-                 } for item in self.items
+                {
+                    "uid": item.product.uid,
+                    "title": item.product.title,
+                    "price": item.product.price,
+                    "quantity": item.quantity,
+                } for item in self.items
             ]
         }
 
@@ -63,7 +66,7 @@ class Cart:
         self.bank_name = data["bank_name"]
         self.timestamp = data["timestamp"]
         self.items = [
-            Item(Product(attr["title"], attr["price"]), attr["quantity"]) for attr in data["items"]
+            Item(Product(attr["title"], attr["price"], attr["uid"]), attr["quantity"]) for attr in data["items"]
         ]
 
     def get_bill(self):
