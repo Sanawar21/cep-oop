@@ -123,12 +123,14 @@
         <p class="cart-total">Total Bill: Rs.{{ cart.bill }}</p>
         <div class="cart-actions">
             <a href="{{ url_for('checkout') }}">Checkout</a>
-            <a href="{{ url_for('products') }}">Back to Products</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         </div>
         {% else %}
         <p>Your cart is empty.</p>
         {% endif %}
+        <div class="cart-actions">
+            <a href="{{ url_for('products')}}">Back to Products</a>
+        </div>
     </div>
 </body>
 
