@@ -20,7 +20,8 @@ def get_products() -> "list[Product]":
         lines = file.readlines()
         for line in lines:
             attrs = line.split(SEP)
-            products.append(Product(attrs[0], int(attrs[1]), uid=attrs[2]))
+            products.append(
+                Product(attrs[0], int(float(attrs[1])), uid=attrs[2]))
 
     return products
 
