@@ -100,6 +100,7 @@
                     <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong></li>
                 {% endfor %}
                 <li class="order-item"><strong>{{cart.timestamp}}</strong></li>
+                <li class="order-item"><strong>{{cart.bank_name}}</strong></li>
             </ul>
             <p class="total-bill">Total Bill: ${{ cart.bill }}</p>
         </div>

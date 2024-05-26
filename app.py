@@ -100,11 +100,13 @@ def cart_():
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    global cart
     if not user:
         flash('Please log in to checkout.', 'error')
         return redirect(url_for('login', next=request.url))
 
     if request.method == 'POST':
+
         bank_name = request.form['bank_name']
         password = request.form['password']
         if password == user.password:
@@ -116,9 +118,10 @@ def checkout():
             database.write_cart(user, cart)
             flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: ${}'.format(
                 total_bill), 'success')
+            cart = Cart(None)
             return redirect(url_for('products'))
         else:
-            flash('Invalid account password.', 'error')
+            flash('Invalid accosunt password.', 'error')
     return render_template('checkout.html')
 
 
