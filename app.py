@@ -59,8 +59,7 @@ def products():
         flash('Please log in to view products.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    products = database.get_products()
-    return render_template('products.html', products=products, cart=cart)
+    return render_template('products.html', products=all_products, cart=cart)
 
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -96,8 +95,7 @@ def cart_():
     #     flash('Your cart is empty.', 'info')
     #     return redirect(url_for('products'))
 
-    products = database.get_products()
-    return render_template('cart.html', products=products, cart=cart)
+    return render_template('cart.html', products=all_products, cart=cart)
 
 
 @app.route('/checkout', methods=['GET', 'POST'])
