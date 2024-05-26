@@ -71,14 +71,10 @@ def add_to_cart():
 
     all_products = database.get_products()
     product_id = int(request.form.get('product_id'))
-    if 1 <= product_id <= len(all_products):
-        product = all_products[product_id - 1]
-        cart.add_product(product, 1)
-        flash('Product added to cart successfully!', 'success')
-        return jsonify({'success': 'Product added to cart successfully!'}), 200
-    else:
-        flash('Invalid product ID.', 'error')
-        return jsonify({'error': 'Invalid product ID.'}), 400
+    product = all_products[product_id]
+    cart.add_product(product, 1)
+    flash('Product added to cart successfully!', 'success')
+    return jsonify({'success': 'Product added to cart successfully!'}), 200
 
 
 @app.route('/remove_from_cart', methods=['POST'])
@@ -108,18 +104,6 @@ def cart_():
 
     products = database.get_products()
     return render_template('cart.html', products=products, cart=cart)
-
-
-# @app.route('/remove_from_cart', methods=['POST'])
-# def remove_from_cart():
-#     if not user:
-#         flash('Please log in to remove products from your cart.', 'error')
-#         return redirect(url_for('login', next=request.url))
-#     product_id = int(request.form.get('product_id'))
-#     product = all_products[product_id]
-#     cart.remove_product(product)
-#     flash('Product removed from cart successfully!', 'success')
-#     return redirect(url_for('products'))
 
 
 @app.route('/checkout', methods=['GET', 'POST'])
