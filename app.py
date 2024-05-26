@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+import time
+from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from src import authenticate, database
 from models.cart import Cart
 from models.product import Product
@@ -6,7 +7,6 @@ from models.user import User
 from src import routines
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
-import time
 # Initialize global variables
 all_products = database.get_products()
 cart = Cart(None)
@@ -60,28 +60,27 @@ def products():
         return redirect(url_for('login', next=request.url))
 
     products = database.get_products()
-    return render_template('products.html', products=products,cart=cart)
+    return render_template('products.html', products=products, cart=cart)
 
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
     if not user:
         flash('Please log in to add products to your cart.', 'error')
-        return redirect(url_for('login', next=request.url))
+        return jsonify({'error': 'Please log in to add products to your cart.'}), 401
+
     all_products = database.get_products()
     product_id = int(request.form.get('product_id'))
     if 1 <= product_id <= len(all_products):
         product = all_products[product_id - 1]
         cart.add_product(product, 5)
         flash('Product added to cart successfully!', 'success')
-        return redirect(url_for('products'))
+        return jsonify({'success': 'Product added to cart successfully!'}), 200
     else:
         flash('Invalid product ID.', 'error')
-        return redirect(url_for('products'))
-    
+        return jsonify({'error': 'Invalid product ID.'}), 400
 
-    
-    
+
 @app.route('/cart')
 def cart_():
     if not user:
@@ -91,11 +90,9 @@ def cart_():
     # if not cart.items:
     #     flash('Your cart is empty.', 'info')
     #     return redirect(url_for('products'))
-   
 
     products = database.get_products()
-    return render_template('cart.html', products=products,cart=cart)
-
+    return render_template('cart.html', products=products, cart=cart)
 
 
 @app.route('/remove_from_cart', methods=['POST'])
@@ -108,6 +105,8 @@ def remove_from_cart():
     cart.remove_product(product)
     flash('Product removed from cart successfully!', 'success')
     return redirect(url_for('products'))
+
+
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     if not user:
@@ -121,9 +120,11 @@ def checkout():
             cart.bank_name = bank_name
             cart.timestamp = time.asctime()
             # Calculate total bill
-            total_bill = sum(item.product.price * item.quantity for item in cart.items)
+            total_bill = sum(item.product.price *
+                             item.quantity for item in cart.items)
             database.write_cart(user, cart)
-            flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: Rs.{}'.format(total_bill), 'success')
+            flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: Rs.{}'.format(
+                total_bill), 'success')
             return redirect(url_for('products'))
         else:
             flash('Invalid account password.', 'error')
@@ -139,6 +140,7 @@ def history():
     carts = database.read_carts(user)
     return render_template('history.html', carts=carts)
 
+
 @app.route('/logout')
 def logout():
     global user, cart
@@ -146,7 +148,6 @@ def logout():
     cart = Cart(None)
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
-
 
 
 if __name__ == "__main__":

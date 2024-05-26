@@ -29,7 +29,8 @@
             flex-wrap: wrap;
             justify-content: space-between;
         }
-        .title{
+
+        .title {
             text-align: center;
         }
 
@@ -121,6 +122,27 @@
 
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.add-to-cart-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the form from submitting the default way
+
+                var form = $(this);
+                var url = form.attr('action');
+                var formData = form.serialize();
+
+                $.post(url, formData)
+                    .done(function (response) {
+                        alert('Product added to cart successfully!');
+                        // Optionally update the cart icon or number of items in the cart here
+                    })
+                    .fail(function () {
+                        alert('Failed to add product to cart.');
+                    });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -147,7 +169,7 @@
                     <button class="remove-from-cart" type="submit">Remove from Cart</button>
                 </form>
                 {% else %}
-                <form action="{{ url_for('add_to_cart') }}" method="post">
+                <form action="{{ url_for('add_to_cart') }}" method="post" class="add-to-cart-form">
                     <input type="hidden" name="product_id" value="{{ products.index(product) }}">
                     <button class="add-to-cart" type="submit">Add to Cart</button>
                 </form>
