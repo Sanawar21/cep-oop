@@ -30,6 +30,7 @@
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
+         
         }
 
         .order-id {
@@ -93,8 +94,9 @@
             <h2 class="order-id">Order ID: {{ loop.index }}</h2>
             <ul class="order-items">
                 {% for item in cart.items %}
-                <li class="order-item">{{ item.product.title }} - Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}</li>
+                <li class="order-item"><strong>{{item.product.title}}</strong> - Price: <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong></li>
                 {% endfor %}
+                <li class="order-item"><strong>{{cart.timestamp}}</strong></li>
             </ul>
             <p class="total-bill">Total Bill: Rs.{{ cart.bill }}</p>
         </div>

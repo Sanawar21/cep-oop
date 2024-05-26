@@ -48,7 +48,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            max-width: 200px;
+            width: 220px;
+
         }
 
         .cart-item img {
@@ -63,6 +64,8 @@
 
         .cart-info {
             padding: 20px;
+            margin-top: -8px;
+            font-weight: bold;
         }
 
         .cart-info p {
@@ -100,6 +103,31 @@
         .cart-actions a:hover {
             background-color: #ffcc00;
         }
+
+        .quantifier {
+            display: flex;
+            flex-direction: row;
+            gap:8px;
+            margin-left: 56px;
+
+
+        }
+        .cart-button{
+            width: 25px;
+            height: 25px;
+            background-color: #ffcc00;
+            border: none;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 6px;
+
+        }
+        .quantifier p{
+            font-size: 16px;
+            font-weight: bold;
+        }
+      
     </style>
 </head>
 
@@ -113,9 +141,27 @@
                 <img src="static/images/apple.jpeg" alt="{{ item.product.title }}">
                 <div class="cart-info">
                     <p>{{ item.product.title }}</p>
-                    <p>Rs.{{ item.product.price }} x {{ item.quantity }} = Rs.{{ item.product.price * item.quantity }}
+                    <p>Rs.{{item.product.price}}
                     </p>
+                    <div class="quantifier">
+                        <form class="cart-form"
+                            action="{{ url_for('add_to_cart')}}"
+                            method="post">
+                            <input type="hidden" name="product_id" value="{{ products.index(item.product) }}">
+                            <button class="cart-button" type="submit">+</button>
+                        </form>
+                        <p class="para">{{item.quantity}}</p>
+                        <form class="cart-form"
+                            action="{{ url_for('remove_from_cart')}}"
+                            method="post">
+                            <input type="hidden" name="product_id" value="{{ products.index(item.product) }}">
+                            <button class="cart-button" type="submit">-</button>
+                        </form>
+
+
+                    </div>
                 </div>
+
 
             </li>
             {% endfor %}
@@ -123,12 +169,14 @@
         <p class="cart-total">Total Bill: Rs.{{ cart.bill }}</p>
         <div class="cart-actions">
             <a href="{{ url_for('checkout') }}">Checkout</a>
-            <a href="{{ url_for('products') }}">Back to Products</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         </div>
         {% else %}
         <p>Your cart is empty.</p>
         {% endif %}
+        <div class="cart-actions">
+            <a href="{{ url_for('products')}}">Back to Products</a>
+        </div>
     </div>
 </body>
 
