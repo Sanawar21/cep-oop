@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +31,7 @@
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
-         
+
         }
 
         .order-id {
@@ -85,6 +86,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1 class="title">Order History</h1>
@@ -94,11 +96,12 @@
             <h2 class="order-id">Order ID: {{ loop.index }}</h2>
             <ul class="order-items">
                 {% for item in cart.items %}
-                <li class="order-item"><strong>{{item.product.title}}</strong> - Price: <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong></li>
+                <li class="order-item"><strong>{{item.product.title}}</strong> - Price:
+                    <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong></li>
                 {% endfor %}
                 <li class="order-item"><strong>{{cart.timestamp}}</strong></li>
             </ul>
-            <p class="total-bill">Total Bill: Rs.{{ cart.bill }}</p>
+            <p class="total-bill">Total Bill: ${{ cart.bill }}</p>
         </div>
         {% endfor %}
         {% else %}
@@ -108,4 +111,5 @@
         <a class="btn" href="{{ url_for('logout') }}">Logout</a>
     </div>
 </body>
+
 </html>

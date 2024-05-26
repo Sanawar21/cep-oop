@@ -114,7 +114,7 @@ def checkout():
             total_bill = sum(item.product.price *
                              item.quantity for item in cart.items)
             database.write_cart(user, cart)
-            flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: Rs.{}'.format(
+            flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: ${}'.format(
                 total_bill), 'success')
             return redirect(url_for('products'))
         else:

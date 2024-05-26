@@ -163,7 +163,7 @@
             </li>
             {% endfor %}
         </ul>
-        <p class="cart-total">Total Bill: Rs.{{ cart.bill }}</p>
+        <p class="cart-total">Total Bill: ${{ cart.bill }}</p>
         <div class="cart-actions">
             <a href="{{ url_for('checkout') }}">Checkout</a>
             <a href="{{ url_for('logout') }}">Logout</a>
