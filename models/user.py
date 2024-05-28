@@ -33,10 +33,18 @@ class User:
             "bank_details": self.bank_details.to_dict() if self.bank_details else None
         }
 
+    @staticmethod
+    def validate_card_number(card_number):
+        return all([chr in "0123456789" for chr in card_number])
+
+    @staticmethod
+    def validate_pin(pin):
+        return all([chr in "0123456789" for chr in pin]) and len(pin) == 4
+
     def add_bank_details(self, bank_name, card_number, pin):
 
-        valid_card_number = all([chr in "0123456789" for chr in card_number])
-        valid_pin = all([chr in "0123456789" for chr in pin]) and len(pin) == 4
+        valid_card_number = self.validate_card_number(card_number)
+        valid_pin = self.validate_pin(pin)
 
         if valid_card_number and valid_pin:
             self.bank_details = BankDetails(

@@ -85,13 +85,7 @@ def signup():
                                    full_name=full_name,
                                    address=address)
 
-        return redirect(
-            url_for(
-                'bank_details',
-                username=username,
-                password=password,
-                full_name=full_name,
-                address=address))
+        return redirect(url_for('bank_details'))
 
     return render_template('signup.html')
 
@@ -201,6 +195,25 @@ def history():
 
 @app.route('/bankdetails')
 def bank_details():
+    global user
+    if request.method == "POST":
+        # TODO: Implement this
+        # bank_name = request.form['bank_name']
+        # card_number = request.form['password']
+        result = authenticator.sign_up(
+            session["username"],
+            session["password"],
+            session["full_name"],
+            session["address"],
+        )
+
+        if type(result) == tuple:
+            flash(result[1], 'error')
+        else:
+            user = result
+            cart.owner = user.username
+            return redirect(url_for('products'))
+
     return render_template("bank_details.html")
 
 
