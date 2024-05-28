@@ -48,13 +48,15 @@
         }
 
         .rating {
-            font-size: 24px;
+            font-size: 20px;
             color: #ffd700;
+            margin-left: 10px;
         }
 
         .rating span {
             display: inline-block;
-            width: 20px;
+            width: 24px;
+            scale: 150%;
             text-align: center;
         }
 
@@ -126,21 +128,12 @@
 <body>
     <div class="container">
         <h1>{{ product.title }}</h1>
-        <img class="product-image"
-            src="{{product.image_path}}"
-            alt="{{ product.title }}">
+        <img class="product-image" src="../{{product.image_path}}" alt="{{ product.title }}">
         <div class="product-info">
-            <div style="display: flex;flex-direction: row;gap: 3px;">
-                <h2>Price :</h2>
-                <h2 style="color: #ffd700;">${{ product.price }}</h2>
-            </div>
-            <div class="product-description">
-                <h2>Description:</h2>
-                <p style="color: rgb(80, 79, 79);">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut nisi ac neque congue posuere. Vestibulum hendrerit elit in sapien feugiat, a commodo est ultricies. Phasellus auctor nulla eget magna lacinia, nec laoreet ipsum posuere. Mauris in eros sed velit feugiat efficitur. Nullam id suscipit nisi. Quisque viverra velit id augue dictum, sit amet fermentum quam fringilla. In ut justo libero. Morbi ultricies, velit sit amet sollicitudin scelerisque, nunc ligula luctus turpis, nec venenatis ligula enim id nulla. Integer a tellus ut arcu fermentum vestibulum vel vitae dui. Phasellus ac magna id nulla venenatis sollicitudin. Duis vel erat auctor, fermentum nunc at, euismod libero. Nunc eget pharetra lacus. Sed eget turpis in elit ullamcorper dignissim nec et magna. Vivamus condimentum, nisi eget luctus ultricies, enim mi tempus est, ac suscipit purus metus a elit..</p>
-            </div>
+            <h2>Price: <span style="color: #ffd700;">${{ product.price }}</span></h2>
             <div style="display: flex">
 
-                <h3>Ratings :</h3>
+                <h2>Rating:</h2>
                 <p class="rating">
                     <span>★</span>
                     <span>★</span>
@@ -148,6 +141,20 @@
                     <span>★</span>
                     <span>☆</span>
                 </p>
+            </div>
+
+            <div class="product-description">
+                <h2>Description:</h2>
+                <p style="color: rgb(80, 79, 79);">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut nisi
+                    ac neque congue posuere. Vestibulum hendrerit elit in sapien feugiat, a commodo est ultricies.
+                    Phasellus auctor nulla eget magna lacinia, nec laoreet ipsum posuere. Mauris in eros sed velit
+                    feugiat efficitur. Nullam id suscipit nisi. Quisque viverra velit id augue dictum, sit amet
+                    fermentum quam fringilla. In ut justo libero. Morbi ultricies, velit sit amet sollicitudin
+                    scelerisque, nunc ligula luctus turpis, nec venenatis ligula enim id nulla. Integer a tellus ut arcu
+                    fermentum vestibulum vel vitae dui. Phasellus ac magna id nulla venenatis sollicitudin. Duis vel
+                    erat auctor, fermentum nunc at, euismod libero. Nunc eget pharetra lacus. Sed eget turpis in elit
+                    ullamcorper dignissim nec et magna. Vivamus condimentum, nisi eget luctus ultricies, enim mi tempus
+                    est, ac suscipit purus metus a elit..</p>
             </div>
 
 
