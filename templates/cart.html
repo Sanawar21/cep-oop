@@ -173,7 +173,7 @@
                 <img src="{{ item.product.image_path }}" alt="{{ item.product.title }}">
                 <div class="cart-info">
                     <p>{{ item.product.title }}</p>
-                    <p>Rs.{{item.product.price}}
+                    <p>${{item.product.price}}
                     </p>
                     <div class="quantifier">
                         <form class="cart-form" action="{{ url_for('add_to_cart')}}" method="post">

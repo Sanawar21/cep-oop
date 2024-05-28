@@ -7,6 +7,7 @@ from models.product import Product
 from models.user import User
 from src import routines
 app = Flask(__name__)
+app.secret_key = "pIQ89naMqA21"
 # Initialize global variables
 database = Database()
 authenticator = Authenticator()
