@@ -15,8 +15,9 @@ all_products = database.get_products()
 cart = Cart.null()
 user = None
 
-# TODO: Tell user when the infos are invalid or incorrect and display appropriate message
+# TODO: 1) Tell user when the infos are invalid or incorrect and display appropriate message
 #       at login and signup and checkout
+#       2) User can save carts without checking out (Operator overloading { Cart + Cart })
 
 
 @app.route('/')
