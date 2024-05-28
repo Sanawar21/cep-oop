@@ -1,1 +1,2 @@
 {'username': 'sanawar99', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': None}
+{'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'North Karachi', 'bank_details': None}

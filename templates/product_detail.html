@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1,
+        h2,
+        p {
+            margin: 10px 0;
+        }
+
+        .product-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 10px;
+            object-fit: contain;
+        }
+
+        .product-info {
+            margin-top: 20px;
+            text-align: left;
+
+        }
+
+        .product-description {
+            text-align: left;
+        }
+
+        .rating {
+            font-size: 24px;
+            color: #ffd700;
+        }
+
+        .rating span {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .button-container a,
+        .button-container button {
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+            text-align: center;
+        }
+
+        .button-container a {
+            background-color: #ffd700;
+        }
+
+        .button-container button {
+            background-color: #ffd700;
+        }
+
+        .button-container a:hover,
+        .button-container button:hover {
+            background-color: #93842e;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.cart-form').on('submit', function (event) {
+                event.preventDefault(); // Prevent the form from submitting the default way
+
+                var form = $(this);
+                var button = form.find('.add-to-cart, .remove-from-cart');
+                var url = form.attr('action');
+                var formData = form.serialize();
+
+                $.post(url, formData)
+                    .done(function (response) {
+                        if (url.endsWith('add_to_cart')) {
+                            alert('Product added to cart successfully!');
+                            button.text('Remove from Cart');
+                            form.attr('action', "{{ url_for('remove_from_cart') }}");
+                        } else if (url.endsWith('remove_from_cart')) {
+                            alert('Product removed from cart successfully!');
+                            button.text('Add to Cart');
+                            form.attr('action', "{{ url_for('add_to_cart') }}");
+                        }
+                    })
+                    .fail(function () {
+                        alert('Failed to update cart.');
+                    });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>{{ product.title }}</h1>
+        <img class="product-image"
+            src="{{product.image_path}}"
+            alt="{{ product.title }}">
+        <div class="product-info">
+            <div style="display: flex;flex-direction: row;gap: 3px;">
+                <h2>Price :</h2>
+                <h2 style="color: #ffd700;">${{ product.price }}</h2>
+            </div>
+            <div class="product-description">
+                <h2>Description:</h2>
+                <p style="color: rgb(80, 79, 79);">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ut nisi ac neque congue posuere. Vestibulum hendrerit elit in sapien feugiat, a commodo est ultricies. Phasellus auctor nulla eget magna lacinia, nec laoreet ipsum posuere. Mauris in eros sed velit feugiat efficitur. Nullam id suscipit nisi. Quisque viverra velit id augue dictum, sit amet fermentum quam fringilla. In ut justo libero. Morbi ultricies, velit sit amet sollicitudin scelerisque, nunc ligula luctus turpis, nec venenatis ligula enim id nulla. Integer a tellus ut arcu fermentum vestibulum vel vitae dui. Phasellus ac magna id nulla venenatis sollicitudin. Duis vel erat auctor, fermentum nunc at, euismod libero. Nunc eget pharetra lacus. Sed eget turpis in elit ullamcorper dignissim nec et magna. Vivamus condimentum, nisi eget luctus ultricies, enim mi tempus est, ac suscipit purus metus a elit..</p>
+            </div>
+            <div style="display: flex">
+
+                <h3>Ratings :</h3>
+                <p class="rating">
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>★</span>
+                    <span>☆</span>
+                </p>
+            </div>
+
+
+            <div class="button-container">
+                <a href="{{ url_for('products') }}">Back to Product</a>
+                <form class="cart-form"
+                    action="{{ url_for('add_to_cart') if not in_cart else url_for('remove_from_cart') }}" method="post">
+                    <input type="hidden" name="product_id" value="{{ product_index }}">
+                    <button class="add-to-cart" type="submit">{{ 'Add to Cart' if not in_cart else 'Remove from Cart'
+                        }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

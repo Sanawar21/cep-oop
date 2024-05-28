@@ -128,36 +128,7 @@
 
         }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.cart-form').on('submit', function (event) {
-                event.preventDefault(); // Prevent the form from submitting the default way
-
-                var form = $(this);
-                var button = form.find('.cart-button');
-                var url = form.attr('action');
-                var formData = form.serialize();
-
-                $.post(url, formData)
-                    .done(function (response) {
-                        if (url.endsWith('add_to_cart')) {
-                            alert('Product added to cart successfully!');
-                            button.text('Remove from Cart');
-                            form.attr('action', "{{ url_for('remove_from_cart') }}");
-                        } else if (url.endsWith('remove_from_cart')) {
-                            alert('Product removed from cart successfully!');
-                            button.text('Add to Cart');
-                            form.attr('action', "{{ url_for('add_to_cart') }}");
-                        }
-                    })
-                    .fail(function () {
-                        alert('Failed to update cart.');
-                    });
-            });
-        });
-    </script>
-
+    
 </head>
 
 <body>
@@ -178,13 +149,12 @@
                     <p class="product-name">{{ product.title }}</p>
                     <p class="product-price">${{ product.price }}</p>
                 </div>
-                {% set in_cart = product in cart.items %}
-                <form class="cart-form"
-                    action="{{ url_for('add_to_cart') if not in_cart else url_for('remove_from_cart') }}" method="post">
+                <form class="cart-form" action="{{ url_for('product_detail', product_id=products.index(product)) }}"
+                    method="post">
                     <input type="hidden" name="product_id" value="{{ products.index(product) }}">
-                    <button class="cart-button" type="submit">{{ 'Remove from Cart' if in_cart else 'Add to Cart'
-                        }}</button>
+                    <button class="cart-button" type="submit">Description</button>
                 </form>
+
             </li>
             {% endfor %}
         </ul>

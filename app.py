@@ -68,6 +68,20 @@ def products():
 
     return render_template('products.html', products=all_products, cart=cart)
 
+@app.route('/product_detail/<int:product_id>', methods=['GET', 'POST'])
+def product_detail(product_id):
+    if not user:
+        flash('Please log in to view product details.', 'error')
+        return redirect(url_for('login', next=request.url))
+
+    product = all_products[product_id]
+    if request.method == 'POST':
+        # Handle the form submission here
+        # For example, add the product to the cart or remove it
+        # You may need to update the cart and then redirect to the product detail page
+        return redirect(url_for('product_detail', product_id=product_id))
+    
+    return render_template('product_detail.html', product=product, product_index=int(product_id), cart=cart)
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
