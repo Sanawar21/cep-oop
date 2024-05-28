@@ -1,4 +1,4 @@
-from bank_details import BankDetails
+from .bank_details import BankDetails
 
 
 class User:
@@ -7,11 +7,31 @@ class User:
     Every User has a unique username.
     """
 
-    def __init__(self, username, password, full_name, address) -> None:
+    def __init__(self, username, password, full_name, address, bank_details=None) -> None:
         self.username = username
         self.password = password
         self.full_name = full_name
         self.address = address
+        self.bank_details = bank_details
+
+    @classmethod
+    def from_dict(cls, data):
+        username = data["username"]
+        password = data["password"]
+        full_name = data["full_name"]
+        address = data["address"]
+        bank_details = BankDetails.from_dict(
+            data["bank_details"]) if data["bank_details"] else None
+        return cls(username, password, full_name, address, bank_details)
+
+    def to_dict(self):
+        return {
+            "username": self.username,
+            "password": self.password,
+            "full_name": self.full_name,
+            "address": self.address,
+            "bank_details": self.bank_details.to_dict() if self.bank_details else None
+        }
 
     def add_bank_details(self, bank_name, card_number, pin):
 

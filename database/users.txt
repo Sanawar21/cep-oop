@@ -1,15 +1,1 @@
-talhaadil48@#$%TalhaAdil48@@#$%Talha Adil@#$%L327..
-sanawar@#$%Sanawar21$$@#$%Muhammad Sanawar@#$%b52 kzb
-talhadil47@#$%TalhaAdil48@@#$%Talha Adil@#$%l327..
-azensajid@#$%abcdef!1@#$%Azen Sajid@#$%damthal north nzb
-talha1233@#$%12345678t@@#$%shawtyyyy@#$%sdsad
-talha12334@#$%12345678t@@#$%dssahdjhs@#$%sakdsjask
-ironman69@#$%ironman123@@#$%Tony Stark@#$%blah blah
-admin@#$%12345678@@#$%dssahdjhs@#$%dsad
-skajdkhs@#$%disadh7@@#$%sdkhah@#$%dsakdj
-sanawar99@#$%Sanawar21$$@#$%asd@#$%asdf
-talhaadil48212@#$%TalhaAdil48@@#$%sadas@#$%dads
-talhaadil48901920@#$%TalhaAdil48@@#$%dadaj@#$%2jjads
-admin@#$%shopping123@#$%Admin@#$%CIS Department, NED University, Karachi.
-new@#$%Sanawar21$$@#$%new user@#$%new user address
-new2@#$%Sanawar21$$@#$%new user 2@#$%address 2
+{'username': 'sanawar99', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': None}

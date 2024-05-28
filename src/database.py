@@ -47,11 +47,8 @@ class Database:
         with open("database/users.txt") as file:
             lines = file.readlines()
             for line in lines:
-                line = line.strip()
-                attrs = line.split(self.SEP)
-                users.append(
-                    User(attrs[0], attrs[1], attrs[2], attrs[3])
-                )
+                user = User.from_dict(eval(line.strip()))
+                users.append(user)
         return users
 
     def save_user(self, user: User):
@@ -59,8 +56,7 @@ class Database:
         Saves a (new) User object to database. 
         """
         with open("database/users.txt", "a") as file:
-            file.write(
-                f"{user.username}{self.SEP}{user.password}{self.SEP}{user.full_name}{self.SEP}{user.address}\n")
+            file.write(str(user.to_dict()) + "\n")
 
     def remove_product_inventory(self, product_title: str):
         """this function reads the old file remove the product and writes the new file,
