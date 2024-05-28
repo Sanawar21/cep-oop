@@ -93,14 +93,15 @@
         {% if carts %}
         {% for cart in carts %}
         <div class="order">
-            <h2 class="order-id">Order ID: {{ loop.index }}</h2>
+            <h2 class="order-id">Order ID: {{ carts|length - loop.index + 1 }}</h2>
             <ul class="order-items">
                 {% for item in cart.items %}
                 <li class="order-item"><strong>{{item.product.title}}</strong> - Price:
-                    <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong></li>
+                    <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong>
+                </li>
                 {% endfor %}
-                <li class="order-item"><strong>{{cart.timestamp}}</strong></li>
-                <li class="order-item"><strong>{{cart.bank_name}}</strong></li>
+                <li class="order-item"><strong>Date: </strong>{{cart.timestamp}}</li>
+                <li class="order-item"><strong>Bank name: </strong>{{cart.bank_name}}</li>
             </ul>
             <p class="total-bill">Total Bill: ${{ cart.bill }}</p>
         </div>

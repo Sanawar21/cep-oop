@@ -133,7 +133,7 @@ def history():
         return redirect(url_for('login', next=request.url))
 
     carts = database.read_carts(user)
-    return render_template('history.html', carts=carts)
+    return render_template('history.html', carts=carts[::-1])
 
 
 @app.route('/logout')
