@@ -122,7 +122,8 @@ def checkout():
             return redirect(url_for('products'))
         else:
             flash('Invalid accosunt password.', 'error')
-    return render_template('checkout.html')
+            return render_template('checkout.html', incorrect_password=True)
+    return render_template('checkout.html', incorrect_password=False)
 
 
 @app.route('/history')

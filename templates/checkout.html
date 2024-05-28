@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: rgb(49,49,49);
+            background-color: rgb(49, 49, 49);
             color: #ffffff;
             margin: 0;
             padding: 0;
@@ -75,8 +76,25 @@
             color: #000000;
             text-decoration: none;
         }
+
+        .no-margin {
+            margin-bottom: 0px;
+        }
+
+        #invisible {
+            visibility: hidden;
+        }
+
+        .incorrectPassword {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red;
+            margin: 10px;
+        }
     </style>
 </head>
+
 <body>
     <div class="checkout-container">
         <h1 class="checkout-title">Checkout</h1>
@@ -84,10 +102,14 @@
             <label class="form-label" for="bank_name">Bank Name:</label>
             <input class="form-input" type="text" id="bank_name" name="bank_name">
             <label class="form-label" for="password">Account Password:</label>
-            <input class="form-input" type="password" id="password" name="password">
+            <input class="form-input no-margin" type="password" id="password" name="password">
+            <div class="incorrectPassword" id={{ 'invisible' if not incorrect_password else 'visible' }}>Incorrect
+                password
+            </div>
             <button class="checkout-button" type="submit">Checkout</button>
         </form>
         <a class="back-link" href="{{ url_for('cart_') }}">Back to Cart</a>
     </div>
 </body>
+
 </html>

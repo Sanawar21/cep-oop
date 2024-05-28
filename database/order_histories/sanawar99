@@ -1,0 +1,5 @@
+{'owner': 'sanawar99', 'bill': 124, 'timestamp': 'Tue May 28 16:22:17 2024', 'bank_name': 'hbl', 'items': [{'uid': 'B0BQTCF22V', 'title': "Men's Hines Sneaker", 'price': 62, 'quantity': 2}]}
+{'owner': 'sanawar99', 'bill': 214, 'timestamp': 'Tue May 28 16:44:32 2024', 'bank_name': 'HBL', 'items': [{'uid': 'B002BWONEO', 'title': 'Dead Rising 2 (PS3)', 'price': 35, 'quantity': 3}, {'uid': 'B07VT3JXLK', 'title': "Girls' Frozen Dress", 'price': 22, 'quantity': 2}, {'uid': 'B00JU7G6J8', 'title': 'Basket Sub-Assembly', 'price': 13, 'quantity': 5}]}
+{'owner': None, 'bill': 186, 'timestamp': 'Tue May 28 16:46:22 2024', 'bank_name': 'sanawar99', 'items': [{'uid': 'B0BQTCF22V', 'title': "Men's Hines Sneaker", 'price': 62, 'quantity': 3}]}
+{'owner': 'sanawar99', 'bill': 62, 'timestamp': 'Tue May 28 17:14:06 2024', 'bank_name': 'sanawar99', 'items': [{'uid': 'B0BQTCF22V', 'title': "Men's Hines Sneaker", 'price': 62, 'quantity': 1}]}
+{'owner': None, 'bill': 62, 'timestamp': 'Tue May 28 17:14:35 2024', 'bank_name': 'sanawar99', 'items': [{'uid': 'B0BQTCF22V', 'title': "Men's Hines Sneaker", 'price': 62, 'quantity': 1}]}
