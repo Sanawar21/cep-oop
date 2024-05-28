@@ -2,74 +2,82 @@
 authenticate.py module for user account generation and authentication.
 """
 
-from models.user import User
-from src.database import get_users, save_user
+from models.user import User, Admin
+from src.database import Database
 
 
-def validate_password(password):
-    """to check password if password is valid"""
+class Authenticator:
 
-    has_digit = False
-    has_special = False
+    def __init__(self) -> None:
+        self.database = Database()
 
-    if len(password) < 8:
-        return False
+    @staticmethod
+    def validate_password(password):
+        """to check password if password is valid"""
 
-    for char in password:
-        if char.isdigit():
-            has_digit = True
+        has_digit = False
+        has_special = False
 
-        if char in "!@#$%^&*()_+{}:/.,' ":
-            has_special = True
-    return has_digit and has_special
-
-
-def validate_username(username):
-    """to check username is valid"""
-    for char in username:
-        if char in "!@#$%^&*()_+{}:/.,' ":
+        if len(password) < 8:
             return False
-    return True
 
+        for char in password:
+            if char.isdigit():
+                has_digit = True
 
-def unique_username(username):
-    """to check if username is unique"""
-    users = get_users()
-    for user in users:
-        if username == user.username:
-            return False
-    return True
+            if char in "!@#$%^&*()_+{}:/.,' ":
+                has_special = True
+        return has_digit and has_special
 
-
-def login(username, password):
-    """this function would compare the values"""
-    users = get_users()
-    for user in users:
-        if user.username == username and user.password == password:
-            return user
-    return None
-
-
-def sign_up(username, password, full_name, address):
-    """if all the inputs are valid it will return a user object containing all the data of the user
-       else it would return a tuple"""
-    if validate_password(password):
-        pass
-    else:
-        return 1, "The password is not valid"
-
-    if not validate_username(username):
-        return 0, "This Username contains a special character."
-    if not unique_username(username):
-        return 0, "This Username has been already taken "
-    user = User(username, password, full_name, address)
-    save_user(user)
-    return user
-
-
-def admin_login(password):
-    """password for admin is shopping123"""
-    if password == "shopping123":
+    @staticmethod
+    def validate_username(username):
+        """to check username is valid"""
+        for char in username:
+            if char in "!@#$%^&*()_+{}:/.,' ":
+                return False
         return True
-    else:
-        return False
+
+    def unique_username(self, username):
+        """to check if username is unique"""
+        users = self.database.get_users()
+        for user in users:
+            if username == user.username:
+                return False
+        return True
+
+    def login(self, username, password):
+        """this function would compare the values"""
+        users = self.database.get_users()
+        for user in users:
+            if user.username == username and user.password == password:
+                self.user = user
+                self.username = username
+                self.password = password
+                return user
+
+    def sign_up(self, username, password, full_name, address):
+        """if all the inputs are valid it will return a user object containing all the data of the user
+        else it would return a tuple"""
+
+        if not self.validate_password(password):
+            return 1, "The password is not valid"
+
+        if not self.validate_username(username):
+            return 0, "This Username contains a special character."
+
+        if not self.unique_username(username):
+            return 0, "This Username has been already taken "
+
+        user = User(username, password, full_name, address)
+        self.database.save_user(user)
+        self.login(username, password)
+
+        return self.user
+
+
+class AdminAuthenticator(Authenticator):
+
+    def __init__(self, password) -> None:
+        super().__init__("admin", password)
+        if self.user:
+            self.user = Admin()

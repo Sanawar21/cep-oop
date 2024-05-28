@@ -57,17 +57,24 @@ class Cart:
             ]
         }
 
-    def from_dict(self, data: dict):
+    @classmethod
+    def null(cls):
+        return cls(None)
+
+    @classmethod
+    def from_dict(cls, data: dict):
         """
         Changes currect cart to the data provided in the dictionary
         """
-        self.owner = data["owner"]
-        self.bill = data["bill"]
-        self.bank_name = data["bank_name"]
-        self.timestamp = data["timestamp"]
-        self.items = [
+        obj = cls.null()
+        obj.owner = data["owner"]
+        obj.bill = data["bill"]
+        obj.bank_name = data["bank_name"]
+        obj.timestamp = data["timestamp"]
+        obj.items = [
             Item(Product(attr["title"], attr["price"], attr["uid"]), attr["quantity"]) for attr in data["items"]
         ]
+        return obj
 
     def get_bill(self):
         bill = 0

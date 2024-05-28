@@ -1,15 +1,17 @@
 import time
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
-from src import authenticate, database
+from src.authenticate import Authenticator
+from src.database import Database
 from models.cart import Cart
 from models.product import Product
 from models.user import User
 from src import routines
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
 # Initialize global variables
+database = Database()
+authenticator = Authenticator()
 all_products = database.get_products()
-cart = Cart(None)
+cart = Cart.null()
 user = None
 
 
@@ -24,7 +26,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = authenticate.login(username, password)
+        user = authenticator.login(username, password)
         if user:
             cart.owner = user.username
             flash('Login successful!', 'success')
@@ -42,7 +44,7 @@ def signup():
         password = request.form['password']
         full_name = request.form['full_name']
         address = request.form['address']
-        result = authenticate.sign_up(username, password, full_name, address)
+        result = authenticator.sign_up(username, password, full_name, address)
         if type(result) == tuple:
             flash(result[1], 'error')
         else:
@@ -140,7 +142,7 @@ def history():
 def logout():
     global user, cart
     user = None
-    cart = Cart(None)
+    cart = Cart.null()
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 

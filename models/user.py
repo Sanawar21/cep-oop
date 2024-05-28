@@ -9,3 +9,10 @@ class User:
         self.password = password
         self.full_name = full_name
         self.address = address
+
+
+class Admin(User):
+
+    def __init__(self) -> None:
+        super().__init__("admin", "shopping123", "Admin",
+                         "CIS Department, NED University, Karachi.")
