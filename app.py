@@ -15,6 +15,9 @@ all_products = database.get_products()
 cart = Cart.null()
 user = None
 
+# TODO: Tell user when the infos are invalid or incorrect and display appropriate message
+#       at login and signup and checkout
+
 
 @app.route('/')
 def index():
