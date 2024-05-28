@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: rgb(49,49,49); 
+            background-color: rgb(49, 49, 49);
             margin: 0;
             padding: 0;
             display: flex;
@@ -17,7 +18,7 @@
         }
 
         .signup-container {
-            background-color: #FFD700; 
+            background-color: #FFD700;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
             padding: 40px;
@@ -27,7 +28,7 @@
         }
 
         .signup-title {
-            color: #000000; 
+            color: #000000;
             font-size: 36px;
             text-align: center;
             margin-bottom: 20px;
@@ -45,23 +46,24 @@
         }
 
         .form-label {
-            color: #000000; 
+            color: #000000;
             font-size: large;
             font-weight: 400;
-            margin-bottom: 5px; 
-            display: block; 
+            margin-bottom: 5px;
+            display: block;
         }
 
         .form-input {
             font-weight: bold;
-            width: 100%; 
+            width: 100%;
             padding: 10px;
-            border: none; /* Black border */
+            border: none;
+            /* Black border */
             border-radius: 4px;
             font-size: 16px;
-            background-color: #FFFFFF; 
+            background-color: #FFFFFF;
             transition: border-color 0.3s ease;
-            box-sizing: border-box; 
+            box-sizing: border-box;
         }
 
         .form-input:focus {
@@ -70,7 +72,7 @@
         }
 
         .signup-button {
-            background-color: #000000; 
+            background-color: #000000;
             color: #FFFFFF;
             font-size: large;
             font-weight: bold;
@@ -83,41 +85,54 @@
         }
 
         .signup-button:hover {
-            background-color: #333333; 
+            background-color: #333333;
         }
 
         .back-link {
             display: block;
             margin-top: 10px;
             text-align: center;
-            color: #000000; 
+            color: #000000;
             text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            padding-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
     <div class="signup-container">
         <h1 class="signup-title">Sign Up</h1>
+        <p class="error">{{ error }}</p>
         <form class="signup-form" method="post">
             <div class="form-group">
                 <label class="form-label" for="username">Username:</label>
-                <input class="form-input" type="text" id="username" name="username">
+                <input class="form-input" type="text" id="username" name="username" value="{{ username }}">
             </div>
             <div class="form-group">
                 <label class="form-label" for="password">Password:</label>
-                <input class="form-input" type="password" id="password" name="password">
+                <input class="form-input" type="password" id="password" name="password" value="{{ password }}">
             </div>
             <div class="form-group">
                 <label class="form-label" for="full_name">Full Name:</label>
-                <input class="form-input" type="text" id="full_name" name="full_name">
+                <input class="form-input" type="text" id="full_name" name="full_name" value="{{ full_name }}">
             </div>
             <div class="form-group">
                 <label class="form-label" for="address">Address:</label>
-                <input class="form-input" type="text" id="address" name="address">
+                <input class="form-input" type="text" id="address" name="address" value="{{ address }}">
             </div>
-            <button class="signup-button" type="submit">Sign Up</button>
+            <button class="signup-button" type="submit">Next</button>
         </form>
         <a class="back-link" href="{{ url_for('index') }}">Back to Home</a>
     </div>
 </body>
+
 </html>

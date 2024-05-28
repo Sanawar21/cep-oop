@@ -128,7 +128,7 @@
 
         }
     </style>
-    
+
 </head>
 
 <body>
@@ -152,7 +152,7 @@
                 <form class="cart-form" action="{{ url_for('product_detail', product_id=products.index(product)) }}"
                     method="post">
                     <input type="hidden" name="product_id" value="{{ products.index(product) }}">
-                    <button class="cart-button" type="submit">Description</button>
+                    <button class="cart-button" type="submit">View product</button>
                 </form>
 
             </li>

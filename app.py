@@ -46,17 +46,53 @@ def signup():
     global user
     if request.method == 'POST':
         username = request.form['username']
+        session["username"] = username
         password = request.form['password']
+        session["password"] = password
         full_name = request.form['full_name']
+        session["full_name"] = full_name
         address = request.form['address']
-        result = authenticator.sign_up(username, password, full_name, address)
-        if type(result) == tuple:
-            flash(result[1], 'error')
-        else:
-            user = result
-            cart.owner = username
-            flash('Signup successful!', 'success')
-            return redirect(url_for('products'))
+        session["address"] = address
+
+        if not username or not password or not full_name or not address:
+            return render_template('signup.html',
+                                   error="All fields are required.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   address=address)
+
+        if not authenticator.unique_username(username):
+            return render_template('signup.html',
+                                   error="This username is taken.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   address=address)
+
+        if not authenticator.validate_username(username):
+            return render_template('signup.html',
+                                   error="Username cannot contain any special characters.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   address=address)
+        if not authenticator.validate_password(password):
+            return render_template('signup.html',
+                                   error="Password must be atleast 8 characters with a special character and a number.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   address=address)
+
+        return redirect(
+            url_for(
+                'bank_details',
+                username=username,
+                password=password,
+                full_name=full_name,
+                address=address))
+
     return render_template('signup.html')
 
 
@@ -67,6 +103,7 @@ def products():
         return redirect(url_for('login', next=request.url))
 
     return render_template('products.html', products=all_products, cart=cart)
+
 
 @app.route('/product_detail/<int:product_id>', methods=['GET', 'POST'])
 def product_detail(product_id):
@@ -80,8 +117,9 @@ def product_detail(product_id):
         # For example, add the product to the cart or remove it
         # You may need to update the cart and then redirect to the product detail page
         return redirect(url_for('product_detail', product_id=product_id))
-    
+
     return render_template('product_detail.html', product=product, product_index=int(product_id), cart=cart)
+
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -159,6 +197,11 @@ def history():
 
     carts = database.read_carts(user)
     return render_template('history.html', carts=carts[::-1])
+
+
+@app.route('/bankdetails')
+def bank_details():
+    return render_template("bank_details.html")
 
 
 @app.route('/logout')
