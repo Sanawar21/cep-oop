@@ -110,6 +110,10 @@ def checkout():
 
     if request.method == 'POST':
 
+        # request only the bank pin at checkout
+        # call user.checkout(<pin inputted>)
+        # user.checkout will return True if the pin is correct else it will return False
+
         bank_name = request.form['bank_name']
         password = request.form['password']
         if password == user.password:

@@ -43,6 +43,9 @@ class User:
                 self.username, bank_name, card_number, pin)
             return self.bank_details
 
+    def checkout(self, pin):
+        return pin == self.bank_details.pin
+
 
 class Admin(User):
 
