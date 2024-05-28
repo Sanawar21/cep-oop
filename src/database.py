@@ -19,7 +19,7 @@ def get_products() -> "list[Product]":
     with open("database/products.txt") as file:
         lines = file.readlines()
         for line in lines:
-            attrs = line.split(SEP)
+            attrs = line.strip().split(SEP)
             products.append(
                 Product(attrs[0], int(float(attrs[1])), uid=attrs[2]))
 
