@@ -78,11 +78,19 @@
             padding: 10px 20px;
             border-radius: 5px;
             display: inline-block;
-            margin-top: 20px;
+            margin: 10px;
         }
 
         .btn:hover {
             background-color: #333333;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            background-color: #f7f7f7;
         }
     </style>
 </head>
@@ -90,6 +98,10 @@
 <body>
     <div class="container">
         <h1 class="title">Order History</h1>
+        <div class="navbar">
+            <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
+            <a class="btn" href="{{ url_for('logout') }}">Logout</a>
+        </div>
         {% if carts %}
         {% for cart in carts %}
         <div class="order">
@@ -109,8 +121,6 @@
         {% else %}
         <p class="no-history">You have no order history.</p>
         {% endif %}
-        <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
-        <a class="btn" href="{{ url_for('logout') }}">Logout</a>
     </div>
 </body>
 
