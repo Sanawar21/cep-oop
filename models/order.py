@@ -31,9 +31,11 @@ class Order(ABC):
 
 
 class BankOrder(Order):
+
+    type = "Bank"
+
     def __init__(self, cart: Cart, full_name, address, bank_details: BankDetails) -> None:
         super().__init__(cart, full_name, address)
-        self.type = "Bank"
         self.bank_name = bank_details.bank_name
         self.card_number = bank_details.card_number
 
@@ -72,7 +74,6 @@ class BankOrder(Order):
         obj.owner = data["owner"]
         obj.bill = data["bill"]
         obj.timestamp = data["timestamp"]
-        obj.type = data["type"]
         obj.full_name = data["full_name"]
         obj.bank_name = data["bank_name"]
         obj.card_number = data["card_number"]
@@ -83,9 +84,11 @@ class BankOrder(Order):
 
 
 class CodOrder(Order):
+
+    type = "COD"
+
     def __init__(self, cart: Cart, full_name, address, email, phone) -> None:
         super().__init__(cart, full_name, address)
-        self.type = "COD"
         self.email = email
         self.phone = phone
         self.address = address
@@ -122,7 +125,6 @@ class CodOrder(Order):
         obj.owner = data["owner"]
         obj.bill = data["bill"]
         obj.timestamp = data["timestamp"]
-        obj.type = data["type"]
         obj.full_name = data["full_name"]
         obj.email = data["email"]
         obj.phone = data["phone"]
