@@ -103,29 +103,36 @@
     padding {
       padding: 50px;
     }
+
+    .error {
+      color: red;
+      text-align: center;
+      padding-bottom: 10px;
+    }
   </style>
 </head>
 
 <body>
   <div class="details-container">
     <h1 class="details-title">Bank Details</h1>
+    <p class="error">{{ error }}</p>
     <padding />
     <form class="details-form" method="post">
       <div class="form-group">
         <label class="form-label" for="bank_name">Bank name:</label>
-        <input class="form-input" type="text" id="bank_name" name="bank_name">
+        <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{bank_name}}">
       </div>
       <div class="form-group">
         <label class="form-label" for="card_number">Card number:</label>
-        <input class="form-input" type="text" id="card_number" name="card_number">
+        <input class="form-input" type="text" id="card_number" name="card_number" value="{{card_number}}">
       </div>
       <div class="form-group">
         <label class="form-label" for="pin">Pin:</label>
-        <input class="form-input" type="text" id="pin" name="pin">
+        <input class="form-input" type="text" id="pin" name="pin" value="{{pin}}">
       </div>
       <button class="details-button" type="submit">Sign Up</button>
     </form>
-    <a class="back-link" href="{{ url_for('signup') }}">Continue without bank detials</a>
+    <a class="back-link" href="{{ url_for('no_bank_details') }}">Continue without bank details</a>
     <a class="back-link" href="{{ url_for('signup') }}">Back to sign up page</a>
   </div>
 </body>

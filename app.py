@@ -3,12 +3,10 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from src.authenticate import Authenticator
 from src.database import Database
 from models.cart import Cart
-from models.product import Product
-from models.user import User
-from src import routines
+from models.user import User, BankDetails
+
 app = Flask(__name__)
 app.secret_key = "pIQ89naMqA21"
-# Initialize global variables
 database = Database()
 authenticator = Authenticator()
 all_products = database.get_products()
@@ -37,7 +35,7 @@ def login():
             flash('Login successful!', 'success')
             return redirect(url_for('products'))
         else:
-            flash('Invalid username or password.', 'error')
+            return render_template("login.html", error="Invalid username or password.")
     return render_template('login.html')
 
 
@@ -175,7 +173,7 @@ def checkout():
             database.write_cart(user, cart)
             flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: ${}'.format(
                 total_bill), 'success')
-            cart = Cart(None)
+            cart = Cart.null()
             return redirect(url_for('products'))
         else:
             flash('Invalid accosunt password.', 'error')
@@ -193,18 +191,64 @@ def history():
     return render_template('history.html', carts=carts[::-1])
 
 
-@app.route('/bankdetails')
+@app.route('/nobankdetails', methods=["GET", "POST"])
+def no_bank_details():
+    global user
+    result = authenticator.sign_up(
+        session["username"],
+        session["password"],
+        session["full_name"],
+        session["address"],
+    )
+    if type(result) == tuple:
+        flash(result[1], 'error')
+    else:
+        user = result
+        cart.owner = user.username
+        return redirect(url_for('products'))
+
+
+@app.route('/bankdetails', methods=['GET', 'POST'])
 def bank_details():
     global user
     if request.method == "POST":
-        # TODO: Implement this
-        # bank_name = request.form['bank_name']
-        # card_number = request.form['password']
+        bank_name = request.form['bank_name']
+        card_number = request.form['card_number']
+        pin = request.form['pin']
+
+        if not bank_name or not card_number or not pin:
+            return render_template(
+                "bank_details.html",
+                error="All fields are required.",
+                bank_name=bank_name,
+                card_number=card_number,
+                pin=pin,
+            )
+        if not User.validate_card_number(card_number):
+            return render_template(
+                "bank_details.html",
+                error="Card number must be 10 digits.",
+                bank_name=bank_name,
+                card_number=card_number,
+                pin=pin,
+            )
+
+        if not User.validate_pin(pin):
+            return render_template(
+                "bank_details.html",
+                error="Pin must be 4 digit long.",
+                bank_name=bank_name,
+                card_number=card_number,
+                pin=pin,
+            )
+
+        bank = BankDetails(session["username"], bank_name, card_number, pin)
         result = authenticator.sign_up(
             session["username"],
             session["password"],
             session["full_name"],
             session["address"],
+            bank
         )
 
         if type(result) == tuple:

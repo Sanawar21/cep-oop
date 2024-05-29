@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: rgb(49, 49, 49); 
+            background-color: rgb(49, 49, 49);
             margin: 0;
             padding: 0;
             display: flex;
@@ -43,7 +44,7 @@
         }
 
         .form-label {
-            color: #000000; 
+            color: #000000;
             font-size: large;
             font-weight: 400;
             margin-bottom: 15px;
@@ -53,7 +54,7 @@
             font-weight: bold;
             width: 380px;
             padding: 10px;
-            border: none; 
+            border: none;
             border-radius: 4px;
             font-size: 16px;
             background-color: #FFFFFF;
@@ -61,13 +62,13 @@
         }
 
         .form-input:focus {
-            outline: none; 
+            outline: none;
             border-color: #000000;
         }
 
         .login-button {
-            background-color: #000000; 
-            color: #FFFFFF; 
+            background-color: #000000;
+            color: #FFFFFF;
             font-size: large;
             font-weight: bold;
             border: none;
@@ -79,21 +80,29 @@
         }
 
         .login-button:hover {
-            background-color: #333333; 
+            background-color: #333333;
         }
 
         .back-link {
             display: block;
             margin-top: 10px;
             text-align: center;
-            color: #000000; 
+            color: #000000;
             text-decoration: none;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            padding-bottom: 10px;
         }
     </style>
 </head>
+
 <body>
     <div class="login-container">
         <h1 class="login-title">Login</h1>
+        <p class="error">{{ error }}</p>
         <form class="login-form" method="post">
             <div class="form-group">
                 <label class="form-label" for="username">Username:</label>
@@ -108,4 +117,5 @@
         <a class="back-link" href="{{ url_for('index') }}">Back to Home</a>
     </div>
 </body>
+
 </html>

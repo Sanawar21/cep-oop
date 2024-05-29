@@ -55,7 +55,7 @@ class Authenticator:
                 self.password = password
                 return user
 
-    def sign_up(self, username, password, full_name, address):
+    def sign_up(self, username, password, full_name, address, bank_details=None):
         """if all the inputs are valid it will return a user object containing all the data of the user
         else it would return a tuple"""
 
@@ -68,7 +68,7 @@ class Authenticator:
         if not self.unique_username(username):
             return 0, "This Username has been already taken "
 
-        user = User(username, password, full_name, address)
+        user = User(username, password, full_name, address, bank_details)
         self.database.save_user(user)
         self.login(username, password)
 
