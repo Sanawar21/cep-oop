@@ -51,7 +51,7 @@ class User:
                 self.username, bank_name, card_number, pin)
             return self.bank_details
 
-    def checkout(self, pin):
+    def check_pin(self, pin) -> bool:
         return pin == self.bank_details.pin
 
 

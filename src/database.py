@@ -110,6 +110,28 @@ class Database:
             pass
         return orders
 
+    def save_users(self, users: list[User]):
+        # remove all file contents
+        with open("database/users.txt", "w") as file:
+            pass
+        # rewrite the users
+        for user in users:
+            self.save_user(user)
+
+    def overwrite_user(self, new_user: User):
+        users = self.get_users()
+        index = None
+        for i, user in enumerate(users):
+            if user.username == new_user.username:
+                index = i
+                break
+        else:
+            return
+
+        users[index] = new_user
+        self.save_users(users)
+        return new_user
+
     @staticmethod
     def write_cart(user: User, cart: Cart):
         """writes the order of the user in the file of his name"""

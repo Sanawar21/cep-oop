@@ -4,6 +4,7 @@ from src.authenticate import Authenticator
 from src.database import Database
 from models.cart import Cart
 from models.user import User, BankDetails
+from models.order import BankOrder, CodOrder
 
 app = Flask(__name__)
 app.secret_key = "pIQ89naMqA21"
@@ -149,36 +150,142 @@ def cart_():
     return render_template('cart.html', products=all_products, cart=cart)
 
 
-@app.route('/checkout', methods=['GET', 'POST'])
+@app.route('/checkout-cod', methods=['GET', 'POST'])
+def checkout_cod():
+    global cart
+
+    if not user:
+        return redirect(url_for('login', next=request.url))
+
+    if request.method == 'POST':
+        address = request.form['address']
+        full_name = request.form['full_name']
+        password = request.form['password']
+        email = request.form['email']
+        phone = request.form['phone']
+
+        if not address or not full_name or not password or not email or not phone:
+            return render_template('checkout_cod.html',
+                                   # implemented dummy user here
+                                   user=User(user.username, user.password,
+                                             full_name, address, None),
+                                   error="Incorrect account password.")
+
+        if password == user.password:
+            order = CodOrder(cart, full_name, address, email, phone)
+            database.write_order(order)
+
+            cart = Cart.null()
+            return redirect(url_for('products'))
+        else:
+            # TODO: Pass auto-fill form data
+            return render_template('checkout_cod.html', user=user, error="Incorrect account password.")
+
+    return render_template('checkout_cod.html', user=user)
+
+
+@app.route('/checkout-bank', methods=['GET', 'POST'])
+def checkout_bank():
+    global user, cart
+
+    if request.method == "POST":
+
+        # get details
+
+        address = request.form["address"]
+        full_name = request.form["full_name"]
+        if user.bank_details:
+            pin = request.form["pin"]
+        else:  # bank details were passed right now
+            bank_name = request.form["bank_name"]
+            card_number = request.form["card_number"]
+            pin = request.form["pin"]
+
+        # check validity
+
+        if user.bank_details:
+            if not pin or not address or not full_name:
+                return render_template(
+                    'checkout_bank.html',
+                    error="All fields are required.",
+                    user=user,
+                    address=address,
+                    full_name=full_name,
+                    pin="",
+                )
+
+            if not user.check_pin(pin):
+                return render_template(
+                    'checkout_bank.html',
+                    error="Incorrect pin.",
+                    user=user,
+                    address=address,
+                    full_name=full_name,
+                    pin="",
+                )
+        else:
+            if not bank_name or not card_number or not pin or not address or not full_name:
+                return render_template(
+                    "checkout_bank.html",
+                    error="All fields are required.",
+                    bank_name=bank_name,
+                    card_number=card_number,
+                    address=address,
+                    full_name=full_name,
+                    pin="",
+                )
+            if not User.validate_card_number(card_number):
+                return render_template(
+                    "checkout_bank.html",
+                    error="Card number must be 10 digits.",
+                    bank_name=bank_name,
+                    card_number=card_number,
+                    address=address,
+                    full_name=full_name,
+                    pin=""
+                )
+
+            if not User.validate_pin(pin):
+                return render_template(
+                    "checkout_bank.html",
+                    error="Pin must be 4 digit long.",
+                    bank_name=bank_name,
+                    card_number=card_number,
+                    address=address,
+                    full_name=full_name,
+                    pin="",
+                )
+
+        # details are valid and usable
+
+        if user.bank_details:
+            order = BankOrder(cart, user.full_name, address, user.bank_details)
+        else:
+            user.add_bank_details(bank_name, card_number, pin)
+            user = database.overwrite_user(user)
+
+        database.write_order(order)
+        cart = Cart.null()
+
+        # TODO: write thank_you.html
+        return render_template('thank_you.html')
+
+    # TODO: Decide what info should be passed to checkout_bank.html
+    # Maybe a dummy user will work
+    return render_template('checkout_bank.html', user=user)
+
+
+@app.route('/checkout', methods=['GET'])
 def checkout():
     global cart
     if not user:
         flash('Please log in to checkout.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    if request.method == 'POST':
-
-        # request only the bank pin at checkout
-        # call user.checkout(<pin inputted>)
-        # user.checkout will return True if the pin is correct else it will return False
-
-        bank_name = request.form['bank_name']
-        password = request.form['password']
-        if password == user.password:
-            cart.bank_name = bank_name
-            cart.timestamp = time.asctime()
-            # Calculate total bill
-            total_bill = sum(item.product.price *
-                             item.quantity for item in cart.items)
-            database.write_cart(user, cart)
-            flash('Checkout successful! Items will be delivered in 1 to 2 working days. Total Bill: ${}'.format(
-                total_bill), 'success')
-            cart = Cart.null()
-            return redirect(url_for('products'))
-        else:
-            flash('Invalid accosunt password.', 'error')
-            return render_template('checkout.html', incorrect_password=True)
-    return render_template('checkout.html', incorrect_password=False)
+    if user.bank_details:
+        return render_template("checkout_bank.html", user=user)
+    else:
+        return render_template("checkout_cod.html", user=user)
 
 
 @app.route('/history')
@@ -187,8 +294,8 @@ def history():
         flash('Please log in to view your order history.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    carts = database.read_carts(user)
-    return render_template('history.html', carts=carts[::-1])
+    orders = database.read_orders(user.username)
+    return render_template('history.html', orders=orders[::-1])
 
 
 @app.route('/nobankdetails', methods=["GET", "POST"])
