@@ -5,6 +5,7 @@ Database handler for this project.
 from models.cart import Cart
 from models.product import Product
 from models.user import User
+from models.order import CodOrder, BankOrder
 
 
 class Database:
@@ -86,6 +87,28 @@ class Database:
                     new_lines.append(line)
             with open("database/products.txt", "w") as file_:
                 file_.writelines(new_lines)
+
+    @staticmethod
+    def write_order(order: BankOrder | CodOrder):
+        with open(f"database/order_histories/{order.owner}", "a") as file:
+            file.write(str(order.to_dict())+"\n")
+
+    @staticmethod
+    def read_orders(owner: str) -> list[BankOrder | CodOrder]:
+        orders = []
+        try:
+            with open(f"database/order_histories/{owner}") as file:
+                lines = file.readlines()
+                for line in lines:
+                    if line != "" or line != "\n":
+                        order_data = eval(line.strip())
+                        if order_data["type"] == CodOrder.type:
+                            orders.append(CodOrder.from_dict(order_data))
+                        else:
+                            orders.append(BankOrder.from_dict(order_data))
+        except FileNotFoundError:
+            pass
+        return orders
 
     @staticmethod
     def write_cart(user: User, cart: Cart):
