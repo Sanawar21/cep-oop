@@ -22,3 +22,9 @@ class BankDetails:
             data["card_number"],
             data["pin"],
         )
+
+    @classmethod
+    def null(cls):
+        return cls(
+            None, None, None, None
+        )
