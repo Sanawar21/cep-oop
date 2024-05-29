@@ -102,20 +102,26 @@
             <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
             <a class="btn" href="{{ url_for('logout') }}">Logout</a>
         </div>
-        {% if carts %}
-        {% for cart in carts %}
+        {% if orders %}
+        {% for order in orders %}
         <div class="order">
-            <h2 class="order-id">Order ID: {{ carts|length - loop.index + 1 }}</h2>
+            <h2 class="order-id">Order ID: {{ orders|length - loop.index + 1 }}</h2>
             <ul class="order-items">
-                {% for item in cart.items %}
-                <li class="order-item"><strong>{{item.product.title}}</strong> - Price:
-                    <strong>${{item.product.price}}</strong> - Quantity: <strong>{{item.quantity}}</strong>
+                {% for item in order.items %}
+                <li class="order-item"><strong>{{ item.product.title }}</strong> - Price:
+                    <strong>${{ item.product.price }}</strong> - Quantity: <strong>{{ item.quantity }}</strong>
                 </li>
                 {% endfor %}
-                <li class="order-item"><strong>Date: </strong>{{cart.timestamp}}</li>
-                <li class="order-item"><strong>Bank name: </strong>{{cart.bank_name}}</li>
+                <li class="order-item"><strong>Date: </strong>{{ order.timestamp }}</li>
+                {% if order.type == 'Bank' %}
+                <li class="order-item"><strong>Bank name: </strong>{{ order.bank_name }}</li>
+                <li class="order-item"><strong>Card number: </strong>{{ order.card_number }}</li>
+                {% elif order.type == 'COD' %}
+                <li class="order-item"><strong>Email: </strong>{{ order.email }}</li>
+                <li class="order-item"><strong>Phone: </strong>{{ order.phone }}</li>
+                {% endif %}
             </ul>
-            <p class="total-bill">Total Bill: ${{ cart.bill }}</p>
+            <p class="total-bill">Total Bill: ${{ order.bill }}</p>
         </div>
         {% endfor %}
         {% else %}
