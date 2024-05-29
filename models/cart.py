@@ -37,16 +37,12 @@ class Cart:
         self.owner = owner
         # will save items as Item objects
         self.items: list[Item] = []
-        self.bill: int = 0
-        self.timestamp = None
-        self.bank_name = None
+        self.get_bill()
 
     def to_dict(self):
         return {
             "owner": self.owner,
             "bill": self.bill,
-            "timestamp": self.timestamp,
-            "bank_name": self.bank_name,
             "items": [
                 {
                     "uid": item.product.uid,
@@ -69,8 +65,6 @@ class Cart:
         obj = cls.null()
         obj.owner = data["owner"]
         obj.bill = data["bill"]
-        obj.bank_name = data["bank_name"]
-        obj.timestamp = data["timestamp"]
         obj.items = [
             Item(Product(attr["title"], attr["price"], attr["uid"]), attr["quantity"]) for attr in data["items"]
         ]
@@ -92,7 +86,7 @@ class Cart:
         else:
             index = self.items.index(product)
             self.items[index].quantity += quantity
-        self.bill += product.price * quantity
+        self.get_bill()
 
     def remove_product(self, product: Product, quantity: int):
         """
@@ -105,7 +99,6 @@ class Cart:
 
         if in_items.quantity <= quantity:
             self.items.remove(in_items)
-            self.bill -= product.price * in_items.quantity
         else:
             in_items.quantity -= quantity
-            self.bill -= product.price * quantity
+        self.get_bill()
