@@ -13,9 +13,9 @@ class Item:
     def __eq__(self, __value: object) -> bool:
         # return True if the objects are identical or the other object is the same Product object as in the Item
         if isinstance(__value, Item):
-            return self.product == __value.product
+            return self.product.uid == __value.product.uid
         elif isinstance(__value, Product):
-            return self.product == __value
+            return self.product.uid == __value.uid
         # for other cases return False
         else:
             return False

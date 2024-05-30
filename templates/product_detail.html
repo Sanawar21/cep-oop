@@ -160,7 +160,7 @@
                 <a href="{{ url_for('products') }}">Back to products</a>
                 <form class="cart-form"
                     action="{{ url_for('add_to_cart') if not in_cart else url_for('remove_from_cart') }}" method="post">
-                    <input type="hidden" name="product_id" value="{{ product_index }}">
+                    <input type="hidden" name="product_id" value="{{ product.uid }}">
                     <button class="add-to-cart" type="submit">{{ 'Add to cart' if not in_cart else 'Remove from cart'
                         }}</button>
                 </form>

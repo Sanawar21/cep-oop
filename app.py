@@ -98,24 +98,15 @@ def products():
     return render_template('products.html', products=all_products, cart=cart)
 
 
-@app.route('/product_detail/<int:product_id>', methods=['GET', 'POST'])
+@app.route('/product_detail/<product_id>', methods=['GET'])
 def product_detail(product_id):
     if not user:
         flash('Please log in to view product details.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    product = all_products[product_id]
-    if request.method == 'POST':
-        # Handle the form submission here
-        # For example, add the product to the cart or remove it
-        # You may need to update the cart and then redirect to the product detail page
-        return redirect(url_for('product_detail', product_id=product_id))
-
-    in_cart = False
-    if product in cart.items:
-        in_cart = True
-
-    return render_template('product_detail.html', product=product, product_index=int(product_id), cart=cart, in_cart=in_cart)
+    product = database.get_product(product_id)
+    in_cart = product in cart.items
+    return render_template('product_detail.html', product=product, in_cart=in_cart)
 
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -124,10 +115,9 @@ def add_to_cart():
         flash('Please log in to add products to your cart.', 'error')
         return jsonify({'error': 'Please log in to add products to your cart.'}), 401
 
-    product_id = int(request.form.get('product_id'))
-    product = all_products[product_id]
+    product_uid = request.form.get('product_id')
+    product = database.get_product(product_uid)
     cart.add_product(product, 1)
-    flash('Product added to cart successfully!', 'success')
     return jsonify({'success': 'Product added to cart successfully!'}), 200
 
 
@@ -135,8 +125,9 @@ def add_to_cart():
 def remove_from_cart():
     if not user:
         return jsonify({'error': 'Please log in to remove products from your cart.'}), 401
-    product_id = int(request.form.get('product_id'))
-    product = all_products[product_id]
+
+    product_uid = request.form.get('product_id')
+    product = database.get_product(product_uid)
     cart.remove_product(product, 1)
     return jsonify({'success': 'Product removed from cart successfully!'}), 200
 
@@ -266,12 +257,12 @@ def checkout_bank():
                     user=dummy_user,
                 )
 
-        # details are valid and usable
-        order = BankOrder(cart, user.full_name, address, user.bank_details)
-
         if not user.bank_details:
             user.add_bank_details(bank_name, card_number, pin)
             user = database.overwrite_user(user)
+
+        # details are valid and usable
+        order = BankOrder(cart, user.full_name, address, user.bank_details)
 
         database.write_order(order)
         cart = Cart.null()

@@ -130,7 +130,7 @@
             /* background-color: #f7f7f7; */
             width: 900px;
             margin-left: 50px;
-        
+
         }
 
         .cart-logo {
@@ -140,14 +140,16 @@
             background-color: transparent;
             margin-top: 2px;
         }
-        .history-logo{
+
+        .history-logo {
             object-fit: contain;
             width: 50px;
             height: 50px;
             background-color: transparent;
 
         }
-        .logout-logo{
+
+        .logout-logo {
             object-fit: contain;
             width: 40px;
             height: 40px;
@@ -155,7 +157,6 @@
             margin-top: 5px;
 
         }
-        
     </style>
 </head>
 
@@ -183,9 +184,7 @@
                     <p class="product-name">{{ product.title }}</p>
                     <p class="product-price">${{ product.price }}</p>
                 </div>
-                <form class="cart-form" action="{{ url_for('product_detail', product_id=products.index(product)) }}"
-                    method="post">
-                    <input type="hidden" name="product_id" value="{{ products.index(product) }}">
+                <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}" method="get">
                     <button class="cart-button" type="submit">View product</button>
                 </form>
             </li>

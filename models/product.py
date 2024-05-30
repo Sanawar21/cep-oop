@@ -12,6 +12,11 @@ class Product:
         else:
             self.image_path = "static/images/placeholder_image.jpg"
 
+    def __eq__(self, value: object) -> bool:
+        if isinstance(value, Product):
+            return self.uid == value.uid
+        return False
+
     def __str__(self) -> str:
         as_string = f"Title: {self.title}\nPrice: Rs.{self.price}"
 

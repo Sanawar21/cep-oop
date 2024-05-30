@@ -153,3 +153,6 @@ class Database:
         except FileNotFoundError:
             pass
         return carts
+
+    def get_product(self, uid):
+        return [product for product in self.get_products() if product.uid == uid][0]
