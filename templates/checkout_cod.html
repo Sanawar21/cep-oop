@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout</title>
   <style>
+    a:hover {
+      text-decoration: none;
+      font-weight: 600;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: rgb(49, 49, 49);
@@ -63,7 +68,7 @@
       cursor: pointer;
       width: 100%;
       transition: background-color 0.3s ease;
-      margin-top: 20px;
+      margin-top: 5px;
     }
 
     .checkout-button:hover {
@@ -98,6 +103,8 @@
       color: red;
       text-align: center;
       padding-bottom: 10px;
+      font-weight: 600;
+      font-style: italic;
     }
 
     .switch-method-row {
@@ -116,12 +123,7 @@
 
     .switch-method-row a:hover {
       font-weight: bold;
-      text-decoration-line: underline;
 
-    }
-
-    .back-link:hover {
-      text-decoration-line: underline;
 
     }
 
@@ -140,22 +142,20 @@
       <a class="active">Cash on delivery</a>
       <a href="{{ url_for('checkout_bank') }}">Bank payment</a>
     </div>
-    <p class="error">{{ error }}</p>
     <form method="post" action="{{ url_for('checkout_cod') }}">
-      <label class="form-label" for="email">Email:</label>
+      <label class="form-label" for="email">Email</label>
       <input class="form-input" type="text" id="email" name="email" value="{{email}}">
-      <label class="form-label" for="phone">Phone number:</label>
+      <label class="form-label" for="phone">Phone number</label>
       <input class="form-input" type="text" id="phone" name="phone" value="{{phone}}">
 
-      <label class="form-label" for="full_name">Full name:</label>
+      <label class="form-label" for="full_name">Full name</label>
       <input class="form-input" type="text" id="full_name" name="full_name" value="{{user.full_name}}">
-      <label class="form-label" for="address">Delivery address:</label>
+      <label class="form-label" for="address">Delivery address</label>
       <input class="form-input" type="text" id="address" name="address" value="{{user.address}}">
 
-      <label class="form-label" for="password">Account password:</label>
+      <label class="form-label" for="password">Account password</label>
       <input class="form-input no-margin" type="password" id="password" name="password" value="">
-
-      <padding />
+      <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Checkout</button>
     </form>
     <a class="back-link" href="{{ url_for('cart_') }}">Back to Cart</a>

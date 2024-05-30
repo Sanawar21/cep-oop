@@ -7,6 +7,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout</title>
   <style>
+    a:hover {
+      text-decoration: none;
+      font-weight: 600;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: rgb(49, 49, 49);
@@ -64,7 +69,7 @@
       cursor: pointer;
       width: 100%;
       transition: background-color 0.3s ease;
-      margin-top: 20px;
+      margin-top: 5px;
     }
 
     .checkout-button:hover {
@@ -87,18 +92,13 @@
       visibility: hidden;
     }
 
-    .incorrectPassword {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: red;
-      margin: 10px;
-    }
 
     .error {
       color: red;
       text-align: center;
       padding-bottom: 10px;
+      font-weight: 600;
+      font-style: italic;
     }
 
     .switch-method-row {
@@ -117,14 +117,10 @@
 
     .switch-method-row a:hover {
       font-weight: bold;
-      text-decoration-line: underline;
+
 
     }
 
-    .back-link:hover {
-      text-decoration-line: underline;
-
-    }
 
     .active {
       font-weight: bold;
@@ -141,19 +137,18 @@
       <a href="{{ url_for('checkout_cod') }}">Cash on delivery</a>
       <a class="active">Bank payment</a>
     </div>
-    <p class="error">{{ error }}</p>
     <form method="post" action="{{ url_for('checkout_bank') }}">
       {% if user.bank_details %}
-      <label class="form-label" for="bank_name">Bank name:</label>
+      <label class="form-label" for="bank_name">Bank name</label>
       <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}"
         disabled>
-      <label class="form-label" for="card_number">Card number:</label>
+      <label class="form-label" for="card_number">Card number</label>
       <input class="form-input" type="text" id="card_number" name="card_number"
         value="{{user.bank_details.card_number}}" disabled>
       {% else %}
-      <label class="form-label" for="bank_name">Bank name:</label>
+      <label class="form-label" for="bank_name">Bank name</label>
       <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}">
-      <label class="form-label" for="card_number">Card number:</label>
+      <label class="form-label" for="card_number">Card number</label>
       <input class="form-input" type="text" id="card_number" name="card_number"
         value="{{user.bank_details.card_number}}">
       {% endif %}
@@ -165,8 +160,7 @@
 
       <label class="form-label" for="pin">PIN:</label>
       <input class="form-input no-margin" type="password" id="address" name="pin" value="{{user.pin}}">
-
-      <padding />
+      <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Checkout</button>
     </form>
     <a class="back-link" href="{{ url_for('cart_') }}">Back to Cart</a>

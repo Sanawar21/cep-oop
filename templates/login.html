@@ -91,10 +91,16 @@
             text-decoration: none;
         }
 
+        .back-link:hover {
+            font-weight: 600;
+        }
+
         .error {
             color: red;
             text-align: center;
             padding-bottom: 10px;
+            font-weight: 600;
+            font-style: italic;
         }
     </style>
 </head>
@@ -102,7 +108,6 @@
 <body>
     <div class="login-container">
         <h1 class="login-title">Login</h1>
-        <p class="error">{{ error }}</p>
         <form class="login-form" method="post">
             <div class="form-group">
                 <label class="form-label" for="username">Username:</label>
@@ -112,6 +117,7 @@
                 <label class="form-label" for="password">Password:</label>
                 <input class="form-input" type="password" id="password" name="password">
             </div>
+            <p class="error">{{ error }}</p>
             <button class="login-button" type="submit">Login</button>
         </form>
         <a class="back-link" href="{{ url_for('index') }}">Back to Home</a>
