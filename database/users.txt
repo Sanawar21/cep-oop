@@ -1,5 +1,8 @@
-{'username': 'sanawar99', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': None}
+{'username': 'sanawar99', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'owner': 'sanawar99', 'bank_name': 'NEW BANK', 'card_number': '1234512345', 'pin': '1234'}}
 {'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'North Karachi', 'bank_details': None}
 {'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'adfadf', 'bank_details': None}
 {'username': 'sanawar999', 'password': 'Sanawar21$$', 'full_name': 'asdfads', 'address': 'lkjlakjsdf', 'bank_details': None}
 {'username': 'test', 'password': 'Sanawar21$$', 'full_name': 'test test', 'address': 'test address', 'bank_details': {'owner': 'test', 'bank_name': 'Bank Al Habib', 'card_number': '1234567890', 'pin': '1234'}}
+{'username': 'nobank', 'password': 'Sanawar21$$', 'full_name': 'NO BANK', 'address': 'NO BANK USER KA GHAR', 'bank_details': None}
+{'username': 'yesbank', 'password': 'Sanawar21$$', 'full_name': 'YES BANK', 'address': 'YES BANK USER KA ADDRESS', 'bank_details': {'owner': 'yesbank', 'bank_name': 'HBL Islamic', 'card_number': '1234123412', 'pin': '1234'}}
+{'username': 'manahil', 'password': 'november09*', 'full_name': 'manahil adeel', 'address': '678 baldia town', 'bank_details': None}

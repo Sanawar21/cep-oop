@@ -112,6 +112,9 @@
                     <strong>${{ item.product.price }}</strong> - Quantity: <strong>{{ item.quantity }}</strong>
                 </li>
                 {% endfor %}
+                <li class="order-item"><strong>Payment method: </strong>{{ order.type }}</li>
+                <li class="order-item"><strong>Full name: </strong>{{ order.full_name }}</li>
+                <li class="order-item"><strong>Address: </strong>{{ order.address }}</li>
                 <li class="order-item"><strong>Date: </strong>{{ order.timestamp }}</li>
                 {% if order.type == 'Bank' %}
                 <li class="order-item"><strong>Bank name: </strong>{{ order.bank_name }}</li>

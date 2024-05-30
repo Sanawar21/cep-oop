@@ -177,6 +177,7 @@ def checkout_cod():
                                    # implemented dummy user here
                                    user=dummy_user,
                                    email=email,
+                                   phone=phone,
                                    password=password,
                                    error="Incorrect account password.")
 
@@ -185,11 +186,12 @@ def checkout_cod():
             database.write_order(order)
 
             cart = Cart.null()
-            return redirect(url_for('products'))
+            return render_template('thankyou.html')
         else:
             return render_template('checkout_cod.html',
                                    user=dummy_user,
                                    email=email,
+                                   phone=phone,
                                    password=password,
                                    error="Incorrect account password.")
 

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- TODO: ADD CONdition for when the account is not initialized -->
 
 <head>
   <meta charset="UTF-8">
@@ -138,33 +137,23 @@
   <div class="checkout-container">
     <h1 class="checkout-title">Payment method</h1>
     <div class="switch-method-row">
-      <a href="{{ url_for('checkout_cod') }}">Cash on delivery</a>
-      <a class="active">Bank payment</a>
+      <a class="active">Cash on delivery</a>
+      <a href="{{ url_for('checkout_bank') }}">Bank payment</a>
     </div>
     <p class="error">{{ error }}</p>
-    <form method="post" action="{{ url_for('checkout_bank') }}">
-      {% if user.bank_details %}
-      <label class="form-label" for="bank_name">Bank name:</label>
-      <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}"
-        disabled>
-      <label class="form-label" for="card_number">Card number:</label>
-      <input class="form-input" type="text" id="card_number" name="card_number"
-        value="{{user.bank_details.card_number}}" disabled>
-      {% else %}
-      <label class="form-label" for="bank_name">Bank name:</label>
-      <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}">
-      <label class="form-label" for="card_number">Card number:</label>
-      <input class="form-input" type="text" id="card_number" name="card_number"
-        value="{{user.bank_details.card_number}}">
-      {% endif %}
+    <form method="post" action="{{ url_for('checkout_cod') }}">
+      <label class="form-label" for="email">Email:</label>
+      <input class="form-input" type="text" id="email" name="email" value="{{email}}">
+      <label class="form-label" for="phone">Phone number:</label>
+      <input class="form-input" type="text" id="phone" name="phone" value="{{phone}}">
 
       <label class="form-label" for="full_name">Full name:</label>
       <input class="form-input" type="text" id="full_name" name="full_name" value="{{user.full_name}}">
       <label class="form-label" for="address">Delivery address:</label>
       <input class="form-input" type="text" id="address" name="address" value="{{user.address}}">
 
-      <label class="form-label" for="pin">PIN:</label>
-      <input class="form-input no-margin" type="password" id="address" name="pin" value="{{user.pin}}">
+      <label class="form-label" for="password">Account password:</label>
+      <input class="form-input no-margin" type="password" id="password" name="password" value="">
 
       <padding />
       <button class="checkout-button" type="submit">Checkout</button>

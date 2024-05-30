@@ -109,17 +109,14 @@
                 $.post(url, formData)
                     .done(function (response) {
                         if (url.endsWith('add_to_cart')) {
-                            alert('Product added to cart successfully!');
                             button.text('Remove from Cart');
                             form.attr('action', "{{ url_for('remove_from_cart') }}");
                         } else if (url.endsWith('remove_from_cart')) {
-                            alert('Product removed from cart successfully!');
                             button.text('Add to Cart');
                             form.attr('action', "{{ url_for('add_to_cart') }}");
                         }
                     })
                     .fail(function () {
-                        alert('Failed to update cart.');
                     });
             });
         });
