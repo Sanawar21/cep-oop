@@ -14,6 +14,14 @@ class BankDetails:
             "pin": self.pin,
         }
 
+    @staticmethod
+    def validate_card_number(card_number):
+        return all([chr in "0123456789" for chr in card_number]) and len(card_number) == 10
+
+    @staticmethod
+    def validate_pin(pin):
+        return all([chr in "0123456789" for chr in pin]) and len(pin) == 4
+
     @classmethod
     def from_dict(cls, data):
         return cls(
