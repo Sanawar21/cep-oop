@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
+            background-color: #fff;
             color: #333;
             margin: 0;
             padding: 20px;
@@ -32,6 +32,8 @@
 
         .title {
             text-align: center;
+            font-size: 36px;
+            font-weight: bold;
         }
 
         .product {
@@ -113,22 +115,48 @@
             font-family: Arial, sans-serif;
             color: black;
             margin-bottom: 10px;
-            color: black;
             font-style: italic;
-
+            background-color: transparent;
         }
 
         .small-container {
             display: flex;
             flex-direction: row;
             justify-content: center;
-            gap: 30px;
-            margin-left: 740px;
-            margin-bottom: 10px;
+            align-items: center;
+            gap: 40px;
+            /* margin-left: 740px; */
+            height: 70px;
+            /* background-color: #f7f7f7; */
+            width: 900px;
+            margin-left: 50px;
+        
+        }
+
+        .cart-logo {
+            object-fit: contain;
+            width: 47px;
+            height: 47px;
+            background-color: transparent;
+            margin-top: 2px;
+        }
+        .history-logo{
+            object-fit: contain;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
 
         }
-    </style>
+        .logout-logo{
+            object-fit: contain;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            margin-top: 5px;
 
+        }
+        
+    </style>
 </head>
 
 <body>
@@ -136,9 +164,15 @@
         <div class="large-container">
             <h1 class="title">Products</h1>
             <div class="small-container">
-                <a class="to-cart" href="{{url_for('cart_')}}">Cart</a>
-                <a class="to-cart" href="{{url_for('history')}}">Order History</a>
-                <a class="to-cart" href="{{url_for('logout')}}">Logout</a>
+                <a class="to-cart" href="{{url_for('cart_')}}">
+                    <img class="cart-logo" src="static/images/cartLogo.png" alt="Cart Logo">
+                </a>
+                <a class="to-cart" href="{{url_for('history')}}">
+                    <img class="history-logo" src="static/images/orderHistoryLogo.png" alt="Order History Logo">
+                </a>
+                <a class="to-cart" href="{{url_for('logout')}}">
+                    <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+                </a>
             </div>
         </div>
         <ul class="product-list">
@@ -154,7 +188,6 @@
                     <input type="hidden" name="product_id" value="{{ products.index(product) }}">
                     <button class="cart-button" type="submit">View product</button>
                 </form>
-
             </li>
             {% endfor %}
         </ul>
