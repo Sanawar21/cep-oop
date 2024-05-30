@@ -111,7 +111,11 @@ def product_detail(product_id):
         # You may need to update the cart and then redirect to the product detail page
         return redirect(url_for('product_detail', product_id=product_id))
 
-    return render_template('product_detail.html', product=product, product_index=int(product_id), cart=cart)
+    in_cart = False
+    if product in cart.items:
+        in_cart = True
+
+    return render_template('product_detail.html', product=product, product_index=int(product_id), cart=cart, in_cart=in_cart)
 
 
 @app.route('/add_to_cart', methods=['POST'])
