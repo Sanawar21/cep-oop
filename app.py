@@ -261,10 +261,9 @@ def checkout_bank():
                 )
 
         # details are valid and usable
+        order = BankOrder(cart, user.full_name, address, user.bank_details)
 
-        if user.bank_details:
-            order = BankOrder(cart, user.full_name, address, user.bank_details)
-        else:
+        if not user.bank_details:
             user.add_bank_details(bank_name, card_number, pin)
             user = database.overwrite_user(user)
 

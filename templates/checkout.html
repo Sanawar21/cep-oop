@@ -92,12 +92,19 @@
             color: red;
             margin: 10px;
         }
+
+        .error {
+            color: red;
+            text-align: center;
+            padding-bottom: 10px;
+        }
     </style>
 </head>
 
 <body>
     <div class="checkout-container">
         <h1 class="checkout-title">Checkout</h1>
+        <p class="error">{{ error }}</p>
         <form method="post">
             <label class="form-label" for="bank_name">Bank Name:</label>
             <input class="form-input" type="text" id="bank_name" name="bank_name">
