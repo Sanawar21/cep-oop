@@ -164,11 +164,20 @@ def checkout_cod():
         email = request.form['email']
         phone = request.form['phone']
 
+        dummy_user = User(
+            user.username,
+            user.password,
+            full_name,
+            address,
+            user.bank_details,
+        )
+
         if not address or not full_name or not password or not email or not phone:
             return render_template('checkout_cod.html',
                                    # implemented dummy user here
-                                   user=User(user.username, user.password,
-                                             full_name, address, None),
+                                   user=dummy_user,
+                                   email=email,
+                                   password=password,
                                    error="Incorrect account password.")
 
         if password == user.password:
@@ -178,8 +187,11 @@ def checkout_cod():
             cart = Cart.null()
             return redirect(url_for('products'))
         else:
-            # TODO: Pass auto-fill form data
-            return render_template('checkout_cod.html', user=user, error="Incorrect account password.")
+            return render_template('checkout_cod.html',
+                                   user=dummy_user,
+                                   email=email,
+                                   password=password,
+                                   error="Incorrect account password.")
 
     return render_template('checkout_cod.html', user=user)
 
@@ -201,6 +213,16 @@ def checkout_bank():
             card_number = request.form["card_number"]
             pin = request.form["pin"]
 
+        dummy_user = User(
+            user.username,
+            user.password,
+            full_name,
+            address,
+            user.bank_details if user.bank_details else BankDetails(
+                user.username, bank_name, card_number, pin,
+            )
+        )
+
         # check validity
 
         if user.bank_details:
@@ -208,52 +230,34 @@ def checkout_bank():
                 return render_template(
                     'checkout_bank.html',
                     error="All fields are required.",
-                    user=user,
-                    address=address,
-                    full_name=full_name,
-                    pin="",
+                    user=dummy_user,
                 )
 
             if not user.check_pin(pin):
                 return render_template(
                     'checkout_bank.html',
                     error="Incorrect pin.",
-                    user=user,
-                    address=address,
-                    full_name=full_name,
-                    pin="",
+                    user=dummy_user,
                 )
         else:
             if not bank_name or not card_number or not pin or not address or not full_name:
                 return render_template(
                     "checkout_bank.html",
                     error="All fields are required.",
-                    bank_name=bank_name,
-                    card_number=card_number,
-                    address=address,
-                    full_name=full_name,
-                    pin="",
+                    user=dummy_user,
                 )
-            if not User.validate_card_number(card_number):
+            if not BankDetails.validate_card_number(card_number):
                 return render_template(
                     "checkout_bank.html",
                     error="Card number must be 10 digits.",
-                    bank_name=bank_name,
-                    card_number=card_number,
-                    address=address,
-                    full_name=full_name,
-                    pin=""
+                    user=dummy_user,
                 )
 
-            if not User.validate_pin(pin):
+            if not BankDetails.validate_pin(pin):
                 return render_template(
                     "checkout_bank.html",
                     error="Pin must be 4 digit long.",
-                    bank_name=bank_name,
-                    card_number=card_number,
-                    address=address,
-                    full_name=full_name,
-                    pin="",
+                    user=dummy_user,
                 )
 
         # details are valid and usable
@@ -267,8 +271,7 @@ def checkout_bank():
         database.write_order(order)
         cart = Cart.null()
 
-        # TODO: write thank_you.html
-        return render_template('thank_you.html')
+        return render_template('thankyou.html')
 
     # TODO: Decide what info should be passed to checkout_bank.html
     # Maybe a dummy user will work
