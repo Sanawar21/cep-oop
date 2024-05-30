@@ -181,6 +181,7 @@ def checkout_cod():
             database.write_order(order)
 
             cart = Cart.null()
+            cart.owner = user.username
             return render_template('thankyou.html')
         else:
             return render_template('checkout_cod.html',
@@ -266,7 +267,7 @@ def checkout_bank():
 
         database.write_order(order)
         cart = Cart.null()
-
+        cart.owner = user.username
         return render_template('thankyou.html')
 
     # TODO: Decide what info should be passed to checkout_bank.html
@@ -299,7 +300,7 @@ def history():
 
 @app.route('/nobankdetails', methods=["GET", "POST"])
 def no_bank_details():
-    global user
+    global user, cart
     result = authenticator.sign_up(
         session["username"],
         session["password"],
@@ -316,7 +317,7 @@ def no_bank_details():
 
 @app.route('/bankdetails', methods=['GET', 'POST'])
 def bank_details():
-    global user
+    global user, cart
     if request.method == "POST":
         bank_name = request.form['bank_name']
         card_number = request.form['card_number']

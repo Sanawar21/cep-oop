@@ -1,0 +1,2 @@
+{'owner': 'debug', 'bill': 15, 'timestamp': 'Thu May 30 22:08:36 2024', 'type': 'Bank', 'full_name': 'Debug Order', 'bank_name': 'DEBUG BANK', 'card_number': '6666666666', 'address': 'Debugger home', 'items': [{'uid': 'B0BHHZNJKZ', 'title': 'Boys Salute T-Shirt', 'price': 15, 'quantity': 1}]}
+{'owner': 'debug', 'bill': 15, 'timestamp': 'Thu May 30 22:14:31 2024', 'type': 'COD', 'full_name': 'Debug Order', 'email': 'nobank', 'phone': '+92 326 3609899', 'address': 'Debugger home', 'items': [{'uid': 'B0BHHZNJKZ', 'title': 'Boys Salute T-Shirt', 'price': 15, 'quantity': 1}]}

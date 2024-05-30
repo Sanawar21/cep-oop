@@ -7,6 +7,8 @@ from models.product import Product
 from models.user import User
 from models.order import CodOrder, BankOrder
 
+import time
+
 
 class Database:
 
@@ -156,3 +158,8 @@ class Database:
 
     def get_product(self, uid):
         return [product for product in self.get_products() if product.uid == uid][0]
+
+    @staticmethod
+    def generate_uid():
+        t = str(time.time()).split(".")
+        return t[1]+t[0][-3]
