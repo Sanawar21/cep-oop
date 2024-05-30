@@ -174,7 +174,7 @@ def checkout_cod():
                                    email=email,
                                    phone=phone,
                                    password=password,
-                                   error="Incorrect account password.")
+                                   error="All fields are required.")
 
         if password == user.password:
             order = CodOrder(cart, full_name, address, email, phone)
