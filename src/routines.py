@@ -1,7 +1,7 @@
 from src import authenticate, database
 from models.product import Product
 from models.cart import Cart
-from models.user import User
+from models.account import User
 import time
 
 
@@ -222,8 +222,3 @@ def display_orders_summary(carts: list[Cart]):
         for cart in carts
     ]
     display_table(data, headers, title)
-
-
-
-
-    

@@ -3,7 +3,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from src.authenticate import Authenticator
 from src.database import Database
 from models.cart import Cart
-from models.user import User, BankDetails
+from models.account import User, BankDetails
 from models.order import BankOrder, CodOrder
 
 app = Flask(__name__)

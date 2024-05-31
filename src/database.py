@@ -4,10 +4,11 @@ Database handler for this project.
 
 from models.cart import Cart
 from models.product import Product
-from models.user import User
+from models.account import User, Admin, Account
 from models.order import CodOrder, BankOrder
 
 import time
+import random
 
 
 class Database:
@@ -41,6 +42,19 @@ class Database:
                     self.SEP}{product.uid}\n"
                 for product in products
             ])
+
+    def get_accounts(self) -> list[Account]:
+        accounts = []
+        with open("database/accounts.txt") as file:
+            lines = file.readlines()
+            for line in lines:
+                data = eval(line.strip())
+                if data["type"] == User.type:
+                    account = User.from_dict(data)
+                elif data["type"] == Admin.type:
+                    account = Admin.from_dict(data)
+                accounts.append(account)
+        return account
 
     def get_users(self) -> "list[User]":
         """
@@ -161,5 +175,8 @@ class Database:
 
     @staticmethod
     def generate_uid():
-        t = str(time.time()).split(".")
-        return t[1]+t[0][-3]
+        alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        characters = alphabets + alphabets.lower() + "".join(str(i)
+                                                             for i in range(10))
+        uid = ''.join(random.choices(characters, k=12))
+        return uid

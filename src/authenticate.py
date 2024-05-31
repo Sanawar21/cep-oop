@@ -2,7 +2,7 @@
 authenticate.py module for user account generation and authentication.
 """
 
-from models.user import User, Admin
+from models.account import User, Admin
 from src.database import Database
 
 
