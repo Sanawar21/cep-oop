@@ -2,12 +2,11 @@
 Database handler for this project.
 """
 
-from models.cart import Cart
-from models.product import Product
-from models.account import User, Admin, Account
-from models.order import CodOrder, BankOrder
+from .cart import Cart
+from .product import Product
+from .account import User, Admin, Account
+from .order import CodOrder, BankOrder
 
-import time
 import random
 
 
@@ -43,7 +42,7 @@ class Database:
                 for product in products
             ])
 
-    def get_accounts(self) -> list[Account]:
+    def get_accounts(self) -> list[Admin | User]:
         accounts = []
         with open("database/accounts.txt") as file:
             lines = file.readlines()
@@ -56,24 +55,34 @@ class Database:
                 accounts.append(account)
         return account
 
-    def get_users(self) -> "list[User]":
-        """
-        Returns a list of users stored in the database as User objects.
-        """
-        users = []
-        with open("database/users.txt") as file:
-            lines = file.readlines()
-            for line in lines:
-                user = User.from_dict(eval(line.strip()))
-                users.append(user)
-        return users
+    def save_accounts(self, accounts: list[User | Admin]):
+        # remove all file contents
+        with open("database/accounts.txt", "w") as file:
+            pass
+        # rewrite the users
+        for account in accounts:
+            self.save_account(account)
 
-    def save_user(self, user: User):
+    def overwrite_account(self, new_account: User | Admin):
+        accounts = self.get_accounts()
+        index = None
+        for i, account in enumerate(accounts):
+            if account.username == new_account.username:
+                index = i
+                break
+        else:
+            return
+
+        accounts[index] = new_account
+        self.save_accountsc(accounts)
+        return new_account
+
+    def save_account(self, account: User | Admin):
         """
-        Saves a (new) User object to database. 
+        Saves a (new) User or Admin object to database. 
         """
-        with open("database/users.txt", "a") as file:
-            file.write(str(user.to_dict()) + "\n")
+        with open("database/accounts.txt", "a") as file:
+            file.write(str(account.to_dict()) + "\n")
 
     def remove_product_inventory(self, product_title: str):
         """this function reads the old file remove the product and writes the new file,
@@ -125,50 +134,6 @@ class Database:
         except FileNotFoundError:
             pass
         return orders
-
-    def save_users(self, users: list[User]):
-        # remove all file contents
-        with open("database/users.txt", "w") as file:
-            pass
-        # rewrite the users
-        for user in users:
-            self.save_user(user)
-
-    def overwrite_user(self, new_user: User):
-        users = self.get_users()
-        index = None
-        for i, user in enumerate(users):
-            if user.username == new_user.username:
-                index = i
-                break
-        else:
-            return
-
-        users[index] = new_user
-        self.save_users(users)
-        return new_user
-
-    @staticmethod
-    def write_cart(user: User, cart: Cart):
-        """writes the order of the user in the file of his name"""
-        with open(f"database/order_histories/{user.username}", "a") as file:
-            file.write(str(cart.to_dict())+"\n")
-
-    @staticmethod
-    def read_carts(user: User) -> list[Cart]:
-        """Returns the checked-out carts affiliated with the user.
-        """
-        carts: list[Cart] = []
-        try:
-            with open(f"database/order_histories/{user.username}") as file:
-                lines = file.readlines()
-                for line in lines:
-                    if line != "" or line != "\n":
-                        cart = Cart.from_dict(eval(line.strip()))
-                        carts.append(cart)
-        except FileNotFoundError:
-            pass
-        return carts
 
     def get_product(self, uid):
         return [product for product in self.get_products() if product.uid == uid][0]

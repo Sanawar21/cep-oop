@@ -2,8 +2,8 @@
 authenticate.py module for user account generation and authentication.
 """
 
-from models.account import User, Admin
-from src.database import Database
+from .account import User, Admin, Account
+from .database import Database
 
 
 class Authenticator:
@@ -33,13 +33,13 @@ class Authenticator:
     def validate_username(username):
         """to check username is valid"""
         for char in username:
-            if char in "!@#$%^&*()_+{}:/.,' ":
+            if char in "!@#$%^&*()_+{}:/.,'\" ":
                 return False
         return True
 
     def unique_username(self, username):
         """to check if username is unique"""
-        users = self.database.get_users()
+        users = self.database.get_accounts()
         for user in users:
             if username == user.username:
                 return False
@@ -47,7 +47,7 @@ class Authenticator:
 
     def login(self, username, password):
         """this function would compare the values"""
-        users = self.database.get_users()
+        users = self.database.get_accounts()
         for user in users:
             if user.username == username and user.password == password:
                 self.user = user
@@ -69,15 +69,7 @@ class Authenticator:
             return 0, "This Username has been already taken "
 
         user = User(username, password, full_name, address, bank_details)
-        self.database.save_user(user)
+        self.database.save_account(user)
         self.login(username, password)
 
         return self.user
-
-
-class AdminAuthenticator(Authenticator):
-
-    def __init__(self, password) -> None:
-        super().__init__("admin", password)
-        if self.user:
-            self.user = Admin()

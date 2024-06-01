@@ -1,7 +1,7 @@
-from src import authenticate, database
-from models.product import Product
-from models.cart import Cart
-from models.account import User
+from classes import authenticate, database
+from classes.product import Product
+from classes.cart import Cart
+from classes.account import User
 import time
 
 

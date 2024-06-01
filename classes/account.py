@@ -42,6 +42,7 @@ class User(Account):
 
     def to_dict(self):
         return {
+            "type": self.type,
             "username": self.username,
             "password": self.password,
             "full_name": self.full_name,
@@ -66,19 +67,32 @@ class User(Account):
         return pin == self.bank_details.pin
 
 
-class Admin(Account):
+class Privilege:
 
-    __ALL_PRIVILEGES = [
-        "ADD_USER",
-        "ADD_ADMIN",
-        "ADD_PRODUCT",
-        "EDIT_USER",
-        "EDIT_ADMIN",
-        "EDIT_PRODUCT",
-        "DELETE_USER",
-        "DELETE_ADMIN",
-        "DELETE_PRODUCT"
+    ADD_USER = "ADD_USER"
+    ADD_ADMIN = "ADD_ADMIN"
+    ADD_PRODUCT = "ADD_PRODUCT"
+    EDIT_USER = "EDIT_USER"
+    EDIT_ADMIN = "EDIT_ADMIN"
+    EDIT_PRODUCT = "EDIT_PRODUCT"
+    DELETE_USER = "DELETE_USER"
+    DELETE_ADMIN = "DELETE_ADMIN"
+    DELETE_PRODUCT = "DELETE_PRODUCT"
+
+    ALL = [
+        ADD_USER,
+        ADD_ADMIN,
+        ADD_PRODUCT,
+        EDIT_USER,
+        EDIT_ADMIN,
+        EDIT_PRODUCT,
+        DELETE_USER,
+        DELETE_ADMIN,
+        DELETE_PRODUCT
     ]
+
+
+class Admin(Account):
 
     type = "admin"
 
@@ -87,7 +101,7 @@ class Admin(Account):
         self.privileges = set(privileges)
 
     def add_privilege(self, p: str):
-        if p in self.__ALL_PRIVILEGES:
+        if p in Privilege.ALL:
             self.privileges.add(p)
         else:
             raise ValueError("Invalid privilege")
