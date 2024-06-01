@@ -2,9 +2,8 @@
 Database handler for this project.
 """
 
-from .cart import Cart
 from .product import Product
-from .account import User, Admin, Account
+from .account import User, Admin
 from .order import CodOrder, BankOrder
 
 import random
@@ -12,9 +11,10 @@ import random
 
 class Database:
 
-    SEP = "@#$%"
+    # product methods
 
-    def get_products(self) -> "list[Product]":
+    @staticmethod
+    def get_products() -> "list[Product]":
         """
         Returns a list of products stored in the database as Product objects.
         """
@@ -24,23 +24,45 @@ class Database:
         with open("database/products.txt") as file:
             lines = file.readlines()
             for line in lines:
-                attrs = line.strip().split(self.SEP)
-                products.append(
-                    Product(attrs[0], int(float(attrs[1])), uid=attrs[2]))
+                data = eval(line.strip())
+                products.append(Product.from_dict(data))
 
         return products
+
+    def get_product(self, uid):
+        return [product for product in self.get_products() if product.uid == uid][0]
+
+    @staticmethod
+    def save_product(product: Product):
+        with open("database/products.txt", "a") as file:
+            file.write(f"{product.to_dict()}\n")
 
     def save_products(self, products: "list[Product]"):
         """
         Writes the products list provided to the database.
         """
+        # remove all file contents
+        with open("database/products.txt", "w"):
+            pass
+        # rewrite the products
+        for product in products:
+            self.save_product(product)
 
-        with open("database/products.txt", "a") as file:
-            file.writelines([
-                f"{product.title}{self.SEP}{product.price}{
-                    self.SEP}{product.uid}\n"
-                for product in products
-            ])
+    def overwrite_product(self, new_product):
+        products = self.get_products()
+        index = None
+        for i, product in enumerate(products):
+            if product.uid == new_product.uid:
+                index = i
+                break
+        else:
+            return
+
+        products[index] = new_product
+        self.save_products(products)
+        return new_product
+
+    # account methods
 
     def get_accounts(self) -> list[Admin | User]:
         accounts = []
@@ -57,7 +79,7 @@ class Database:
 
     def save_accounts(self, accounts: list[User | Admin]):
         # remove all file contents
-        with open("database/accounts.txt", "w") as file:
+        with open("database/accounts.txt", "w"):
             pass
         # rewrite the users
         for account in accounts:
@@ -74,7 +96,7 @@ class Database:
             return
 
         accounts[index] = new_account
-        self.save_accountsc(accounts)
+        self.save_accounts(accounts)
         return new_account
 
     def save_account(self, account: User | Admin):
@@ -84,34 +106,7 @@ class Database:
         with open("database/accounts.txt", "a") as file:
             file.write(str(account.to_dict()) + "\n")
 
-    def remove_product_inventory(self, product_title: str):
-        """this function reads the old file remove the product and writes the new file,
-        it takes Product.title as a parameter"""
-
-        with open("database/products.txt") as file:
-            lines = file.readlines()
-            new_lines = []
-            for line in lines:
-                if line in lines:
-                    if not line.startswith(f"{product_title}{self.SEP}"):
-                        new_lines.append(line)
-            with open("database/products.txt", "w") as file_:
-                file_.writelines(new_lines)
-
-    def change_price(self, product_title: str, new_price: int):
-        """this functions reads the old file access the product and change its price and writes new file and it takes """
-
-        with open("database/products.txt") as file:
-            lines = file.readlines()
-            new_lines = []
-            for line in lines:
-                if line.startswith(f"{product_title}{self.SEP}"):
-                    new_line = f"{product_title}{self.SEP}{new_price}\n"
-                    new_lines.append(new_line)
-                else:
-                    new_lines.append(line)
-            with open("database/products.txt", "w") as file_:
-                file_.writelines(new_lines)
+    # order methods
 
     @staticmethod
     def write_order(order: BankOrder | CodOrder):
@@ -135,8 +130,7 @@ class Database:
             pass
         return orders
 
-    def get_product(self, uid):
-        return [product for product in self.get_products() if product.uid == uid][0]
+    # miscellaneous
 
     @staticmethod
     def generate_uid():
