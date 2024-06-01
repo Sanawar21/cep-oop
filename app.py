@@ -1,10 +1,10 @@
 import time
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
-from src.authenticate import Authenticator
-from src.database import Database
-from models.cart import Cart
-from models.account import User, BankDetails
-from models.order import BankOrder, CodOrder
+from classes.authenticate import Authenticator
+from classes.database import Database
+from classes.cart import Cart
+from classes.account import User, BankDetails
+from classes.order import BankOrder, CodOrder
 
 app = Flask(__name__)
 app.secret_key = "pIQ89naMqA21"
@@ -12,11 +12,7 @@ database = Database()
 authenticator = Authenticator()
 all_products = database.get_products()
 cart = Cart.null()
-user = None
-
-# TODO: 1) Tell user when the infos are invalid or incorrect and display appropriate message
-#       at login and signup and checkout
-#       2) User can save carts without checking out (Operator overloading { Cart + Cart })
+account = None
 
 
 @app.route('/')
@@ -26,13 +22,13 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    global user
+    global account
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = authenticator.login(username, password)
-        if user:
-            cart.owner = user.username
+        account = authenticator.login(username, password)
+        if account:
+            cart.owner = account.username
             flash('Login successful!', 'success')
             return redirect(url_for('products'))
         else:
@@ -42,7 +38,7 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    global user
+    global account
     if request.method == 'POST':
         username = request.form['username']
         session["username"] = username
@@ -91,7 +87,7 @@ def signup():
 
 @app.route('/products')
 def products():
-    if not user:
+    if not account:
         flash('Please log in to view products.', 'error')
         return redirect(url_for('login', next=request.url))
 
@@ -100,7 +96,7 @@ def products():
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
 def product_detail(product_id):
-    if not user:
+    if not account:
         flash('Please log in to view product details.', 'error')
         return redirect(url_for('login', next=request.url))
 
@@ -111,7 +107,7 @@ def product_detail(product_id):
 
 @app.route('/add_to_cart', methods=['POST'])
 def add_to_cart():
-    if not user:
+    if not account:
         flash('Please log in to add products to your cart.', 'error')
         return jsonify({'error': 'Please log in to add products to your cart.'}), 401
 
@@ -123,7 +119,7 @@ def add_to_cart():
 
 @app.route('/remove_from_cart', methods=['POST'])
 def remove_from_cart():
-    if not user:
+    if not account:
         return jsonify({'error': 'Please log in to remove products from your cart.'}), 401
 
     product_uid = request.form.get('product_id')
@@ -134,14 +130,9 @@ def remove_from_cart():
 
 @app.route('/cart')
 def cart_():
-    if not user:
+    if not account:
         flash('Please log in to view your cart.', 'error')
         return redirect(url_for('login', next=request.url))
-
-    # if not cart.items:
-    #     flash('Your cart is empty.', 'info')
-    #     return redirect(url_for('products'))
-
     return render_template('cart.html', products=all_products, cart=cart)
 
 
@@ -149,7 +140,7 @@ def cart_():
 def checkout_cod():
     global cart
 
-    if not user:
+    if not account:
         return redirect(url_for('login', next=request.url))
 
     if request.method == 'POST':
@@ -160,28 +151,28 @@ def checkout_cod():
         phone = request.form['phone']
 
         dummy_user = User(
-            user.username,
-            user.password,
+            account.username,
+            account.password,
             full_name,
             address,
-            user.bank_details,
+            account.bank_details,
         )
 
         if not address or not full_name or not password or not email or not phone:
             return render_template('checkout_cod.html',
-                                   # implemented dummy user here
+                                   # implemented dummy account here
                                    user=dummy_user,
                                    email=email,
                                    phone=phone,
                                    password=password,
                                    error="All fields are required.")
 
-        if password == user.password:
+        if password == account.password:
             order = CodOrder(cart, full_name, address, email, phone)
             database.write_order(order)
 
             cart = Cart.null()
-            cart.owner = user.username
+            cart.owner = account.username
             return render_template('thankyou.html')
         else:
             return render_template('checkout_cod.html',
@@ -191,12 +182,12 @@ def checkout_cod():
                                    password=password,
                                    error="Incorrect account password.")
 
-    return render_template('checkout_cod.html', user=user)
+    return render_template('checkout_cod.html', user=account)
 
 
 @app.route('/checkout-bank', methods=['GET', 'POST'])
 def checkout_bank():
-    global user, cart
+    global account, cart
 
     if request.method == "POST":
 
@@ -204,26 +195,27 @@ def checkout_bank():
 
         address = request.form["address"]
         full_name = request.form["full_name"]
-        if user.bank_details:
+        if account.bank_details:
             pin = request.form["pin"]
         else:  # bank details were passed right now
             bank_name = request.form["bank_name"]
             card_number = request.form["card_number"]
             pin = request.form["pin"]
 
+        # for state management
         dummy_user = User(
-            user.username,
-            user.password,
+            account.username,
+            account.password,
             full_name,
             address,
-            user.bank_details if user.bank_details else BankDetails(
-                user.username, bank_name, card_number, pin,
+            account.bank_details if account.bank_details else BankDetails(
+                account.username, bank_name, card_number, pin,
             )
         )
 
         # check validity
 
-        if user.bank_details:
+        if account.bank_details:
             if not pin or not address or not full_name:
                 return render_template(
                     'checkout_bank.html',
@@ -231,7 +223,7 @@ def checkout_bank():
                     user=dummy_user,
                 )
 
-            if not user.check_pin(pin):
+            if not account.check_pin(pin):
                 return render_template(
                     'checkout_bank.html',
                     error="Incorrect pin.",
@@ -258,49 +250,48 @@ def checkout_bank():
                     user=dummy_user,
                 )
 
-        if not user.bank_details:
-            user.add_bank_details(bank_name, card_number, pin)
-            user = database.overwrite_user(user)
+        if not account.bank_details:
+            account.add_bank_details(bank_name, card_number, pin)
+            account = database.overwrite_account(account)
 
         # details are valid and usable
-        order = BankOrder(cart, user.full_name, address, user.bank_details)
+        order = BankOrder(cart, account.full_name,
+                          address, account.bank_details)
 
         database.write_order(order)
         cart = Cart.null()
-        cart.owner = user.username
+        cart.owner = account.username
         return render_template('thankyou.html')
 
-    # TODO: Decide what info should be passed to checkout_bank.html
-    # Maybe a dummy user will work
-    return render_template('checkout_bank.html', user=user)
+    return render_template('checkout_bank.html', user=account)
 
 
 @app.route('/checkout', methods=['GET'])
 def checkout():
     global cart
-    if not user:
+    if not account:
         flash('Please log in to checkout.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    if user.bank_details:
-        return render_template("checkout_bank.html", user=user)
+    if account.bank_details:
+        return render_template("checkout_bank.html", user=account)
     else:
-        return render_template("checkout_cod.html", user=user)
+        return render_template("checkout_cod.html", user=account)
 
 
 @app.route('/history')
 def history():
-    if not user:
+    if not account:
         flash('Please log in to view your order history.', 'error')
         return redirect(url_for('login', next=request.url))
 
-    orders = database.read_orders(user.username)
+    orders = database.read_orders(account.username)
     return render_template('history.html', orders=orders[::-1])
 
 
 @app.route('/nobankdetails', methods=["GET", "POST"])
 def no_bank_details():
-    global user, cart
+    global account, cart
     result = authenticator.sign_up(
         session["username"],
         session["password"],
@@ -310,14 +301,14 @@ def no_bank_details():
     if type(result) == tuple:
         flash(result[1], 'error')
     else:
-        user = result
-        cart.owner = user.username
+        account = result
+        cart.owner = account.username
         return redirect(url_for('products'))
 
 
 @app.route('/bankdetails', methods=['GET', 'POST'])
 def bank_details():
-    global user, cart
+    global account, cart
     if request.method == "POST":
         bank_name = request.form['bank_name']
         card_number = request.form['card_number']
@@ -361,8 +352,8 @@ def bank_details():
         if type(result) == tuple:
             flash(result[1], 'error')
         else:
-            user = result
-            cart.owner = user.username
+            account = result
+            cart.owner = account.username
             return redirect(url_for('products'))
 
     return render_template("bank_details.html")
@@ -370,8 +361,8 @@ def bank_details():
 
 @app.route('/logout')
 def logout():
-    global user, cart
-    user = None
+    global account, cart
+    account = None
     cart = Cart.null()
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
