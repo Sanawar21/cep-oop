@@ -1,2 +1,0 @@
-{'owner': 'test', 'bill': 15, 'timestamp': 'Wed May 29 17:05:34 2024', 'bank_name': 'sanawar99', 'items': [{'uid': 'B0BHHZNJKZ', 'title': 'Boys Salute T-Shirt', 'price': 15, 'quantity': 1}]}
-{'owner': None, 'bill': 15, 'timestamp': 'Wed May 29 17:06:19 2024', 'bank_name': 'faysal', 'items': [{'uid': 'B0BHHZNJKZ', 'title': 'Boys Salute T-Shirt', 'price': 15, 'quantity': 1}]}

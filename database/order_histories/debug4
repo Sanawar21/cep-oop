@@ -1,2 +1,0 @@
-{'owner': 'debug4', 'bill': 62, 'timestamp': 'Thu May 30 22:25:36 2024', 'type': 'Bank', 'full_name': 'MJ', 'bank_name': 'kjh', 'card_number': '3213213211', 'address': 'asdf', 'items': [{'uid': 'B0BQTCF22V', 'title': "Men's Hines Sneaker", 'price': 62, 'quantity': 1}]}
-{'owner': 'debug4', 'bill': 27, 'timestamp': 'Thu May 30 22:26:21 2024', 'type': 'COD', 'full_name': 'MJ', 'email': 'hbl', 'phone': '+92 326 3609899', 'address': 'asdf', 'items': [{'uid': 'B01MQ3F5HW', 'title': "Girls' Skye Pajamas", 'price': 27, 'quantity': 1}]}
