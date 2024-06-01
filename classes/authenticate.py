@@ -32,6 +32,7 @@ class Authenticator:
     @staticmethod
     def validate_username(username):
         """to check username is valid"""
+        username = username.lower()
         for char in username:
             if char in "!@#$%^&*()_+{}:/.,'\" ":
                 return False
@@ -39,25 +40,28 @@ class Authenticator:
 
     def unique_username(self, username):
         """to check if username is unique"""
-        users = self.database.get_accounts()
-        for user in users:
-            if username == user.username:
+        username = username.lower()
+        accounts = self.database.get_accounts()
+        for account in accounts:
+            if username == account.username:
                 return False
         return True
 
     def login(self, username, password):
         """this function would compare the values"""
-        users = self.database.get_accounts()
-        for user in users:
-            if user.username == username and user.password == password:
-                self.user = user
+        username = username.lower()
+        accounts = self.database.get_accounts()
+        for account in accounts:
+            if account.username == username and account.password == password:
+                self.account = account
                 self.username = username
                 self.password = password
-                return user
+                return account
 
     def sign_up(self, username, password, full_name, address, bank_details=None):
         """if all the inputs are valid it will return a user object containing all the data of the user
         else it would return a tuple"""
+        username = username.lower()
 
         if not self.validate_password(password):
             return 1, "The password is not valid"
@@ -72,4 +76,4 @@ class Authenticator:
         self.database.save_account(user)
         self.login(username, password)
 
-        return self.user
+        return self.account

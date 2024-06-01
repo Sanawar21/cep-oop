@@ -29,6 +29,8 @@ account = None
 # func = only_allow(User)(func)
 # only_allow(User) will return a decorator and the func will be passed as an argument to it
 # func = <decorator returned by only_allow(User)>(func)
+# and the above code will evaluate to
+# func = <decorated func>
 
 def only_allow(types_: list[type] | type):
     """
