@@ -75,7 +75,7 @@ class Database:
                 elif data["type"] == Admin.type:
                     account = Admin.from_dict(data)
                 accounts.append(account)
-        return account
+        return accounts
 
     def save_accounts(self, accounts: list[User | Admin]):
         # remove all file contents

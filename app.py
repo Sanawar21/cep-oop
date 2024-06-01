@@ -3,7 +3,8 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from classes.authenticate import Authenticator
 from classes.database import Database
 from classes.cart import Cart
-from classes.account import User, BankDetails
+from classes.account import User, Admin
+from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
 
 app = Flask(__name__)
@@ -13,6 +14,51 @@ authenticator = Authenticator()
 all_products = database.get_products()
 cart = Cart.null()
 account = None
+
+
+# when only_allow is called like this @only_allow(Admin), it will execute and
+# only then will the decorator be returned.
+# The returned decorator will then modify the function
+# Example:
+# @only_allow(User)
+# def func():
+#     # do things
+# The above code will evaluate to
+# def func():
+#     # do things
+# func = only_allow(User)(func)
+# only_allow(User) will return a decorator and the func will be passed as an argument to it
+# func = <decorator returned by only_allow(User)>(func)
+
+def only_allow(types_: list[type] | type):
+    """
+    Some routes are only accessible to specific account types.
+    For example, only a User account can checkout, Only a privileged Admin can
+    edit products list.
+
+    This wrapper forces this functionality. It reroutes the app to the login page
+    if the current account type is not the allowed account type passed in the `types_` argument.
+
+    The programmer can also add a list of allowed types.
+    """
+    if type(types_) != list:
+        types_ = [types_]  # Convert the types_ argument into a list
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            if type(account) not in types_:
+                return redirect(url_for('login'))
+            else:
+                return func(*args, **kwargs)
+
+        # This is important because flask searches endpoints with the function names.
+        # So if all functions are named `wrapper`, flask cannot differentiate between routes.
+        wrapper.__name__ = func.__name__
+        wrapper.__doc__ = func.__doc__
+        wrapper.__module__ = func.__module__
+
+        return wrapper
+    return decorator
 
 
 @app.route('/')
@@ -86,31 +132,22 @@ def signup():
 
 
 @app.route('/products')
+@only_allow(User)
 def products():
-    if not account:
-        flash('Please log in to view products.', 'error')
-        return redirect(url_for('login', next=request.url))
-
     return render_template('products.html', products=all_products, cart=cart)
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
+@only_allow(User)
 def product_detail(product_id):
-    if not account:
-        flash('Please log in to view product details.', 'error')
-        return redirect(url_for('login', next=request.url))
-
     product = database.get_product(product_id)
     in_cart = product in cart.items
     return render_template('product_detail.html', product=product, in_cart=in_cart)
 
 
 @app.route('/add_to_cart', methods=['POST'])
+@only_allow(User)
 def add_to_cart():
-    if not account:
-        flash('Please log in to add products to your cart.', 'error')
-        return jsonify({'error': 'Please log in to add products to your cart.'}), 401
-
     product_uid = request.form.get('product_id')
     product = database.get_product(product_uid)
     cart.add_product(product, 1)
@@ -118,10 +155,8 @@ def add_to_cart():
 
 
 @app.route('/remove_from_cart', methods=['POST'])
+@only_allow(User)
 def remove_from_cart():
-    if not account:
-        return jsonify({'error': 'Please log in to remove products from your cart.'}), 401
-
     product_uid = request.form.get('product_id')
     product = database.get_product(product_uid)
     cart.remove_product(product, 1)
@@ -129,20 +164,15 @@ def remove_from_cart():
 
 
 @app.route('/cart')
+@only_allow(User)
 def cart_():
-    if not account:
-        flash('Please log in to view your cart.', 'error')
-        return redirect(url_for('login', next=request.url))
     return render_template('cart.html', products=all_products, cart=cart)
 
 
 @app.route('/checkout-cod', methods=['GET', 'POST'])
+@only_allow(User)
 def checkout_cod():
     global cart
-
-    if not account:
-        return redirect(url_for('login', next=request.url))
-
     if request.method == 'POST':
         address = request.form['address']
         full_name = request.form['full_name']
@@ -186,6 +216,7 @@ def checkout_cod():
 
 
 @app.route('/checkout-bank', methods=['GET', 'POST'])
+@only_allow(User)
 def checkout_bank():
     global account, cart
 
@@ -267,12 +298,9 @@ def checkout_bank():
 
 
 @app.route('/checkout', methods=['GET'])
+@only_allow(User)
 def checkout():
     global cart
-    if not account:
-        flash('Please log in to checkout.', 'error')
-        return redirect(url_for('login', next=request.url))
-
     if account.bank_details:
         return render_template("checkout_bank.html", user=account)
     else:
@@ -280,11 +308,8 @@ def checkout():
 
 
 @app.route('/history')
+@only_allow(User)
 def history():
-    if not account:
-        flash('Please log in to view your order history.', 'error')
-        return redirect(url_for('login', next=request.url))
-
     orders = database.read_orders(account.username)
     return render_template('history.html', orders=orders[::-1])
 
@@ -360,6 +385,7 @@ def bank_details():
 
 
 @app.route('/logout')
+@only_allow([User, Admin])
 def logout():
     global account, cart
     account = None

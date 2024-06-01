@@ -1,0 +1,1 @@
+{'type': 'user', 'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'owner': 'Sanawar', 'bank_name': 'Faysal Bank', 'card_number': '1231231231', 'pin': '1234'}}
