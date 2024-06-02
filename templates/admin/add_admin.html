@@ -158,39 +158,48 @@
       <fieldset>
         <legend class="form-label">Select Privileges</legend>
         <div class="privilege-item">
-          <input type="checkbox" id="ADD_USER" name="privileges[]" value="ADD_USER">
+          <input {{ 'checked' if 'ADD_USER' in privileges }} type="checkbox" id="ADD_USER" name="privileges[]"
+            value="ADD_USER">
           <label for="ADD_USER">ADD USER</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="ADD_ADMIN" name="privileges[]" value="ADD_ADMIN">
+          <input {{ 'checked' if 'ADD_ADMIN' in privileges }} type="checkbox" id="ADD_ADMIN" name="privileges[]"
+            value="ADD_ADMIN">
           <label for="ADD_ADMIN">ADD ADMIN</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="ADD_PRODUCT" name="privileges[]" value="ADD_PRODUCT">
+          <input {{ 'checked' if 'ADD_PRODUCT' in privileges }} type="checkbox" id="ADD_PRODUCT" name="privileges[]"
+            value="ADD_PRODUCT">
           <label for="ADD_PRODUCT">ADD PRODUCT</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="EDIT_USER" name="privileges[]" value="EDIT_USER">
+          <input {{ 'checked' if 'EDIT_USER' in privileges }} type="checkbox" id="EDIT_USER" name="privileges[]"
+            value="EDIT_USER">
           <label for="EDIT_USER">EDIT USER</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="EDIT_ADMIN" name="privileges[]" value="EDIT_ADMIN">
+          <input {{ 'checked' if 'EDIT_ADMIN' in privileges }} type="checkbox" id="EDIT_ADMIN" name="privileges[]"
+            value="EDIT_ADMIN">
           <label for="EDIT_ADMIN">EDIT ADMIN</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="EDIT_PRODUCT" name="privileges[]" value="EDIT_PRODUCT">
+          <input {{ 'checked' if 'EDIT_PRODUCT' in privileges }} type="checkbox" id="EDIT_PRODUCT" name="privileges[]"
+            value="EDIT_PRODUCT">
           <label for="EDIT_PRODUCT">EDIT PRODUCT</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="DELETE_USER" name="privileges[]" value="DELETE_USER">
+          <input {{ 'checked' if 'DELETE_USER' in privileges }} type="checkbox" id="DELETE_USER" name="privileges[]"
+            value="DELETE_USER">
           <label for="DELETE_USER">DELETE USER</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="DELETE_ADMIN" name="privileges[]" value="DELETE_ADMIN">
+          <input {{ 'checked' if 'DELETE_ADMIN' in privileges }} type="checkbox" id="DELETE_ADMIN" name="privileges[]"
+            value="DELETE_ADMIN">
           <label for="DELETE_ADMIN">DELETE ADMIN</label>
         </div>
         <div class="privilege-item">
-          <input type="checkbox" id="DELETE_PRODUCT" name="privileges[]" value="DELETE_PRODUCT">
+          <input {{ 'checked' if 'DELETE_PRODUCT' in privileges }} type="checkbox" id="DELETE_PRODUCT"
+            name="privileges[]" value="DELETE_PRODUCT">
           <label for="DELETE_PRODUCT">DELETE PRODUCT</label>
         </div>
       </fieldset>

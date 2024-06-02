@@ -105,14 +105,13 @@ def add_admin():
         full_name = request.form.get("full_name")
         privileges = request.form.getlist('privileges[]')
 
-        print(privileges)
-
         if not username or not password or not full_name:
             return render_template(template,
                                    error="All fields are required.",
                                    username=username,
                                    password=password,
                                    full_name=full_name,
+                                   privileges=privileges,
                                    )
 
         if not authenticator.unique_username(username):
@@ -121,6 +120,7 @@ def add_admin():
                                    username=username,
                                    password=password,
                                    full_name=full_name,
+                                   privileges=privileges,
                                    )
 
         if not authenticator.validate_username(username):
@@ -129,6 +129,7 @@ def add_admin():
                                    username=username,
                                    password=password,
                                    full_name=full_name,
+                                   privileges=privileges,
                                    )
         if not authenticator.validate_password(password):
             return render_template(template,
@@ -136,6 +137,15 @@ def add_admin():
                                    username=username,
                                    password=password,
                                    full_name=full_name,
+                                   privileges=privileges,
+                                   )
+        if not privileges:
+            return render_template(template,
+                                   error="Select at least one privilege.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   privileges=privileges,
                                    )
 
         authenticator.add_admin(username, password, full_name, [])
@@ -230,6 +240,9 @@ def products():
     filtered_products = all_products
 
     if query:
+        filtered_products = [
+            p for p in all_products if query.lower() in p.title.lower()]
+
         filtered_products = [
             p for p in all_products if query.lower() in p.title.lower()]
 
