@@ -89,6 +89,7 @@
             transition: background-color 0.3s ease;
             background-color: #FFD700;
             width: 250px;
+            font-weight: bold;
         }
 
         .add-to-cart {
@@ -125,12 +126,9 @@
             justify-content: center;
             align-items: center;
             gap: 40px;
-            /* margin-left: 740px; */
             height: 70px;
-            /* background-color: #f7f7f7; */
             width: 900px;
             margin-left: 50px;
-
         }
 
         .cart-logo {
@@ -146,7 +144,6 @@
             width: 50px;
             height: 50px;
             background-color: transparent;
-
         }
 
         .logout-logo {
@@ -155,8 +152,82 @@
             height: 40px;
             background-color: transparent;
             margin-top: 5px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 10px 40px;
+            margin: 0 5px;
+            color: #333;
+            background-color: #ffcc00;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            width: 100px;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .pagination a:hover {
+            background-color: #d4aa02;
+        }
+
+        .prev-button,
+        .next-button {
+            font-weight: bold;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            position: relative;
+        }
+
+        .search-button {
+            padding: 8px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            right: 330px;
+            margin-top: 2px;
 
         }
+
+        .search-logo {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            margin-right: 8px;
+
+        }
+
+        
+
+        .search-input {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+            outline: none;
+            transition: box-shadow 0.3s ease;
+            width: 300px;
+            height: 28px;
+            font-size: 16px;
+        }
+        
+
+        .search-input:focus {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+       
     </style>
 </head>
 
@@ -165,15 +236,23 @@
         <div class="large-container">
             <h1 class="title">Products</h1>
             <div class="small-container">
-                <a class="to-cart" href="{{url_for('cart_')}}">
+                <a class="to-cart" href="{{ url_for('cart_') }}">
                     <img class="cart-logo" src="static/images/cartLogo.png" alt="Cart Logo">
                 </a>
-                <a class="to-cart" href="{{url_for('history')}}">
+                <a class="to-cart" href="{{ url_for('history') }}">
                     <img class="history-logo" src="static/images/orderHistoryLogo.png" alt="Order History Logo">
                 </a>
-                <a class="to-cart" href="{{url_for('logout')}}">
+                <a class="to-cart" href="{{ url_for('logout') }}">
                     <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
                 </a>
+            </div>
+            <div class="search-container">
+                <form action="{{ url_for('products') }}" method="get">
+                    <input type="text" class="search-input" name="query" placeholder="Search products...">
+                    <button type="submit" class="search-button">
+                        <img class="search-logo" src="static/images/search.png" alt="Search Logo">
+                    </button>
+                </form>
             </div>
         </div>
         <ul class="product-list">
@@ -190,6 +269,13 @@
             </li>
             {% endfor %}
         </ul>
+        <div class="pagination">
+            {% if page > 1 %}
+            <a class="prev-button" href="{{ url_for('products', page=page-1) }}">Previous</a>
+            {% endif %}
+            {% if page < total_pages %} <a class="next-button" href="{{ url_for('products', page=page+1) }}">Next</a>
+                {% endif %}
+        </div>
     </div>
 </body>
 

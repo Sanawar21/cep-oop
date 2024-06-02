@@ -139,3 +139,12 @@ class Database:
                                                              for i in range(10))
         uid = ''.join(random.choices(characters, k=12))
         return uid
+    
+    
+    def get_products_paginated(self, page, per_page):
+        products = self.get_products()
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_products = products[start:end]
+        total_products = len(products)
+        return paginated_products, total_products

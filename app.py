@@ -134,9 +134,19 @@ def signup():
 
 
 @app.route('/products')
-@only_allow(User)
 def products():
-    return render_template('products.html', products=all_products, cart=cart)
+    query = request.args.get('query')
+    page = int(request.args.get('page', 1))
+    per_page = 18
+    filtered_products = all_products
+    
+    if query:
+        filtered_products = [p for p in all_products if query.lower() in p.title.lower()]
+    
+    total_pages = (len(filtered_products) + per_page - 1) // per_page
+    paginated_products = filtered_products[(page - 1) * per_page:page * per_page]
+    
+    return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages)
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
