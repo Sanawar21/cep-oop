@@ -68,14 +68,17 @@ def only_allow(types_: list[type] | type):
 
 
 def check_privilege(func):
-
+    """
+    Uses the route name to determine whether the admin has the necessary privilege to 
+    perfomr the action and then reroutes accordingly.
+    """
     def wrapper(*args, **kwargs):
         route_name = func.__name__
-        if account.has_privilege(route_name.upper()):
+        if route_name not in Privilege.ALL or account.has_privilege(route_name.upper()):
             return func(*args, **kwargs)
         else:
             # TODO: Think of a better way to tell that the admin does not have the necessary privilege
-            return "You do not have the privilege to perform the action."
+            return "You do not have the privilege to perform this action."
 
     wrapper.__name__ = func.__name__
     wrapper.__doc__ = func.__doc__
@@ -84,11 +87,67 @@ def check_privilege(func):
     return wrapper
 
 
-@app.route('/add_admin')
+def completion(action_detail, back_link):
+    template = "./admin/completion.html"
+    return render_template(template, action_detail=action_detail, back_link=back_link)
+
+
+@app.route('/add_admin', methods=["GET", "POST"])
 @only_allow(Admin)
 @check_privilege
 def add_admin():
-    return "You have the privilege."
+
+    template = "./admin/add_admin.html"
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        full_name = request.form.get("full_name")
+        privileges = request.form.getlist('privileges[]')
+
+        print(privileges)
+
+        if not username or not password or not full_name:
+            return render_template(template,
+                                   error="All fields are required.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+
+        if not authenticator.unique_username(username):
+            return render_template(template,
+                                   error="This username is taken.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+
+        if not authenticator.validate_username(username):
+            return render_template(template,
+                                   error="Username cannot contain any special characters.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+        if not authenticator.validate_password(password):
+            return render_template(template,
+                                   error="Password must be atleast 8 characters with a special character and a number.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+
+        authenticator.add_admin(username, password, full_name, [])
+        return completion("Admin added successfully.", url_for("admin"))
+
+    return render_template("./admin/add_admin.html")
+
+
+@app.route('/admin')
+@only_allow(Admin)
+def admin():
+    return render_template("./admin/admin.html")
 
 
 @app.route('/')
@@ -108,7 +167,7 @@ def login():
                 cart.owner = account.username
                 return redirect(url_for('products'))
             else:
-                return redirect(render_template("admin.html"))
+                return redirect(url_for("admin"))
         else:
             return render_template("login.html", error="Incorrect username or password.")
     return render_template('login.html')
