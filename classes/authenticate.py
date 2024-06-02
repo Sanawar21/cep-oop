@@ -10,6 +10,7 @@ class Authenticator:
 
     def __init__(self) -> None:
         self.database = Database()
+        self.account: User | Admin = None
 
     @staticmethod
     def validate_password(password):
@@ -34,7 +35,7 @@ class Authenticator:
         """to check username is valid"""
         username = username.lower()
         for char in username:
-            if char in "!@#$%^&*()_+{}:/.,'\" ":
+            if char in "!@#$%^&*()+{}:/.,'\" ":
                 return False
         return True
 
@@ -54,8 +55,6 @@ class Authenticator:
         for account in accounts:
             if account.username == username and account.password == password:
                 self.account = account
-                self.username = username
-                self.password = password
                 return account
 
     def sign_up(self, username, password, full_name, address, bank_details=None):
@@ -77,3 +76,9 @@ class Authenticator:
         self.login(username, password)
 
         return self.account
+
+    def add_admin(self, username, password, full_name, privileges):
+        admin = Admin(username, password, full_name, privileges)
+        self.database.save_account(admin)
+        self.account = admin
+        return admin
