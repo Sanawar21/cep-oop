@@ -3,7 +3,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from classes.authenticate import Authenticator
 from classes.database import Database
 from classes.cart import Cart
-from classes.account import User, Admin
+from classes.account import User, Admin, Privilege
 from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
 
@@ -48,7 +48,11 @@ def only_allow(types_: list[type] | type):
 
     def decorator(func):
         def wrapper(*args, **kwargs):
+            global account, cart
+
             if type(account) not in types_:
+                account = None
+                cart = Cart.null()
                 return redirect(url_for('login'))
             else:
                 return func(*args, **kwargs)
@@ -61,6 +65,30 @@ def only_allow(types_: list[type] | type):
 
         return wrapper
     return decorator
+
+
+def check_privilege(func):
+
+    def wrapper(*args, **kwargs):
+        route_name = func.__name__
+        if account.has_privilege(route_name.upper()):
+            return func(*args, **kwargs)
+        else:
+            # TODO: Think of a better way to tell that the admin does not have the necessary privilege
+            return "You do not have the privilege to perform the action."
+
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
+    wrapper.__module__ = func.__module__
+
+    return wrapper
+
+
+@app.route('/add_admin')
+@only_allow(Admin)
+@check_privilege
+def add_admin():
+    return "You have the privilege."
 
 
 @app.route('/')
@@ -76,11 +104,13 @@ def login():
         password = request.form['password']
         account = authenticator.login(username, password)
         if account:
-            cart.owner = account.username
-            flash('Login successful!', 'success')
-            return redirect(url_for('products'))
+            if account.type == User.type:
+                cart.owner = account.username
+                return redirect(url_for('products'))
+            else:
+                return redirect(render_template("admin.html"))
         else:
-            return render_template("login.html", error="Invalid username or password.")
+            return render_template("login.html", error="Incorrect username or password.")
     return render_template('login.html')
 
 
