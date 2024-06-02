@@ -146,6 +146,7 @@ def products():
     total_pages = (len(filtered_products) + per_page - 1) // per_page
     paginated_products = filtered_products[(page - 1) * per_page:page * per_page]
     
+    
     return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages)
 
 

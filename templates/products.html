@@ -27,7 +27,9 @@
             margin: 0 -10px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: flex-start;
+            gap: 30px;
+        
         }
 
         .title {
@@ -197,7 +199,6 @@
             position: absolute;
             right: 330px;
             margin-top: 2px;
-
         }
 
         .search-logo {
@@ -205,10 +206,7 @@
             height: 24px;
             object-fit: contain;
             margin-right: 8px;
-
         }
-
-        
 
         .search-input {
             padding: 8px 16px;
@@ -221,13 +219,19 @@
             height: 28px;
             font-size: 16px;
         }
-        
 
         .search-input:focus {
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-       
+        .no-products-found {
+            text-align: center;
+            font-size: 30px;
+            margin-top: 20px;
+            font-weight: bold;
+        
+
+        }
     </style>
 </head>
 
@@ -256,25 +260,30 @@
             </div>
         </div>
         <ul class="product-list">
-            {% for product in products %}
-            <li class="product">
-                <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
-                <div class="product-info">
-                    <p class="product-name">{{ product.title }}</p>
-                    <p class="product-price">${{ product.price }}</p>
-                </div>
-                <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}" method="get">
-                    <button class="cart-button" type="submit">View product</button>
-                </form>
-            </li>
-            {% endfor %}
+            {% if products %}
+                {% for product in products %}
+                    <li class="product">
+                        <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
+                        <div class="product-info">
+                            <p class="product-name">{{ product.title }}</p>
+                            <p class="product-price">${{ product.price }}</p>
+                        </div>
+                        <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}" method="get">
+                            <button class="cart-button" type="submit">View product</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p class="no-products-found">No products found.</p>
+            {% endif %}
         </ul>
         <div class="pagination">
             {% if page > 1 %}
-            <a class="prev-button" href="{{ url_for('products', page=page-1) }}">Previous</a>
+                <a class="prev-button" href="{{ url_for('products', page=page-1) }}">Previous</a>
             {% endif %}
-            {% if page < total_pages %} <a class="next-button" href="{{ url_for('products', page=page+1) }}">Next</a>
-                {% endif %}
+            {% if page < total_pages %}
+                <a class="next-button" href="{{ url_for('products', page=page+1) }}">Next</a>
+            {% endif %}
         </div>
     </div>
 </body>
