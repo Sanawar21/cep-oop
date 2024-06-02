@@ -3,9 +3,10 @@ from .bank_details import BankDetails
 
 
 class Account(ABC):
-    def __init__(self, username, password) -> None:
+    def __init__(self, username, password, full_name) -> None:
         self.username = username
         self.password = password
+        self.full_name = full_name
 
     @abstractmethod
     def to_dict():
@@ -25,8 +26,7 @@ class User(Account):
     type = "user"
 
     def __init__(self, username, password, full_name, address, bank_details=None) -> None:
-        super().__init__(username, password)
-        self.full_name = full_name
+        super().__init__(username, password, full_name)
         self.address = address
         self.bank_details = bank_details
 
@@ -96,8 +96,8 @@ class Admin(Account):
 
     type = "admin"
 
-    def __init__(self, username, password, privileges: list[str] | set[str]) -> None:
-        super().__init__(username, password)
+    def __init__(self, username, password, full_name, privileges: list[str] | set[str]) -> None:
+        super().__init__(username, password, full_name)
         self.privileges = set(privileges)
 
     def add_privilege(self, p: str):
@@ -118,6 +118,7 @@ class Admin(Account):
             "type": self.type,
             "username": self.username,
             "password": self.password,
+            "full_name": self.full_name,
             "privileges": list(self.privileges),
         }
 
@@ -126,5 +127,6 @@ class Admin(Account):
         return cls(
             data["username"],
             data["password"],
+            data["full_name"],
             data["privileges"],
         )
