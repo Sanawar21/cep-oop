@@ -137,7 +137,7 @@ def signup():
 def products():
     query = request.args.get('query')
     page = int(request.args.get('page', 1))
-    per_page = 18
+    per_page = 9
     filtered_products = all_products
     
     if query:
@@ -145,9 +145,12 @@ def products():
     
     total_pages = (len(filtered_products) + per_page - 1) // per_page
     paginated_products = filtered_products[(page - 1) * per_page:page * per_page]
-    
-    
-    return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages)
+
+    # Calculate the range of page numbers to display
+    start_page = max(1, page - 2)
+    end_page = min(start_page + 4, total_pages)
+
+    return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page,max=max,min=min)
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])

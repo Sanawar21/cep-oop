@@ -27,9 +27,8 @@
             margin: 0 -10px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: flex-start;
-            gap: 30px;
-        
+            justify-content: flex;
+
         }
 
         .title {
@@ -163,25 +162,50 @@
 
         .pagination a {
             text-decoration: none;
-            padding: 10px 40px;
             margin: 0 5px;
             color: #333;
             background-color: #ffcc00;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            width: 100px;
             display: inline-block;
             text-align: center;
+
+
         }
 
         .pagination a:hover {
             background-color: #d4aa02;
         }
 
-        .prev-button,
+        .prev-button {
+            font-weight: bold;
+            padding: 10px 20px;
+        }
+
         .next-button {
             font-weight: bold;
+            padding: 10px 30px;
         }
+
+
+        .page-number {
+            text-decoration: none;
+            padding: 10px 10px;
+            margin: 0 5px;
+            color: #333;
+            background-color: #ffcc00;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+
+        }
+
+        .page-number:hover {
+            background-color: #d4aa02;
+        }
+
+
+
+
 
         .search-container {
             margin-bottom: 20px;
@@ -229,8 +253,38 @@
             font-size: 30px;
             margin-top: 20px;
             font-weight: bold;
-        
 
+        }
+
+        .page-number {
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            color: #333;
+            background-color: #ffcc00;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+
+        }
+
+        .page-number:hover {
+            background-color: #d4aa02;
+        }
+
+
+
+        .disabled {
+            pointer-events: none;
+            opacity: 0.5;
+            text-decoration: none;
+            padding: 10px 40px;
+            margin: 0 5px;
+            color: #333;
+            background-color: #ffcc00;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            text-align: center;
         }
     </style>
 </head>
@@ -261,31 +315,45 @@
         </div>
         <ul class="product-list">
             {% if products %}
-                {% for product in products %}
-                    <li class="product">
-                        <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
-                        <div class="product-info">
-                            <p class="product-name">{{ product.title }}</p>
-                            <p class="product-price">${{ product.price }}</p>
-                        </div>
-                        <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}" method="get">
-                            <button class="cart-button" type="submit">View product</button>
-                        </form>
-                    </li>
-                {% endfor %}
+            {% for product in products %}
+            <li class="product">
+                <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
+                <div class="product-info">
+                    <p class="product-name">{{ product.title }}</p>
+                    <p class="product-price">${{ product.price }}</p>
+                </div>
+                <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}" method="get">
+                    <button class="cart-button" type="submit">View product</button>
+                </form>
+            </li>
+            {% endfor %}
             {% else %}
-                <p class="no-products-found">No products found.</p>
+            <p class="no-products-found">No products found.</p>
             {% endif %}
         </ul>
         <div class="pagination">
+            <a class="prev-button{% if page == 1 %} disabled{% endif %}"
+                href="{{ url_for('products', page=page-1) }}">Previous</a>
+
             {% if page > 1 %}
-                <a class="prev-button" href="{{ url_for('products', page=page-1) }}">Previous</a>
+            <a class="page-number" href="{{ url_for('products', page=1) }}">1</a>
+            <span class="ellipsis">...</span>
             {% endif %}
-            {% if page < total_pages %}
-                <a class="next-button" href="{{ url_for('products', page=page+1) }}">Next</a>
-            {% endif %}
+
+            {% for p in range(page + 1, min(page + 4, total_pages + 1)) %}
+            <a class="page-number" href="{{ url_for('products', page=p) }}">{{ p }}</a>
+            {% endfor %}
+
+            {% if page + 3 < total_pages %} <span class="ellipsis">...</span>
+                <a class="page-number" href="{{ url_for('products', page=total_pages) }}">{{ total_pages }}</a>
+                {% endif %}
+
+                <a class="next-button{% if page == total_pages %} disabled{% endif %}"
+                    href="{{ url_for('products', page=page+1) }}">Next</a>
         </div>
-    </div>
+
 </body>
+
+</html>
 
 </html>
