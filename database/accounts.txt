@@ -1,2 +1,4 @@
 {'type': 'user', 'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'owner': 'Sanawar', 'bank_name': 'Faysal Bank', 'card_number': '1231231231', 'pin': '1234'}}
 {'type': 'user', 'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'L328', 'bank_details': None}
+{'type': 'admin', 'username': 'superadmin', 'password': 'password', 'full_name': 'Super Admin', 'privileges': ['ADD_USER', 'ADD_ADMIN', 'ADD_PRODUCT', 'EDIT_USER', 'EDIT_ADMIN', 'EDIT_PRODUCT', 'DELETE_USER', 'DELETE_ADMIN', 'DELETE_PRODUCT']}
+{'type': 'admin', 'username': 'empty_admin', 'password': 'Sanawar21$$', 'full_name': 'Empty Admin', 'privileges': []}

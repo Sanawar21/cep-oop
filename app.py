@@ -3,7 +3,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from classes.authenticate import Authenticator
 from classes.database import Database
 from classes.cart import Cart
-from classes.account import User, Admin
+from classes.account import User, Admin, Privilege
 from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
 
@@ -48,7 +48,11 @@ def only_allow(types_: list[type] | type):
 
     def decorator(func):
         def wrapper(*args, **kwargs):
+            global account, cart
+
             if type(account) not in types_:
+                account = None
+                cart = Cart.null()
                 return redirect(url_for('login'))
             else:
                 return func(*args, **kwargs)
@@ -61,6 +65,89 @@ def only_allow(types_: list[type] | type):
 
         return wrapper
     return decorator
+
+
+def check_privilege(func):
+    """
+    Uses the route name to determine whether the admin has the necessary privilege to 
+    perfomr the action and then reroutes accordingly.
+    """
+    def wrapper(*args, **kwargs):
+        route_name = func.__name__
+        if route_name not in Privilege.ALL or account.has_privilege(route_name.upper()):
+            return func(*args, **kwargs)
+        else:
+            # TODO: Think of a better way to tell that the admin does not have the necessary privilege
+            return "You do not have the privilege to perform this action."
+
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
+    wrapper.__module__ = func.__module__
+
+    return wrapper
+
+
+def completion(action_detail, back_link):
+    template = "./admin/completion.html"
+    return render_template(template, action_detail=action_detail, back_link=back_link)
+
+
+@app.route('/add_admin', methods=["GET", "POST"])
+@only_allow(Admin)
+@check_privilege
+def add_admin():
+
+    template = "./admin/add_admin.html"
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        full_name = request.form.get("full_name")
+        privileges = request.form.getlist('privileges[]')
+
+        print(privileges)
+
+        if not username or not password or not full_name:
+            return render_template(template,
+                                   error="All fields are required.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+
+        if not authenticator.unique_username(username):
+            return render_template(template,
+                                   error="This username is taken.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+
+        if not authenticator.validate_username(username):
+            return render_template(template,
+                                   error="Username cannot contain any special characters.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+        if not authenticator.validate_password(password):
+            return render_template(template,
+                                   error="Password must be atleast 8 characters with a special character and a number.",
+                                   username=username,
+                                   password=password,
+                                   full_name=full_name,
+                                   )
+
+        authenticator.add_admin(username, password, full_name, [])
+        return completion("Admin added successfully.", url_for("admin"))
+
+    return render_template("./admin/add_admin.html")
+
+
+@app.route('/admin')
+@only_allow(Admin)
+def admin():
+    return render_template("./admin/admin.html")
 
 
 @app.route('/')
@@ -76,11 +163,13 @@ def login():
         password = request.form['password']
         account = authenticator.login(username, password)
         if account:
-            cart.owner = account.username
-            flash('Login successful!', 'success')
-            return redirect(url_for('products'))
+            if account.type == User.type:
+                cart.owner = account.username
+                return redirect(url_for('products'))
+            else:
+                return redirect(url_for("admin"))
         else:
-            return render_template("login.html", error="Invalid username or password.")
+            return render_template("login.html", error="Incorrect username or password.")
     return render_template('login.html')
 
 
