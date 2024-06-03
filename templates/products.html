@@ -6,6 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Products</title>
     <style>
+        .title {
+            text-align: center;
+            font-size: 50px;
+            margin-bottom: -10px;
+            background-image: linear-gradient(to bottom right, #ffcc00, #000000);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #fff;
@@ -21,20 +31,34 @@
             background-color: transparent;
         }
 
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+
+        .product-title {
+            display: block;
+            font-size: 36px;
+            font-weight: bold;
+            margin-right: auto;
+            /* margin-bottom: 0; */
+            text-align: center;
+            margin-left: 10px;
+
+
+        }
+
         .product-list {
             list-style-type: none;
             padding: 0;
             margin: 0 -10px;
             display: flex;
             flex-wrap: wrap;
-            justify-content: flex;
-
-        }
-
-        .title {
-            text-align: center;
-            font-size: 36px;
-            font-weight: bold;
+            justify-content: flex-start;
+            gap: 30px;
         }
 
         .product {
@@ -111,47 +135,77 @@
             background-color: #ff6666;
         }
 
-        .to-cart {
-            text-decoration: none;
-            font-size: 18px;
-            font-family: Arial, sans-serif;
-            color: black;
-            margin-bottom: 10px;
-            font-style: italic;
-            background-color: transparent;
+        .search-container {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            position: relative;
+            margin-left: 48px;
         }
 
-        .small-container {
+        .search-input {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+            outline: none;
+            transition: box-shadow 0.3s ease;
+            width: 300px;
+            height: 28px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-button {
+            padding: 8px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .search-logo {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            margin-right: 8px;
+            position: absolute;
+            right: 33px;
+            top: 10px;
+        }
+
+        .logos {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
             align-items: center;
-            gap: 40px;
-            height: 70px;
-            width: 900px;
-            margin-left: 50px;
+            gap: 20px;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+
+        .cart-logo,
+        .history-logo,
+        .logout-logo {
+            object-fit: contain;
+            background-color: transparent;
         }
 
         .cart-logo {
-            object-fit: contain;
             width: 47px;
             height: 47px;
-            background-color: transparent;
             margin-top: 2px;
         }
 
         .history-logo {
-            object-fit: contain;
             width: 50px;
             height: 50px;
-            background-color: transparent;
         }
 
         .logout-logo {
-            object-fit: contain;
             width: 40px;
             height: 40px;
-            background-color: transparent;
             margin-top: 5px;
         }
 
@@ -169,24 +223,17 @@
             transition: background-color 0.3s ease;
             display: inline-block;
             text-align: center;
-
-
         }
 
         .pagination a:hover {
             background-color: #d4aa02;
         }
 
-        .prev-button {
+        .prev-button,
+        .next-button {
             font-weight: bold;
             padding: 10px 20px;
         }
-
-        .next-button {
-            font-weight: bold;
-            padding: 10px 30px;
-        }
-
 
         .page-number {
             text-decoration: none;
@@ -196,104 +243,54 @@
             background-color: #ffcc00;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-
         }
 
         .page-number:hover {
             background-color: #d4aa02;
         }
-
-
-
-
-
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            position: relative;
-        }
-
-        .search-button {
-            padding: 8px;
-            background-color: transparent;
-            border: none;
-            cursor: pointer;
-            position: absolute;
-            right: 330px;
-            margin-top: 2px;
-        }
-
-        .search-logo {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-            margin-right: 8px;
-        }
-
-        .search-input {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
-            outline: none;
-            transition: box-shadow 0.3s ease;
-            width: 300px;
-            height: 28px;
-            font-size: 16px;
-        }
-
-        .search-input:focus {
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .no-products-found {
-            text-align: center;
-            font-size: 30px;
-            margin-top: 20px;
-            font-weight: bold;
-
-        }
-
-        .page-number {
-            text-decoration: none;
-            padding: 10px 20px;
-            margin: 0 5px;
-            color: #333;
-            background-color: #ffcc00;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-
-        }
-
-        .page-number:hover {
-            background-color: #d4aa02;
-        }
-
-
-
         .disabled {
             pointer-events: none;
             opacity: 0.5;
-            text-decoration: none;
-            padding: 10px 40px;
-            margin: 0 5px;
-            color: #333;
-            background-color: #ffcc00;
+            
+        }
+        .no-product-found{
+            margin-left: 300px;
+        }
+        .back-to-products{
+            margin: 0 10px;
+            border: none;
             border-radius: 5px;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 16px;
             transition: background-color 0.3s ease;
-            display: inline-block;
+            text-decoration: none;
+            color:black;
+            font-weight: bold;
             text-align: center;
+            background-color: #ffcc00;
+            margin-left: 396px;
+        }
+        .back-to-products:hover{
+            background-color: #d4aa02;
         }
     </style>
 </head>
 
 <body>
+    <h1 class="title">Brinx</h1>
     <div class="container">
-        <div class="large-container">
-            <h1 class="title">Products</h1>
-            <div class="small-container">
+        <div class="header">
+            <h1 class="product-title">Products</h1>
+            <div class="search-container">
+                <form action="{{ url_for('products') }}" method="get">
+                    <input type="text" class="search-input" name="query" placeholder="Search products...">
+                    <button type="submit" class="search-button">
+                        <img class="search-logo" src="static/images/search.png" alt="Search Logo">
+                    </button>
+                </form>
+            </div>
+            <div class="logos">
                 <a class="to-cart" href="{{ url_for('cart_') }}">
                     <img class="cart-logo" src="static/images/cartLogo.png" alt="Cart Logo">
                 </a>
@@ -303,14 +300,6 @@
                 <a class="to-cart" href="{{ url_for('logout') }}">
                     <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
                 </a>
-            </div>
-            <div class="search-container">
-                <form action="{{ url_for('products') }}" method="get">
-                    <input type="text" class="search-input" name="query" placeholder="Search products...">
-                    <button type="submit" class="search-button">
-                        <img class="search-logo" src="static/images/search.png" alt="Search Logo">
-                    </button>
-                </form>
             </div>
         </div>
         <ul class="product-list">
@@ -328,9 +317,12 @@
             </li>
             {% endfor %}
             {% else %}
-            <p class="no-products-found">No products found.</p>
+            <div class="no-product-found">
+                <img src="../static/images/no-product-found.jpg" alt="">
+            </div>
             {% endif %}
         </ul>
+        {% if products %}
         <div class="pagination">
             <a class="prev-button{% if page == 1 %} disabled{% endif %}"
                 href="{{ url_for('products', page=page-1) }}">Previous</a>
@@ -351,9 +343,11 @@
                 <a class="next-button{% if page == total_pages %} disabled{% endif %}"
                     href="{{ url_for('products', page=page+1) }}">Next</a>
         </div>
-
+        {% else %}
+        <a class="back-to-products" href="{{url_for('products')}}">Back to Products</a>
+        {% endif %}
+        
+    </div>
 </body>
-
-</html>
 
 </html>
