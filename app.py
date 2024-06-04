@@ -15,6 +15,9 @@ all_products = database.get_products()
 cart = Cart.null()
 account = None
 
+# TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
+# TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
+#       use a focus.
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
 # only then will the decorator be returned.
@@ -31,6 +34,7 @@ account = None
 # func = <decorator returned by only_allow(User)>(func)
 # and the above code will evaluate to
 # func = <decorated func>
+
 
 def only_allow(types_: list[type] | type):
     """
@@ -152,6 +156,67 @@ def add_admin():
         return completion("Admin added successfully.", url_for("admin"))
 
     return render_template("./admin/add_admin.html")
+
+
+@app.route('/add_user', methods=["GET", "POST"])
+@only_allow(Admin)
+@check_privilege
+def add_user():
+
+    template = "./admin/add_user.html"
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        full_name = request.form.get("full_name")
+        address = request.form.get('address')
+
+        bank_name = request.form.get("bank_name")
+        card_number = request.form.get("card_number")
+        pin = request.form.get("pin")
+
+        # for state management
+        context = {
+            "template_name_or_list": template,
+            "username": username,
+            "password": password,
+            "full_name": full_name,
+            "address": address,
+            "bank_name": bank_name,
+            "card_number": card_number,
+            "pin": pin,
+        }
+
+        if not username or not password or not full_name or not address:
+            return render_template(**context, error="All fields are required.")
+
+        if not authenticator.unique_username(username):
+            return render_template(**context, error="This username is taken.")
+
+        if not authenticator.validate_username(username):
+            return render_template(**context, error="Username cannot contain any special characters.")
+
+        if not authenticator.validate_password(password):
+            return render_template(**context, error="Password must be atleast 8 characters with a special character and a number.")
+
+        # handle bank details
+        bank_details = None
+
+        if card_number and bank_name and pin:
+            if not BankDetails.validate_card_number(card_number):
+                return render_template(**context, error="Card number must be 10 digits.")
+            if not BankDetails.validate_pin(pin):
+                return render_template(**context, error="Pin must be 4 digit long.")
+            bank_details = BankDetails(username, bank_name, card_number, pin)
+        else:
+            if card_number or bank_name or pin:
+                return render_template(**context, error="All bank details should be filled or left empty.")
+
+        authenticator.sign_up(username, password,
+                              full_name, address, bank_details)
+        return completion("User added successfully.", url_for("admin"))
+
+    return render_template("./admin/add_user.html")
 
 
 @app.route('/admin')
