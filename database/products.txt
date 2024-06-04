@@ -92,3 +92,4 @@
 {'title': "Women's Mona Sandal", 'price': 89, 'uid': 'B0BF2P66KP'}
 {'title': 'Dead Rising 2 (PS3)', 'price': 35, 'uid': 'B002BWONEO'}
 {'title': 'Basket Sub-Assembly', 'price': 13, 'uid': 'B00JU7G6J8'}
+{'title': 'Test Product', 'price': 100, 'uid': 'x3nSt0z5fCdO'}

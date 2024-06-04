@@ -2,3 +2,6 @@
 {'type': 'user', 'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'L328', 'bank_details': None}
 {'type': 'admin', 'username': 'superadmin', 'password': 'password', 'full_name': 'Super Admin', 'privileges': ['ADD_USER', 'ADD_ADMIN', 'ADD_PRODUCT', 'EDIT_USER', 'EDIT_ADMIN', 'EDIT_PRODUCT', 'DELETE_USER', 'DELETE_ADMIN', 'DELETE_PRODUCT']}
 {'type': 'admin', 'username': 'empty_admin', 'password': 'Sanawar21$$', 'full_name': 'Empty Admin', 'privileges': []}
+{'type': 'user', 'username': 'testuser', 'password': 'Sanawar21$$', 'full_name': 'test user', 'address': 'asdfasdf', 'bank_details': None}
+{'type': 'user', 'username': 'nobank', 'password': 'Sanawar21$$', 'full_name': 'No Bank', 'address': 'no bank', 'bank_details': None}
+{'type': 'user', 'username': 'yesbank', 'password': 'Sanawar21$$', 'full_name': 'Yes bank', 'address': 'Yes BANK ADDRESS', 'bank_details': {'owner': 'yesbank', 'bank_name': 'HBL Islamic', 'card_number': '1234123412', 'pin': '1234'}}
