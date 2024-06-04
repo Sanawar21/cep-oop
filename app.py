@@ -3,6 +3,7 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from classes.authenticate import Authenticator
 from classes.database import Database
 from classes.cart import Cart
+from classes.product import Product
 from classes.account import User, Admin, Privilege
 from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
@@ -217,6 +218,52 @@ def add_user():
         return completion("User added successfully.", url_for("admin"))
 
     return render_template("./admin/add_user.html")
+
+
+@app.route('/add_product', methods=["GET", "POST"])
+@only_allow(Admin)
+@check_privilege
+def add_product():
+
+    template = "./admin/add_product.html"
+
+    if request.method == "POST":
+        title = request.form.get("title")
+        price = request.form.get("price")
+        image = request.files.get("image")
+
+        # for state management
+        # cannot pass image
+        context = {
+            "template_name_or_list": template,
+            "title": title,
+            "price": price,
+        }
+
+        if not title or not price:
+            return render_template(**context, error="All fields are required.")
+
+        if title in [p.title for p in all_products]:  # title not unique
+            return render_template(**context, error="This product title has been used.")
+
+        try:
+            price = int(price)
+        except ValueError:
+            return render_template(**context, error="The price must be an integer.")
+
+        uid = Database.generate_uid()
+        print(image)
+        if image:
+            if not image.filename.endswith(('png', 'jpg', 'jpeg')):
+                return render_template(**context, error="Invalid image format. Only png, jpg and jpeg is allowed.")
+            else:
+                print(image)
+                image.save(f"../static/images/{uid}.jpg")
+
+        # database.save_product(Product(title, price, uid))
+        # return completion("Product added successfully.", url_for("admin"))
+
+    return render_template("./admin/add_product.html")
 
 
 @app.route('/admin')
