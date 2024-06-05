@@ -21,9 +21,7 @@ account = None
 # TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
 # TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
 #       use a focus.
-# TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
-# TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
-#       use a focus.
+# TODO: Save cart if user logs out before checking out.
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
 # only then will the decorator be returned.
@@ -213,7 +211,7 @@ def add_user():
                 return render_template(**context, error="Card number must be 10 digits.")
             if not BankDetails.validate_pin(pin):
                 return render_template(**context, error="Pin must be 4 digit long.")
-            bank_details = BankDetails(username, bank_name, card_number, pin)
+            bank_details = BankDetails(bank_name, card_number, pin)
         else:
             if card_number or bank_name or pin:
                 return render_template(**context, error="All bank details should be filled or left empty.")
@@ -268,6 +266,20 @@ def add_product():
 
     return render_template("./admin/add_product.html")
 
+# Edit routes
+
+
+@app.route("/edit_admin/<username>", methods=["GET", "POST"])
+@only_allow(Admin)
+@check_privilege
+def edit_admin(username):
+
+    template = "./admin/edit_admin.html"
+
+    account = database.get_account(username)
+    if type(account) != Admin:
+        return render_template("./admin/failure.html", action_detail="The account is not an admin.")
+
 
 @app.route('/admin')
 @only_allow(Admin)
@@ -289,7 +301,6 @@ def login():
         account = authenticator.login(username, password)
         if account:
             if account.type == User.type:
-                cart.owner = account.username
                 return redirect(url_for('products'))
             else:
                 return redirect(url_for("admin"))
@@ -416,6 +427,7 @@ def checkout_cod():
         phone = request.form['phone']
 
         dummy_user = User(
+            None,
             account.username,
             account.password,
             full_name,
@@ -433,11 +445,10 @@ def checkout_cod():
                                    error="All fields are required.")
 
         if password == account.password:
-            order = CodOrder(cart, full_name, address, email, phone)
-            database.write_order(order)
-
+            order = CodOrder(Database.generate_uid(), cart,
+                             full_name, address, email, phone)
+            database.write_order(order, account.uid)
             cart = Cart.null()
-            cart.owner = account.username
             return render_template('thankyou.html')
         else:
             return render_template('checkout_cod.html',
@@ -470,12 +481,13 @@ def checkout_bank():
 
         # for state management
         dummy_user = User(
+            None,
             account.username,
             account.password,
             full_name,
             address,
             account.bank_details if account.bank_details else BankDetails(
-                account.username, bank_name, card_number, pin,
+                bank_name, card_number, pin,
             )
         )
 
@@ -521,12 +533,11 @@ def checkout_bank():
             account = database.overwrite_account(account)
 
         # details are valid and usable
-        order = BankOrder(cart, account.full_name,
+        order = BankOrder(Database.generate_uid(), cart, account.full_name,
                           address, account.bank_details)
 
-        database.write_order(order)
+        database.write_order(order, account.uid)
         cart = Cart.null()
-        cart.owner = account.username
         return render_template('thankyou.html')
 
     return render_template('checkout_bank.html', user=account)
@@ -545,7 +556,7 @@ def checkout():
 @app.route('/history')
 @only_allow(User)
 def history():
-    orders = database.read_orders(account.username)
+    orders = database.read_orders(account.uid)
     return render_template('history.html', orders=orders[::-1])
 
 
@@ -562,7 +573,6 @@ def no_bank_details():
         flash(result[1], 'error')
     else:
         account = result
-        cart.owner = account.username
         return redirect(url_for('products'))
 
 
@@ -600,7 +610,7 @@ def bank_details():
                 pin=pin,
             )
 
-        bank = BankDetails(session["username"], bank_name, card_number, pin)
+        bank = BankDetails(bank_name, card_number, pin)
         result = authenticator.sign_up(
             session["username"],
             session["password"],
@@ -613,7 +623,6 @@ def bank_details():
             flash(result[1], 'error')
         else:
             account = result
-            cart.owner = account.username
             return redirect(url_for('products'))
 
     return render_template("bank_details.html")

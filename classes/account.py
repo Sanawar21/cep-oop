@@ -62,8 +62,7 @@ class User(Account):
         return all([chr in "0123456789" for chr in pin]) and len(pin) == 4
 
     def add_bank_details(self, bank_name, card_number, pin):
-        self.bank_details = BankDetails(
-            self.username, bank_name, card_number, pin)
+        self.bank_details = BankDetails(bank_name, card_number, pin)
         return self.bank_details
 
     def check_pin(self, pin) -> bool:
