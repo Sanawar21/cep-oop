@@ -4,6 +4,7 @@ from classes.authenticate import Authenticator
 from classes.database import Database
 from classes.cart import Cart
 from classes.product import Product
+from classes.product import Product
 from classes.account import User, Admin, Privilege
 from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
@@ -16,6 +17,9 @@ all_products = database.get_products()
 cart = Cart.null()
 account = None
 
+# TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
+# TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
+#       use a focus.
 # TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
 # TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
 #       use a focus.
