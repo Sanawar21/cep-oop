@@ -7,8 +7,8 @@ import time
 
 
 class Order(ABC):
-    def __init__(self, cart: Cart, full_name, address) -> None:
-        self.owner = cart.owner
+    def __init__(self, uid, cart: Cart, full_name, address) -> None:
+        self.uid = uid
         self.full_name = full_name
         self.items = cart.items
         self.bill = cart.bill
@@ -34,14 +34,15 @@ class BankOrder(Order):
 
     type = "Bank"
 
-    def __init__(self, cart: Cart, full_name, address, bank_details: BankDetails) -> None:
-        super().__init__(cart, full_name, address)
+    def __init__(self, uid, cart: Cart, full_name, address, bank_details: BankDetails) -> None:
+        super().__init__(uid, cart, full_name, address)
         self.bank_name = bank_details.bank_name
         self.card_number = bank_details.card_number
 
     @classmethod
     def null(cls):
         return cls(
+            None,
             Cart.null(),
             None, None,
             BankDetails.null()
@@ -49,7 +50,7 @@ class BankOrder(Order):
 
     def to_dict(self):
         return {
-            "owner": self.owner,
+            "uid": self.uid,
             "bill": self.bill,
             "timestamp": self.timestamp,
             "type": self.type,
@@ -71,7 +72,7 @@ class BankOrder(Order):
     @classmethod
     def from_dict(cls, data):
         obj = cls.null()
-        obj.owner = data["owner"]
+        obj.uid = data["uid"]
         obj.bill = data["bill"]
         obj.timestamp = data["timestamp"]
         obj.full_name = data["full_name"]
@@ -87,8 +88,8 @@ class CodOrder(Order):
 
     type = "COD"
 
-    def __init__(self, cart: Cart, full_name, address, email, phone) -> None:
-        super().__init__(cart, full_name, address)
+    def __init__(self, uid, cart: Cart, full_name, address, email, phone) -> None:
+        super().__init__(uid, cart, full_name, address)
         self.email = email
         self.phone = phone
         self.address = address
@@ -96,12 +97,12 @@ class CodOrder(Order):
     @classmethod
     def null(cls):
         return cls(
-            Cart.null(), None, None, None, None
+            None, Cart.null(), None, None, None, None
         )
 
     def to_dict(self):
         return {
-            "owner": self.owner,
+            "uid": self.uid,
             "bill": self.bill,
             "timestamp": self.timestamp,
             "type": self.type,
@@ -122,7 +123,7 @@ class CodOrder(Order):
     @classmethod
     def from_dict(cls, data):
         obj = cls.null()
-        obj.owner = data["owner"]
+        obj.uid = data["uid"]
         obj.bill = data["bill"]
         obj.timestamp = data["timestamp"]
         obj.full_name = data["full_name"]

@@ -71,14 +71,16 @@ class Authenticator:
         if not self.unique_username(username):
             return 0, "This Username has been already taken "
 
-        user = User(username, password, full_name, address, bank_details)
+        user = User(Database.generate_uid(), username,
+                    password, full_name, address, bank_details)
         self.database.save_account(user)
         self.login(username, password)
 
         return self.account
 
     def add_admin(self, username, password, full_name, privileges):
-        admin = Admin(username, password, full_name, privileges)
+        admin = Admin(Database.generate_uid(), username,
+                      password, full_name, privileges)
         self.database.save_account(admin)
         self.account = admin
         return admin
