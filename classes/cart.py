@@ -33,15 +33,15 @@ class Cart:
     This will only be a part of the main memory.    
     """
 
-    def __init__(self, owner: str) -> None:
-        self.owner = owner
+    def __init__(self, uid) -> None:
+        self.uid = uid
         # will save items as Item objects
         self.items: list[Item] = []
         self.get_bill()
 
     def to_dict(self):
         return {
-            "owner": self.owner,
+            "uid": self.uid,
             "bill": self.bill,
             "items": [
                 {
@@ -63,7 +63,7 @@ class Cart:
         Changes currect cart to the data provided in the dictionary
         """
         obj = cls.null()
-        obj.owner = data["owner"]
+        obj.uid = data["uid"]
         obj.bill = data["bill"]
         obj.items = [
             Item(Product(attr["title"], attr["price"], attr["uid"]), attr["quantity"]) for attr in data["items"]

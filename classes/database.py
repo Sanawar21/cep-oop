@@ -13,6 +13,14 @@ class Database:
 
     # product methods
 
+    def get_products_paginated(self, page, per_page):
+        products = self.get_products()
+        start = (page - 1) * per_page
+        end = start + per_page
+        paginated_products = products[start:end]
+        total_products = len(products)
+        return paginated_products, total_products
+
     @staticmethod
     def get_products() -> "list[Product]":
         """
@@ -64,6 +72,11 @@ class Database:
 
     # account methods
 
+    def get_account(self, uid) -> Admin | User | None:
+        for account in self.get_accounts():
+            if account.uid == uid:
+                return account
+
     def get_accounts(self) -> list[Admin | User]:
         accounts = []
         with open("database/accounts.txt") as file:
@@ -89,7 +102,7 @@ class Database:
         accounts = self.get_accounts()
         index = None
         for i, account in enumerate(accounts):
-            if account.username == new_account.username:
+            if account.uid == new_account.uid:
                 index = i
                 break
         else:
@@ -109,15 +122,15 @@ class Database:
     # order methods
 
     @staticmethod
-    def write_order(order: BankOrder | CodOrder):
-        with open(f"database/order_histories/{order.owner}", "a") as file:
+    def write_order(order: BankOrder | CodOrder, owner_uid):
+        with open(f"database/order_histories/{owner_uid}", "a") as file:
             file.write(str(order.to_dict())+"\n")
 
     @staticmethod
-    def read_orders(owner: str) -> list[BankOrder | CodOrder]:
+    def read_orders(owner_uid: str) -> list[BankOrder | CodOrder]:
         orders = []
         try:
-            with open(f"database/order_histories/{owner}") as file:
+            with open(f"database/order_histories/{owner_uid}") as file:
                 lines = file.readlines()
                 for line in lines:
                     if line != "" or line != "\n":
@@ -139,12 +152,3 @@ class Database:
                                                              for i in range(10))
         uid = ''.join(random.choices(characters, k=12))
         return uid
-    
-    
-    def get_products_paginated(self, page, per_page):
-        products = self.get_products()
-        start = (page - 1) * per_page
-        end = start + per_page
-        paginated_products = products[start:end]
-        total_products = len(products)
-        return paginated_products, total_products
