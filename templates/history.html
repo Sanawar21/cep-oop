@@ -105,7 +105,7 @@
         {% if orders %}
         {% for order in orders %}
         <div class="order">
-            <h2 class="order-id">Order ID: {{ orders|length - loop.index + 1 }}</h2>
+            <h3 class="order-id">ID: {{ order.uid }}</h3>
             <ul class="order-items">
                 {% for item in order.items %}
                 <li class="order-item"><strong>{{ item.product.title }}</strong> - Price:
