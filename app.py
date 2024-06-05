@@ -1,4 +1,5 @@
 import time
+import os
 import random
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from classes.authenticate import Authenticator
@@ -258,16 +259,14 @@ def add_product():
             return render_template(**context, error="The price must be an integer.")
 
         uid = Database.generate_uid()
-        print(image)
         if image:
             if not image.filename.endswith(('png', 'jpg', 'jpeg')):
                 return render_template(**context, error="Invalid image format. Only png, jpg and jpeg is allowed.")
             else:
-                print(image)
-                image.save(f"../static/images/{uid}.jpg")
+                image.save(f"./static/images/{uid}.jpg")
 
-        # database.save_product(Product(title, price, uid))
-        # return completion("Product added successfully.", url_for("admin"))
+        database.save_product(Product(title, price, uid))
+        return completion("Product added successfully.", url_for("admin"))
 
     return render_template("./admin/add_product.html")
 
@@ -275,9 +274,8 @@ def add_product():
 @app.route('/admin')
 @only_allow(Admin)
 def admin():
-   
-    admin_type = request.args.get('type')
 
+    admin_type = request.args.get('type')
 
     if admin_type == 'products':
         all_products = database.get_products()
@@ -288,10 +286,11 @@ def admin():
         return render_template("./admin/user_changes.html", users=users)
     elif admin_type == 'admins':
         accounts = database.get_accounts()
-        admins = [account for account in accounts if isinstance(account, Admin)]
+        admins = [
+            account for account in accounts if isinstance(account, Admin)]
         return render_template("./admin/admin_changes.html", admins=admins)
     else:
-   
+
         return render_template("./admin/admin.html")
 
 
@@ -373,7 +372,7 @@ def products():
     page = int(request.args.get('page', 1))
     per_page = 12
     filtered_products = all_products[:]
-    products =  all_products
+    products = all_products
 
     if query:
         filtered_products = [
@@ -388,9 +387,8 @@ def products():
 
     start_page = max(1, page - 2)
     end_page = min(start_page + 4, total_pages)
-    
 
-    return render_template('./store/products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min,new_arrivals_list=products[-6:],query=query)
+    return render_template('./store/products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min, new_arrivals_list=products[-6:], query=query)
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
@@ -399,8 +397,6 @@ def product_detail(product_id):
     product = database.get_product(product_id)
     in_cart = product in cart.items
     return render_template('./store/product_detail.html', product=product, in_cart=in_cart)
-
-
 
 
 @app.route('/add_to_cart', methods=['POST'])

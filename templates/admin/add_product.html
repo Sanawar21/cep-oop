@@ -148,7 +148,7 @@
 <body>
   <div class="checkout-container">
     <h1 class="checkout-title">Add Product</h1>
-    <form method="post" action="{{ url_for('add_product') }}">
+    <form method="post" action="{{ url_for('add_product') }}" enctype="multipart/form-data">
       <label class="form-label" for="title">Title</label>
       <input class="form-input" type="text" id="title" name="title" value="{{title}}">
 
