@@ -1,4 +1,5 @@
 import time
+import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from classes.authenticate import Authenticator
 from classes.database import Database
@@ -256,16 +257,14 @@ def add_product():
             return render_template(**context, error="The price must be an integer.")
 
         uid = Database.generate_uid()
-        print(image)
         if image:
             if not image.filename.endswith(('png', 'jpg', 'jpeg')):
                 return render_template(**context, error="Invalid image format. Only png, jpg and jpeg is allowed.")
             else:
-                print(image)
-                image.save(f"../static/images/{uid}.jpg")
+                image.save(f"./static/images/{uid}.jpg")
 
-        # database.save_product(Product(title, price, uid))
-        # return completion("Product added successfully.", url_for("admin"))
+        database.save_product(Product(title, price, uid))
+        return completion("Product added successfully.", url_for("admin"))
 
     return render_template("./admin/add_product.html")
 
