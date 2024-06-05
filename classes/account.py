@@ -3,7 +3,8 @@ from .bank_details import BankDetails
 
 
 class Account(ABC):
-    def __init__(self, username, password, full_name) -> None:
+    def __init__(self, uid, username, password, full_name) -> None:
+        self.uid = uid
         self.username = username
         self.password = password
         self.full_name = full_name
@@ -25,24 +26,26 @@ class User(Account):
     """
     type = "user"
 
-    def __init__(self, username, password, full_name, address, bank_details=None) -> None:
-        super().__init__(username, password, full_name)
+    def __init__(self, uid, username, password, full_name, address, bank_details=None) -> None:
+        super().__init__(uid, username, password, full_name)
         self.address = address
         self.bank_details = bank_details
 
     @classmethod
     def from_dict(cls, data):
+        uid = data["uid"]
         username = data["username"]
         password = data["password"]
         full_name = data["full_name"]
         address = data["address"]
         bank_details = BankDetails.from_dict(
             data["bank_details"]) if data["bank_details"] else None
-        return cls(username, password, full_name, address, bank_details)
+        return cls(uid, username, password, full_name, address, bank_details)
 
     def to_dict(self):
         return {
             "type": self.type,
+            "uid": self.uid,
             "username": self.username,
             "password": self.password,
             "full_name": self.full_name,
@@ -96,8 +99,8 @@ class Admin(Account):
 
     type = "admin"
 
-    def __init__(self, username, password, full_name, privileges: list[str] | set[str]) -> None:
-        super().__init__(username, password, full_name)
+    def __init__(self, uid, username, password, full_name, privileges: list[str] | set[str]) -> None:
+        super().__init__(uid, username, password, full_name)
         self.privileges = set(privileges)
 
     def add_privilege(self, p: str):
@@ -116,6 +119,7 @@ class Admin(Account):
     def to_dict(self):
         return {
             "type": self.type,
+            "uid": self.uid,
             "username": self.username,
             "password": self.password,
             "full_name": self.full_name,
@@ -125,6 +129,7 @@ class Admin(Account):
     @classmethod
     def from_dict(cls, data):
         return cls(
+            data["uid"],
             data["username"],
             data["password"],
             data["full_name"],
