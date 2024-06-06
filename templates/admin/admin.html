@@ -1,19 +1,101 @@
-<!-- templates/admin.html -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(to right, #007bff, #00ABE4);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+
+        }
+
+        .content {
+            /* padding: 20px; */
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .content a {
+            display: inline-block;
+            padding: 15px 25px;
+            /* background-color: #00ABE4; */
+            color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+            margin: 15px;
+            /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+            font-size: 1.1em;
+        }
+
+        .content a:hover {
+            text-decoration-line: underline;
+            text-decoration-thickness: 1px;
+            /* background-color: #0c84ac; */
+            /* transform: translateY(-5px); */
+        }
+
+        #active-tab {
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            font-weight: bold;
+        }
+
+
+
+        @keyframes fadeInDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content a {
+                padding: 10px 20px;
+                margin: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Admin Panel</h1>
-    <a href="{{ url_for('add_admin') }}">Add admin</a>
-    <br>
-    <a href="{{ url_for('add_user') }}">Add user</a>
-    <br>
-    <a href="{{ url_for('add_product') }}">Add product</a>
+    <div class="header">
+        <h1>Admin Panel</h1>
+    </div>
+
+    <div class="content">
+        <a id="active-tab" href="{{ url_for('add_product') }}">Products</a>
+        <a href="{{ url_for('add_user') }}">Users</a>
+        <a href="{{ url_for('add_admin') }}">Admins</a>
+    </div>
+    <hr style="background-color: #0c84ac; height: 0.1px; opacity: 0.5;">
 </body>
 
 </html>
