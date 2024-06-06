@@ -25,7 +25,7 @@
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-            
+
         }
 
         .content {
@@ -112,7 +112,8 @@
         .item-buttons .delete-button:hover {
             background-color: #c82333;
         }
-        .info-container{
+
+        .info-container {
             display: flex;
             flex-direction: column;
             font-size: 18px;
@@ -157,9 +158,9 @@
     </div>
 
     <div class="content">
-        <a href="{{ url_for('admin_products') }}">Edit Products</a>
-        <a href="{{ url_for('admin_users') }}">Edit Users</a>
-        <a href="{{ url_for('admin_admins') }}">Edit Admins</a>
+        <a href="{{ url_for('admin', type='products') }}">Edit Products</a>
+        <a href="{{ url_for('admin', type='users') }}">Edit Users</a>
+        <a href="{{ url_for('admin', type='admins') }}">Edit Admins</a>
     </div>
 
     <div class="content">

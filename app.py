@@ -273,7 +273,24 @@ def add_product():
 @app.route('/admin')
 @only_allow(Admin)
 def admin():
-    return render_template("./admin/admin.html")
+   
+    admin_type = request.args.get('type')
+
+
+    if admin_type == 'products':
+        all_products = database.get_products()
+        return render_template("./admin/product_changes.html", products=all_products)
+    elif admin_type == 'users':
+        accounts = database.get_accounts()
+        users = [account for account in accounts if isinstance(account, User)]
+        return render_template("./admin/user_changes.html", users=users)
+    elif admin_type == 'admins':
+        accounts = database.get_accounts()
+        admins = [account for account in accounts if isinstance(account, Admin)]
+        return render_template("./admin/admin_changes.html", admins=admins)
+    else:
+   
+        return render_template("./admin/admin.html")
 
 
 @app.route('/')
@@ -632,22 +649,6 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
-@app.route('/admin_products')
-def admin_products():
-    all_products = database.get_products()
-    return render_template("./admin/product_changes.html", products=all_products)
-
-@app.route('/admin_users')
-def admin_users():
-    accounts = database.get_accounts()
-    users = [account for account in accounts if isinstance(account, User)]
-    return render_template("./admin/user_changes.html", users=users)
-
-@app.route('/admin_admins')
-def admin_admins():
-    accounts = database.get_accounts()
-    admins = [account for account in accounts if isinstance(account, Admin)]
-    return render_template("./admin/admin_changes.html", admins=admins)
 
 if __name__ == "__main__":
     app.run(debug=True)
