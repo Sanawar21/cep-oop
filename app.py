@@ -354,6 +354,7 @@ def products():
     page = int(request.args.get('page', 1))
     per_page = 12
     filtered_products = all_products
+    products =  all_products
 
     if query:
         filtered_products = [
@@ -370,7 +371,7 @@ def products():
     start_page = max(1, page - 2)
     end_page = min(start_page + 4, total_pages)
 
-    return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min)
+    return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min,new_arrivals_list=products[-6:])
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
@@ -379,6 +380,8 @@ def product_detail(product_id):
     product = database.get_product(product_id)
     in_cart = product in cart.items
     return render_template('product_detail.html', product=product, in_cart=in_cart)
+
+
 
 
 @app.route('/add_to_cart', methods=['POST'])
@@ -629,6 +632,22 @@ def logout():
     flash('Logged out successfully!', 'success')
     return redirect(url_for('index'))
 
+@app.route('/admin_products')
+def admin_products():
+    all_products = database.get_products()
+    return render_template("./admin/product_changes.html", products=all_products)
+
+@app.route('/admin_users')
+def admin_users():
+    accounts = database.get_accounts()
+    users = [account for account in accounts if isinstance(account, User)]
+    return render_template("./admin/user_changes.html", users=users)
+
+@app.route('/admin_admins')
+def admin_admins():
+    accounts = database.get_accounts()
+    admins = [account for account in accounts if isinstance(account, Admin)]
+    return render_template("./admin/admin_changes.html", admins=admins)
 
 if __name__ == "__main__":
     app.run(debug=True)

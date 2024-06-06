@@ -20,8 +20,6 @@
             padding: 20px;
             background-color: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
 
         h1,
@@ -49,7 +47,7 @@
 
         .rating {
             font-size: 20px;
-            color: #ffd700;
+            color: #00ABE4;
             margin-left: 10px;
         }
 
@@ -82,17 +80,17 @@
         }
 
         .button-container a {
-            background-color: #ffd700;
+            background-color: #00ABE4;
         }
 
         .button-container button {
-            background-color: #ffd700;
+            background-color: #00ABE4;
             width: 194px;
         }
 
         .button-container a:hover,
         .button-container button:hover {
-            background-color: #93842e;
+            background-color:#0d8db8;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -128,7 +126,7 @@
         <h1>{{ product.title }}</h1>
         <img class="product-image" src="../{{product.image_path}}" alt="{{ product.title }}">
         <div class="product-info">
-            <h2>Price: <span style="color: #ffd700;">${{ product.price }}</span></h2>
+            <h2>Price: <span style="color: #00ABE4;">${{ product.price }}</span></h2>
             <div style="display: flex">
 
                 <h2>Rating:</h2>

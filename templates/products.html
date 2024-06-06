@@ -10,7 +10,7 @@
             text-align: center;
             font-size: 50px;
             margin-bottom: -10px;
-            background-image: linear-gradient(to bottom right, #ffcc00, #000000);
+            background-image: linear-gradient(to bottom right,#00ABE4, #000000);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -90,7 +90,7 @@
         }
 
         .product:hover img {
-            border-color: #ffcc00;
+            border-color:#00ABE4;
         }
 
         .product-info {
@@ -112,18 +112,18 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
-            background-color: #FFD700;
+            background-color: #00ABE4;
             width: 250px;
             font-weight: bold;
         }
 
         .add-to-cart {
-            background-color: #ffcc00;
+            background-color:#00ABE4;
             color: #333;
         }
 
         .cart-button:hover {
-            background-color: #d4aa02;
+            background-color: #0c7395;
         }
 
         .remove-from-cart {
@@ -138,9 +138,8 @@
         .search-container {
             display: flex;
             align-items: center;
-            margin-left: auto;
             position: relative;
-            margin-left: 48px;
+            
         }
 
         .search-input {
@@ -218,15 +217,17 @@
             text-decoration: none;
             margin: 0 5px;
             color: #333;
-            background-color: #ffcc00;
+            background-color: #00ABE4;
             border-radius: 5px;
             transition: background-color 0.3s ease;
             display: inline-block;
             text-align: center;
+            font-weight: bold;
+            font-size: 18px;
         }
 
         .pagination a:hover {
-            background-color: #d4aa02;
+            background-color: #0c7395;
         }
 
         .prev-button,
@@ -240,23 +241,26 @@
             padding: 10px 10px;
             margin: 0 5px;
             color: #333;
-            background-color: #ffcc00;
+            background-color: black;
             border-radius: 5px;
             transition: background-color 0.3s ease;
         }
 
         .page-number:hover {
-            background-color: #d4aa02;
+            background-color: #0c7395;
         }
+
         .disabled {
             pointer-events: none;
             opacity: 0.5;
-            
+
         }
-        .no-product-found{
+
+        .no-product-found {
             margin-left: 300px;
         }
-        .back-to-products{
+
+        .back-to-products {
             margin: 0 10px;
             border: none;
             border-radius: 5px;
@@ -265,14 +269,31 @@
             font-size: 16px;
             transition: background-color 0.3s ease;
             text-decoration: none;
-            color:black;
+            color: black;
             font-weight: bold;
             text-align: center;
-            background-color: #ffcc00;
+            background-color:#00ABE4;
             margin-left: 396px;
         }
-        .back-to-products:hover{
-            background-color: #d4aa02;
+
+        .back-to-products:hover {
+            background-color: #0c7395;
+        }
+
+        .new-arrivals {
+            margin-bottom: 30px;
+        }
+
+
+        /* Styles for For You section */
+        .for-you {
+            margin-bottom: 30px;
+        }
+
+        .arrival-header {
+            font-size: 30px;
+            font-weight: bold;
+            color: #0b3f72;
         }
     </style>
 </head>
@@ -281,7 +302,6 @@
     <h1 class="title">Brinx</h1>
     <div class="container">
         <div class="header">
-            <h1 class="product-title">Products</h1>
             <div class="search-container">
                 <form action="{{ url_for('products') }}" method="get">
                     <input type="text" class="search-input" name="query" placeholder="Search products...">
@@ -302,30 +322,55 @@
                 </a>
             </div>
         </div>
-        <ul class="product-list">
-            {% if products %}
-            {% for product in products %}
-            <li class="product">
-                <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
-                <div class="product-info">
-                    <p class="product-name">{{ product.title }}</p>
-                    <p class="product-price">${{ product.price }}</p>
+        {% if page==1 %}
+        <div class="new-arrivals">
+            <p class="arrival-header">New Arrivals</p>
+            <ul class="product-list">
+                {% for product in new_arrivals_list %}
+                <li class="product">
+                    <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
+                    <div class="product-info">
+                        <p class="product-name">{{ product.title }}</p>
+                        <p class="product-price">${{ product.price }}</p>
+                    </div>
+                    <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}"
+                        method="get">
+                        <button class="cart-button" type="submit">View product</button>
+                    </form>
+                </li>
+                {% endfor %}            
+            </ul>
+        </div>
+        {% endif %}
+    
+        <div class="for-you">
+            <p class='arrival-header'>For You</p>
+            <ul class="product-list">
+                {% if products %}
+                {% for product in products %}
+                <li class="product">
+                    <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
+                    <div class="product-info">
+                        <p class="product-name">{{ product.title }}</p>
+                        <p class="product-price">${{ product.price }}</p>
+                    </div>
+                    <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}"
+                        method="get">
+                        <button class="cart-button" type="submit">View product</button>
+                    </form>
+                </li>
+                {% endfor %}
+                {% else %}
+                <div class="no-product-found">
+                    <img src="../static/images/no-product-found.jpg" alt="">
                 </div>
-                <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}" method="get">
-                    <button class="cart-button" type="submit">View product</button>
-                </form>
-            </li>
-            {% endfor %}
-            {% else %}
-            <div class="no-product-found">
-                <img src="../static/images/no-product-found.jpg" alt="">
-            </div>
-            {% endif %}
-        </ul>
+                {% endif %}
+            </ul>
+        </div>
         {% if products %}
         <div class="pagination">
             <a class="prev-button{% if page == 1 %} disabled{% endif %}"
-                href="{{ url_for('products', page=page-1) }}">Previous</a>
+                href="{{ url_for('products', page=page-1) }}">&lt;</a>
 
             {% if page > 1 %}
             <a class="page-number" href="{{ url_for('products', page=1) }}">1</a>
@@ -341,12 +386,12 @@
                 {% endif %}
 
                 <a class="next-button{% if page == total_pages %} disabled{% endif %}"
-                    href="{{ url_for('products', page=page+1) }}">Next</a>
+                    href="{{ url_for('products', page=page+1) }}">&gt;</a>
         </div>
         {% else %}
         <a class="back-to-products" href="{{url_for('products')}}">Back to Products</a>
         {% endif %}
-        
+
     </div>
 </body>
 
