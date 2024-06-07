@@ -14,10 +14,10 @@
             color: #333;
         }
 
+
         .header {
             background: linear-gradient(to top, #007bff, #0a7497);
             padding: 20px;
-            text-align: center;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -25,9 +25,8 @@
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-
+            margin-left: 20px;
         }
-
 
         .navbar {
             display: flex;
@@ -42,14 +41,13 @@
             color: white;
             text-decoration: none;
             transition: background-color 0.3s, transform 0.3s;
-            font-size: 18px;
+            font-size: 1.2em;
             font-weight: bold;
         }
 
         .navbar a:hover {
             transform: translateY(-5px);
         }
-
 
         .content {
             flex: 1;
@@ -59,8 +57,6 @@
             padding: 20px;
             background-color: #f4f4f4;
             text-align: center;
-
-
         }
 
         .content a {
@@ -115,14 +111,12 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
-
         .action-button {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
             margin-right: 12px;
-
         }
 
         .action-button img {
@@ -134,43 +128,128 @@
         .action-button img:hover {
             transform: scale(1.2);
         }
-        .info-container{
+
+        .info-container {
             font-size: 18px;
             font-style: italic;
         }
 
-
-        @keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
         }
 
-        @media (max-width: 600px) {
-            .content a {
-                font-size: 1.2em;
-                padding: 10px 20px;
-            }
+        .modal-content {
+            background-color: #00ABE4;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #000;
+            position: relative;
+        }
 
-            .navbar a {
-                padding: 10px 20px;
-            }
+        .close-button {
+            position: absolute;
+            top: 4px;
+            right: 10px;
+            text-decoration: none;
+            color: black;
+            z-index: 1200;
+            font-size: 24px;
+            font-weight: bold;
+        }
 
-            .item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-            .item-buttons {
-                width: 100%;
-                justify-content: flex-end;
-            }
+        /* Form styles */
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .form-label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00ABE4;
+            box-shadow: 0 0 10px rgba(0, 171, 228, 0.5);
+        }
+
+        .error {
+            color: red;
+            font-size: 16px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        .checkout-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .checkout-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .modal:target {
+            display: flex;
+        }
+
+        .modal:target {
+            filter: none;
+        }
+
+        .modal:target body {
+            overflow: hidden;
+            filter: blur(5px);
+            transition: filter 0.3s ease;
         }
     </style>
 </head>
@@ -187,14 +266,14 @@
     </div>
 
     <div class="content">
-        <a href="{{ url_for('add_product') }}">Add Product</a>
+        <a href="#myModal" id="add-product-button">Add Product</a>
     </div>
 
     <div class="item-list">
         {% for product in products %}
         <div class="item">
             <div class="info-container">
-                <div>Title: <strong style="color: #00ABE4;">{{product.title}}</strong></div>
+                <div>Title: <strong style="color: #00ABE4;">{{ product.title }}</strong></div>
                 <div>ID: <strong style="color: #00ABE4;">{{ product.uid }}</strong></div>
             </div>
             <div class="item-buttons">
@@ -212,6 +291,30 @@
         </div>
         {% endfor %}
     </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <a href="{{ url_for('admin', type='products') }}" class="close-button" id="close-button">&times;</a>
+            <h1 class="checkout-title">Add Product</h1>
+            <form method="post" action="{{ url_for('add_product') }}">
+                <label  style="font-size: 16px;font-weight: bold;" class="form-label" for="title">Title</label>
+                <input class="form-input" type="text" id="title" name="title" value="{{title}}">
+
+                <fieldset>
+                    <legend class="form-label">Image (optional)</legend>
+                    <input class="form-label" type="file" name="image" id="image" accept="image/*">
+                </fieldset>
+                <br>
+
+                <label style="font-size: 16px;font-weight: bold;"  class="form-label" for="price">Price</label>
+                <input class="form-input no-margin" type="text" id="price" name="price" value="{{price}}">
+
+                <p class="error">{{ error }}</p>
+                <button class="checkout-button" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
 </body>
 
 </html>

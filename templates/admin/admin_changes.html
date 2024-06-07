@@ -17,7 +17,6 @@
         .header {
             background: linear-gradient(to top, #007bff, #0a7497);
             padding: 20px;
-            text-align: center;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -25,9 +24,8 @@
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-
+            margin-left: 20px;
         }
-
 
         .navbar {
             display: flex;
@@ -42,14 +40,13 @@
             color: white;
             text-decoration: none;
             transition: background-color 0.3s, transform 0.3s;
-            font-size: 18px;
+            font-size: 1.2em;
             font-weight: bold;
         }
 
         .navbar a:hover {
             transform: translateY(-5px);
         }
-
 
         .content {
             flex: 1;
@@ -59,8 +56,6 @@
             padding: 20px;
             background-color: #f4f4f4;
             text-align: center;
-
-
         }
 
         .content a {
@@ -79,7 +74,7 @@
 
         .content a:hover {
             background: linear-gradient(to right, #0d4580, #00ABE4);
-            transform: translateY(-2px);
+            transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
@@ -121,7 +116,6 @@
             cursor: pointer;
             padding: 0;
             margin-right: 12px;
-
         }
 
         .action-button img {
@@ -133,8 +127,6 @@
         .action-button img:hover {
             transform: scale(1.2);
         }
-
-
 
         @keyframes fadeInDown {
             0% {
@@ -168,6 +160,132 @@
                 justify-content: flex-end;
             }
         }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #00ABE4;
+            border-radius: 8px;
+            padding: 20px;
+            padding-bottom: 0px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #000;
+            position: relative;
+            height: 680px;
+            margin-bottom: 30px;
+            margin-top: 200px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 4px;
+            right: 10px;
+            text-decoration: none;
+            color: black;
+            z-index: 1200;
+            font-size: 24px;
+            font-weight: bold;
+          
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Form styles */
+        .modal-content form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            margin-top: -10px;
+        }
+
+        .form-label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+
+        }
+
+        .form-input {
+            width: 270px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00ABE4;
+            box-shadow: 0 0 10px rgba(0, 171, 228, 0.5);
+        }
+
+        .error {
+            color: red;
+            font-size: 16px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+
+        .checkout-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .checkout-button:hover {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .checkout-button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal:target {
+            display: flex;
+        }
+
+        .modal:target {
+            filter: none;
+        }
+
+        .modal:target body {
+            overflow: hidden;
+            filter: blur(5px);
+            transition: filter 0.3s ease;
+        }
     </style>
 </head>
 
@@ -183,7 +301,7 @@
     </div>
 
     <div class="content">
-        <a href="{{ url_for('add_admin') }}">Add Admin</a>
+        <a href="#addAdminModal" id="add-admin-button">Add Admin</a>
     </div>
 
     <div class="item-list">
@@ -204,6 +322,66 @@
             </div>
         </div>
         {% endfor %}
+    </div>
+
+    <!-- Add Admin Modal -->
+    <div id="addAdminModal" class="modal">
+        <div class="modal-content">
+            <a href="#" class="close-button">&times;</a>
+            <h2>Add Admin</h2>
+            <form method="post" action="{{ url_for('add_admin') }}">
+                <label class="form-label" for="username">Username</label>
+                <input class="form-input" type="text" id="username" name="username" value="{{username}}">
+
+                <label class="form-label" for="full_name">Full name</label>
+                <input class="form-input" type="text" id="full_name" name="full_name" value="{{full_name}}">
+
+                <fieldset>
+                    <legend class="form-label">Select Privileges</legend>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'ADD_USER' in privileges }} type="checkbox" id="ADD_USER" name="privileges[]" value="ADD_USER">
+                        <label for="ADD_USER">ADD USER</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'ADD_ADMIN' in privileges }} type="checkbox" id="ADD_ADMIN" name="privileges[]" value="ADD_ADMIN">
+                        <label for="ADD_ADMIN">ADD ADMIN</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'ADD_PRODUCT' in privileges }} type="checkbox" id="ADD_PRODUCT" name="privileges[]" value="ADD_PRODUCT">
+                        <label for="ADD_PRODUCT">ADD PRODUCT</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'EDIT_USER' in privileges }} type="checkbox" id="EDIT_USER" name="privileges[]" value="EDIT_USER">
+                        <label for="EDIT_USER">EDIT USER</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'EDIT_ADMIN' in privileges }} type="checkbox" id="EDIT_ADMIN" name="privileges[]" value="EDIT_ADMIN">
+                        <label for="EDIT_ADMIN">EDIT ADMIN</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'EDIT_PRODUCT' in privileges }} type="checkbox" id="EDIT_PRODUCT" name="privileges[]" value="EDIT_PRODUCT">
+                        <label for="EDIT_PRODUCT">EDIT PRODUCT</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'DELETE_USER' in privileges }} type="checkbox" id="DELETE_USER" name="privileges[]" value="DELETE_USER">
+                        <label for="DELETE_USER">DELETE USER</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'DELETE_ADMIN' in privileges }} type="checkbox" id="DELETE_ADMIN" name="privileges[]" value="DELETE_ADMIN">
+                        <label for="DELETE_ADMIN">DELETE ADMIN</label>
+                    </div>
+                    <div class="privilege-item">
+                        <input {{ 'checked' if 'DELETE_PRODUCT' in privileges }} type="checkbox" id="DELETE_PRODUCT" name="privileges[]" value="DELETE_PRODUCT">
+                        <label for="DELETE_PRODUCT">DELETE PRODUCT</label>
+                    </div>
+                </fieldset>
+                <br>
+                <label class="form-label" for="password">Password</label>
+                <input class="form-input no-margin" type="password" id="password" name="password" value="">
+                <p class="error">{{ error }}</p>
+                <button class="checkout-button" type="submit">Submit</button>
+            </form>
+        </div>
     </div>
 </body>
 
