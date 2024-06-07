@@ -42,7 +42,8 @@
             color: white;
             text-decoration: none;
             transition: background-color 0.3s, transform 0.3s;
-            font-size: 1.1em;
+            font-size: 18px;
+            font-weight: bold;
         }
 
         .navbar a:hover {
@@ -94,6 +95,7 @@
             padding: 20px;
             max-width: 800px;
             margin: auto;
+            margin-top: -20px;
         }
 
         .item {
@@ -113,38 +115,26 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         }
 
-        .item-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .item-buttons button {
-            padding: 8px 15px;
+        .action-button {
+            background: none;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            font-size: 1em;
+            padding: 0;
+            margin-right: 12px;
+
         }
 
-        .item-buttons .edit-button {
-            background-color: #28a745;
-            color: white;
+        .action-button img {
+            width: 26px;
+            height: 26px;
+            transition: transform 0.3s;
         }
 
-        .item-buttons .edit-button:hover {
-            background-color: #218838;
+        .action-button img:hover {
+            transform: scale(1.2);
         }
 
-        .item-buttons .delete-button {
-            background-color: #dc3545;
-            color: white;
-        }
 
-        .item-buttons .delete-button:hover {
-            background-color: #c82333;
-        }
 
         @keyframes fadeInDown {
             0% {
@@ -201,11 +191,15 @@
         <div class="item">
             <div style="font-size: 18px;font-style: italic;">Admin name: <strong>{{ admin.username }}</strong></div>
             <div class="item-buttons">
-                <form action="{{ url_for('add_admin')}}" method="get" style="display:inline;">
-                    <button type="submit" class="edit-button">Edit</button>
+                <form action="{{ url_for('add_admin') }}" method="get" style="display:inline;">
+                    <button type="submit" class="action-button">
+                        <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
+                    </button>
                 </form>
-                <form action="{{ url_for('add_admin')}}" method="post" style="display:inline;">
-                    <button type="submit" class="delete-button">Delete</button>
+                <form action="{{ url_for('add_admin') }}" method="post" style="display:inline;">
+                    <button type="submit" class="action-button">
+                        <img src="static/images/delete.png" alt="Delete">
+                    </button>
                 </form>
             </div>
         </div>
