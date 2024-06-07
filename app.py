@@ -1,4 +1,5 @@
 import time
+import random
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from classes.authenticate import Authenticator
 from classes.database import Database
@@ -9,6 +10,7 @@ from classes.account import User, Admin, Privilege
 from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
 
+import random
 app = Flask(__name__)
 app.secret_key = "pIQ89naMqA21"
 database = Database()
@@ -295,7 +297,7 @@ def admin():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('./user_authentication/index.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -312,8 +314,8 @@ def login():
             else:
                 return redirect(url_for("admin"))
         else:
-            return render_template("login.html", error="Incorrect username or password.")
-    return render_template('login.html')
+            return render_template("./user_authentication/login.html", error="Incorrect username or password.")
+    return render_template('./user_authentication/login.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -330,7 +332,7 @@ def signup():
         session["address"] = address
 
         if not username or not password or not full_name or not address:
-            return render_template('signup.html',
+            return render_template('./user_authentication/signup.html',
                                    error="All fields are required.",
                                    username=username,
                                    password=password,
@@ -338,7 +340,7 @@ def signup():
                                    address=address)
 
         if not authenticator.unique_username(username):
-            return render_template('signup.html',
+            return render_template('./user_authentication/signup.html',
                                    error="This username is taken.",
                                    username=username,
                                    password=password,
@@ -346,14 +348,14 @@ def signup():
                                    address=address)
 
         if not authenticator.validate_username(username):
-            return render_template('signup.html',
+            return render_template('./user_authentication/signup.html',
                                    error="Username cannot contain any special characters.",
                                    username=username,
                                    password=password,
                                    full_name=full_name,
                                    address=address)
         if not authenticator.validate_password(password):
-            return render_template('signup.html',
+            return render_template('./user_authentication/signup.html',
                                    error="Password must be atleast 8 characters with a special character and a number.",
                                    username=username,
                                    password=password,
@@ -362,7 +364,7 @@ def signup():
 
         return redirect(url_for('bank_details'))
 
-    return render_template('signup.html')
+    return render_template('./user_authentication/signup.html')
 
 
 @app.route('/products')
@@ -370,7 +372,7 @@ def products():
     query = request.args.get('query')
     page = int(request.args.get('page', 1))
     per_page = 12
-    filtered_products = all_products
+    filtered_products = all_products[:]
     products =  all_products
 
     if query:
@@ -384,11 +386,11 @@ def products():
     paginated_products = filtered_products[(
         page - 1) * per_page:page * per_page]
 
-    # Calculate the range of page numbers to display
     start_page = max(1, page - 2)
     end_page = min(start_page + 4, total_pages)
+    
 
-    return render_template('products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min,new_arrivals_list=products[-6:])
+    return render_template('./store/products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min,new_arrivals_list=products[-6:],query=query)
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
@@ -396,7 +398,7 @@ def products():
 def product_detail(product_id):
     product = database.get_product(product_id)
     in_cart = product in cart.items
-    return render_template('product_detail.html', product=product, in_cart=in_cart)
+    return render_template('./store/product_detail.html', product=product, in_cart=in_cart)
 
 
 
@@ -422,7 +424,7 @@ def remove_from_cart():
 @app.route('/cart')
 @only_allow(User)
 def cart_():
-    return render_template('cart.html', products=all_products, cart=cart)
+    return render_template('./store/cart.html', products=all_products, cart=cart)
 
 
 @app.route('/checkout-cod', methods=['GET', 'POST'])
@@ -445,7 +447,7 @@ def checkout_cod():
         )
 
         if not address or not full_name or not password or not email or not phone:
-            return render_template('checkout_cod.html',
+            return render_template('./checkout/checkout_cod.html',
                                    # implemented dummy account here
                                    user=dummy_user,
                                    email=email,
@@ -459,16 +461,16 @@ def checkout_cod():
 
             cart = Cart.null()
             cart.owner = account.username
-            return render_template('thankyou.html')
+            return render_template('./user_authentication/thankyou.html')
         else:
-            return render_template('checkout_cod.html',
+            return render_template('./checkout/checkout_cod.html',
                                    user=dummy_user,
                                    email=email,
                                    phone=phone,
                                    password=password,
                                    error="Incorrect account password.")
 
-    return render_template('checkout_cod.html', user=account)
+    return render_template('./checkout/checkout_cod.html', user=account)
 
 
 @app.route('/checkout-bank', methods=['GET', 'POST'])
@@ -505,34 +507,34 @@ def checkout_bank():
         if account.bank_details:
             if not pin or not address or not full_name:
                 return render_template(
-                    'checkout_bank.html',
+                    './checkout/checkout_bank.html',
                     error="All fields are required.",
                     user=dummy_user,
                 )
 
             if not account.check_pin(pin):
                 return render_template(
-                    'checkout_bank.html',
+                    './checkout/checkout_bank.html',
                     error="Incorrect pin.",
                     user=dummy_user,
                 )
         else:
             if not bank_name or not card_number or not pin or not address or not full_name:
                 return render_template(
-                    "checkout_bank.html",
+                    "./checkout/checkout_bank.html",
                     error="All fields are required.",
                     user=dummy_user,
                 )
             if not BankDetails.validate_card_number(card_number):
                 return render_template(
-                    "checkout_bank.html",
+                    "./checkout/checkout_bank.html",
                     error="Card number must be 10 digits.",
                     user=dummy_user,
                 )
 
             if not BankDetails.validate_pin(pin):
                 return render_template(
-                    "checkout_bank.html",
+                    "./checkout/checkout_bank.html",
                     error="Pin must be 4 digit long.",
                     user=dummy_user,
                 )
@@ -548,9 +550,9 @@ def checkout_bank():
         database.write_order(order)
         cart = Cart.null()
         cart.owner = account.username
-        return render_template('thankyou.html')
+        return render_template('./user_authentication/thankyou.html')
 
-    return render_template('checkout_bank.html', user=account)
+    return render_template('./checkout/checkout_bank.html', user=account)
 
 
 @app.route('/checkout', methods=['GET'])
@@ -558,16 +560,16 @@ def checkout_bank():
 def checkout():
     global cart
     if account.bank_details:
-        return render_template("checkout_bank.html", user=account)
+        return render_template("./checkout/checkout_bank.html", user=account)
     else:
-        return render_template("checkout_cod.html", user=account)
+        return render_template("./checkout/checkout_cod.html", user=account)
 
 
 @app.route('/history')
 @only_allow(User)
 def history():
     orders = database.read_orders(account.username)
-    return render_template('history.html', orders=orders[::-1])
+    return render_template('./store/history.html', orders=orders[::-1])
 
 
 @app.route('/nobankdetails', methods=["GET", "POST"])
@@ -597,7 +599,7 @@ def bank_details():
 
         if not bank_name or not card_number or not pin:
             return render_template(
-                "bank_details.html",
+                "./user_authentication/bank_details.html",
                 error="All fields are required.",
                 bank_name=bank_name,
                 card_number=card_number,
@@ -605,7 +607,7 @@ def bank_details():
             )
         if not User.validate_card_number(card_number):
             return render_template(
-                "bank_details.html",
+                "./user_authentication/bank_details.html",
                 error="Card number must be 10 digits.",
                 bank_name=bank_name,
                 card_number=card_number,
@@ -614,7 +616,7 @@ def bank_details():
 
         if not User.validate_pin(pin):
             return render_template(
-                "bank_details.html",
+                "./user_authentication/bank_details.html",
                 error="Pin must be 4 digit long.",
                 bank_name=bank_name,
                 card_number=card_number,
@@ -637,7 +639,7 @@ def bank_details():
             cart.owner = account.username
             return redirect(url_for('products'))
 
-    return render_template("bank_details.html")
+    return render_template("./user_authentication/bank_details.html")
 
 
 @app.route('/logout')
