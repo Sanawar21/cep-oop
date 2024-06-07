@@ -189,7 +189,7 @@
     <div class="item-list">
         {% for admin in admins %}
         <div class="item">
-            <div style="font-size: 18px;font-style: italic;">Admin name: <strong>{{ admin.username }}</strong></div>
+            <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color: #00ABE4;">{{ admin.username }}</strong></div>
             <div class="item-buttons">
                 <form action="{{ url_for('add_admin') }}" method="get" style="display:inline;">
                     <button type="submit" class="action-button">
