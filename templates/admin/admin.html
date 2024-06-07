@@ -11,11 +11,14 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            color: #333;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .header {
-            background: linear-gradient(to right, #007bff, #00ABE4);
+            background: linear-gradient(to top, #007bff, #00ABE4);
             padding: 20px;
             text-align: center;
             color: white;
@@ -25,52 +28,50 @@
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-            
         }
 
-        .content {
-            padding: 20px;
+        .navbar {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
+            justify-content: space-around;
+            background-color: #00ABE4;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .content a {
+        .navbar a {
             display: inline-block;
             padding: 15px 25px;
-            background-color: #00ABE4;
             color: white;
             text-decoration: none;
-            border-radius: 5px;
             transition: background-color 0.3s, transform 0.3s;
-            margin: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             font-size: 1.1em;
         }
 
-        .content a:hover {
-            background-color: #0c84ac;
+        .navbar a:hover {
             transform: translateY(-5px);
         }
 
- 
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
 
-        @keyframes fadeInDown {
-            0% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .content p {
+            max-width: 600px;
+            font-size: 1.4em;
+            line-height: 1.6;
+            color: rgba(128, 128, 128, 0.8);
+            font-weight: bold;
+            
         }
 
         @media (max-width: 600px) {
-            .content a {
+            .navbar a {
                 padding: 10px 20px;
-                margin: 10px;
             }
         }
     </style>
@@ -81,10 +82,17 @@
         <h1>Admin Panel</h1>
     </div>
 
-    <div class="content">
-        <a href="{{ url_for('admin', type='products') }}">Edit Products</a>
-        <a href="{{ url_for('admin', type='users') }}">Edit Users</a>
-        <a href="{{ url_for('admin', type='admins') }}">Edit Admins</a>
+    <div class="navbar">
+        <a href="{{ url_for('admin', type='products') }}">Products</a>
+        <a href="{{ url_for('admin', type='users') }}">Users</a>
+        <a href="{{ url_for('admin', type='admins') }}">Admins</a>
     </div>
+
+    
 </body>
 </html>
+
+
+<div class="content">
+    <p>Welcome to the Admin Panel. Please select a tab to manage the respective section.</p>
+</div>

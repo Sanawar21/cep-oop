@@ -15,7 +15,7 @@
         }
 
         .header {
-            background: linear-gradient(to right, #007bff, #00ABE4);
+            background: linear-gradient(to top, #007bff, #0a7497);
             padding: 20px;
             text-align: center;
             color: white;
@@ -25,33 +25,66 @@
         .header h1 {
             margin: 0;
             font-size: 2.5em;
-            
+
         }
 
+
+        .navbar {
+            display: flex;
+            justify-content: space-around;
+            background-color: #00ABE4;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            display: inline-block;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 1.1em;
+        }
+
+        .navbar a:hover {
+            transform: translateY(-5px);
+        }
+
+
         .content {
-            padding: 20px;
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
+            padding: 20px;
+            background-color: #f4f4f4;
+            text-align: center;
+           
+            
         }
 
         .content a {
             display: inline-block;
-            padding: 15px 25px;
-            background-color: #00ABE4;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            font-weight: bold;
             color: white;
+            background: linear-gradient(to right, #007bff, #00ABE4);
+            border: none;
+            border-radius: 50px;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s, transform 0.3s;
-            margin: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .content a:hover {
-            background-color: #0c84ac;
+            background: linear-gradient(to right, #0d4580, #00ABE4);
             transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .content a:active {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .item-list {
@@ -127,8 +160,11 @@
 
         @media (max-width: 600px) {
             .content a {
+                font-size: 1.2em;
                 padding: 10px 20px;
-                margin: 10px;
+            }
+            .navbar a {
+                padding: 10px 20px;
             }
 
             .item {
@@ -149,10 +185,10 @@
         <h1>Admin Panel</h1>
     </div>
 
-    <div class="content">
-        <a href="{{ url_for('admin', type='products') }}">Edit Products</a>
-        <a href="{{ url_for('admin', type='users') }}">Edit Users</a>
-        <a href="{{ url_for('admin', type='admins') }}">Edit Admins</a>
+    <div class="navbar">
+        <a href="{{ url_for('admin', type='products') }}">Products</a>
+        <a href="{{ url_for('admin', type='users') }}">Users</a>
+        <a href="{{ url_for('admin', type='admins') }}">Admins</a>
     </div>
 
     <div class="content">
