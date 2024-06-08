@@ -16,21 +16,36 @@
 
 
         .header {
-            background: linear-gradient(to top, #007bff, #0a7497);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background: linear-gradient(to top, #007bff, #00ABE4);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
         }
 
         .header h1 {
             margin: 0;
             font-size: 2.5em;
             margin-left: 20px;
+
         }
+
+        .header a {
+            text-decoration: none;
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-top: 24px;
+            margin-right: 20px;
+        }
+
 
         .navbar {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             background-color: #00ABE4;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -238,6 +253,7 @@
             transform: translateY(2px);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
         .modal:target {
             display: flex;
         }
@@ -257,7 +273,9 @@
 <body>
     <div class="header">
         <h1>Admin Panel</h1>
+        <a href="{{url_for('logout')}}">Logout</a>
     </div>
+
 
     <div class="navbar">
         <a href="{{ url_for('admin', type='products') }}">Products</a>
@@ -297,7 +315,7 @@
             <a href="{{ url_for('admin', type='products') }}" class="close-button" id="close-button">&times;</a>
             <h1 class="checkout-title">Add Product</h1>
             <form method="post" action="{{ url_for('add_product') }}">
-                <label  style="font-size: 16px;font-weight: bold;" class="form-label" for="title">Title</label>
+                <label style="font-size: 16px;font-weight: bold;" class="form-label" for="title">Title</label>
                 <input class="form-input" type="text" id="title" name="title" value="{{title}}">
 
                 <fieldset>
@@ -306,7 +324,7 @@
                 </fieldset>
                 <br>
 
-                <label style="font-size: 16px;font-weight: bold;"  class="form-label" for="price">Price</label>
+                <label style="font-size: 16px;font-weight: bold;" class="form-label" for="price">Price</label>
                 <input class="form-input no-margin" type="text" id="price" name="price" value="{{price}}">
 
                 <p class="error">{{ error }}</p>

@@ -18,23 +18,35 @@
         }
 
         .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
             background: linear-gradient(to top, #007bff, #00ABE4);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            
+
         }
 
         .header h1 {
             margin: 0;
             font-size: 2.5em;
             margin-left: 20px;
-            
+
+        }
+
+        .header a {
+            text-decoration: none;
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-top: 24px;
+            margin-right: 20px;
         }
 
         .navbar {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             background-color: #00ABE4;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -69,7 +81,7 @@
             line-height: 1.6;
             color: rgba(128, 128, 128, 0.8);
             font-weight: bold;
-            
+
         }
 
         @media (max-width: 600px) {
@@ -83,6 +95,7 @@
 <body>
     <div class="header">
         <h1>Admin Panel</h1>
+        <a href="{{url_for('logout')}}">Logout</a>
     </div>
 
     <div class="navbar">
@@ -91,8 +104,9 @@
         <a href="{{ url_for('admin', type='admins') }}">Admins</a>
     </div>
 
-    
+
 </body>
+
 </html>
 
 
