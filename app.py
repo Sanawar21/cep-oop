@@ -1,6 +1,7 @@
 import time
 import os
 import random
+import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from classes.authenticate import Authenticator
 from classes.database import Database
@@ -23,6 +24,7 @@ account = None
 # TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
 # TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
 #       use a focus.
+# TODO: Save cart if user logs out before checking out.
 # TODO: Save cart if user logs out before checking out.
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
