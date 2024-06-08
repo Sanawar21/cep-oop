@@ -6,3 +6,5 @@
 {'type': 'user', 'uid': '6', 'username': 'nobank', 'password': 'Sanawar21$$', 'full_name': 'No Bank', 'address': 'no bank', 'bank_details': None}
 {'type': 'user', 'uid': '7', 'username': 'yesbank', 'password': 'Sanawar21$$', 'full_name': 'Yes bank', 'address': 'Yes BANK ADDRESS', 'bank_details': {'bank_name': 'HBL Islamic', 'card_number': '1234123412', 'pin': '1234'}}
 {'type': 'user', 'uid': 'rsfWLdJ5Srm0', 'username': 'sanawar21', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'bank_name': 'HBL Islamic', 'card_number': '1231231231', 'pin': '1224'}}
+{'type': 'user', 'uid': 'ecdCNnmE82rR', 'username': 'new-test', 'password': 'Sanawar21$$', 'full_name': 'new test', 'address': 'new test address', 'bank_details': None}
+{'type': 'user', 'uid': '1xLgRsS3hZn6', 'username': 'test_user', 'password': 'hello1234##', 'full_name': 'asnaf', 'address': 'asdf', 'bank_details': None}

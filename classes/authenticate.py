@@ -34,10 +34,7 @@ class Authenticator:
     def validate_username(username):
         """to check username is valid"""
         username = username.lower()
-        for char in username:
-            if char in "!@#$%^&*()+{}:/.,'\" ":
-                return False
-        return True
+        return bool(username) and all([char in "abcdefghijklmnopqrstuvwxyz0123456789_" for char in username])
 
     def unique_username(self, username):
         """to check if username is unique"""

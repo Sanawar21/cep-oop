@@ -1,7 +1,3 @@
-import time
-import os
-import random
-import os
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
 from classes.authenticate import Authenticator
 from classes.database import Database
@@ -24,7 +20,6 @@ account = None
 # TODO: Work on removing redundancy by creating functions that return html templates as strings and then reuse them.
 # TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
 #       use a focus.
-# TODO: Save cart if user logs out before checking out.
 # TODO: Save cart if user logs out before checking out.
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
@@ -316,11 +311,13 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global account
+    global all_products
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         account = authenticator.login(username, password)
         if account:
+            all_products = database.get_products()
             if account.type == User.type:
                 return redirect(url_for('products'))
             else:
@@ -380,6 +377,7 @@ def signup():
 
 
 @app.route('/products')
+@only_allow(User)
 def products():
     query = request.args.get('query')
     page = int(request.args.get('page', 1))
@@ -401,7 +399,7 @@ def products():
     start_page = max(1, page - 2)
     end_page = min(start_page + 4, total_pages)
 
-    return render_template('./store/products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min, new_arrivals_list=products[-6:], query=query)
+    return render_template('./store/products.html', products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, max=max, min=min, new_arrivals_list=products[-6:][::-1], query=query)
 
 
 @app.route('/product_detail/<product_id>', methods=['GET'])
