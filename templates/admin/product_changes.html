@@ -35,10 +35,8 @@
 
         .header a {
             text-decoration: none;
-            font-size: 20px;
             color: #ffffff;
         }
-
 
         .navbar {
             display: flex;
@@ -278,8 +276,11 @@
 
 <body>
     <div class="header">
-        <h1>Admin Panel</h1>
+        <a href="{{url_for('admin')}}">
+            <h1>Admin Panel</h1>
+        </a>
         <a href="{{url_for('logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+        </a>
     </div>
 
 
