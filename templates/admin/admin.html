@@ -39,9 +39,6 @@
             text-decoration: none;
             font-size: 20px;
             color: #ffffff;
-            font-weight: bold;
-            margin-top: 24px;
-            margin-right: 20px;
         }
 
         .navbar {
@@ -89,13 +86,22 @@
                 padding: 10px 20px;
             }
         }
+
+        .logout-logo {
+            object-fit: contain;
+            width: 40px;
+            height: 40px;
+            margin-top: 5px;
+
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
         <h1>Admin Panel</h1>
-        <a href="{{url_for('logout')}}">Logout</a>
+        <a href="{{url_for('logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+        </a>
     </div>
 
     <div class="navbar">
