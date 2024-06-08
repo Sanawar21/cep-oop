@@ -33,25 +33,31 @@
         }
 
         .header {
-            background: linear-gradient(to top, #007bff, #0a7497);
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            background: linear-gradient(to top, #007bff, #00ABE4);
             padding: 20px;
-            text-align: center;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
         }
 
         .header h1 {
-            text-align: left;
             margin: 0;
             font-size: 2.5em;
             margin-left: 20px;
 
         }
 
+        .header a {
+            text-decoration: none;
+            color: #ffffff;
+        }
 
         .navbar {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             background-color: #00ABE4;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -280,13 +286,26 @@
             transform: translateY(2px);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
+        .logout-logo {
+            object-fit: contain;
+            width: 40px;
+            height: 40px;
+            margin-top: 5px;
+
+        }
     </style>
 </head>
 
 <body>
     <div class="header">
-        <h1>Admin Panel</h1>
+        <a href="{{url_for('admin')}}">
+            <h1>Admin Panel</h1>
+        </a>
+        <a href="{{url_for('logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+        </a>
     </div>
+
 
     <div class="navbar">
         <a href="{{ url_for('admin', type='products') }}">Products</a>

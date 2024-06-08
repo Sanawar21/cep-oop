@@ -10,7 +10,7 @@
             text-align: center;
             font-size: 50px;
             margin-bottom: -10px;
-            background-image: linear-gradient(to bottom right,#00ABE4, #000000);
+            background-image: linear-gradient(to bottom right, #00ABE4, #000000);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -90,7 +90,7 @@
         }
 
         .product:hover img {
-            border-color:#00ABE4;
+            border-color: #00ABE4;
         }
 
         .product-info {
@@ -118,7 +118,7 @@
         }
 
         .add-to-cart {
-            background-color:#00ABE4;
+            background-color: #00ABE4;
             color: #333;
         }
 
@@ -139,7 +139,7 @@
             display: flex;
             align-items: center;
             position: relative;
-            
+
         }
 
         .search-input {
@@ -257,7 +257,7 @@
         }
 
         .no-product-found {
-            margin-left: 300px;
+            margin-left: 320px;
         }
 
         .back-to-products {
@@ -272,8 +272,8 @@
             color: black;
             font-weight: bold;
             text-align: center;
-            background-color:#00ABE4;
-            margin-left: 396px;
+            background-color: #00ABE4;
+            margin-left: 410px;
         }
 
         .back-to-products:hover {
@@ -336,13 +336,15 @@
                         <button class="cart-button" type="submit">View product</button>
                     </form>
                 </li>
-                {% endfor %}            
+                {% endfor %}
             </ul>
         </div>
         {% endif %}
-    
+
         <div class="for-you">
+            {% if not query %}
             <p class='arrival-header'>For You</p>
+            {% endif %}
             <ul class="product-list">
                 {% if products %}
                 {% for product in products %}
@@ -358,6 +360,9 @@
                     </form>
                 </li>
                 {% endfor %}
+                {% if query %}
+                <a class="back-to-products" href="{{url_for('products')}}">Back to Products</a>
+                {% endif %}
                 {% else %}
                 <div class="no-product-found">
                     <img src="../static/images/no-product-found.jpg" alt="">
