@@ -286,32 +286,35 @@ def admin():
     admin_type = request.args.get('type')
     page = int(request.args.get('page', 1))
     per_page = 20 
+    search_query = request.args.get('search', '')  # Get the search query from the request
 
     if admin_type == 'products':
         all_products = database.get_products()
-        total_pages = (len(all_products) + per_page - 1) // per_page
+        filtered_products = [product for product in all_products if search_query.lower() in product.title.lower()]
+        total_pages = (len(filtered_products) + per_page - 1) // per_page
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
-        paginated_products = all_products[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/product_changes.html", products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page,type=admin_type)
+        paginated_products = filtered_products[(page - 1) * per_page:page * per_page]
+        return render_template("./admin/product_changes.html",products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'users':
         accounts = database.get_accounts()
-        users = [account for account in accounts if isinstance(account, User)]
+        users = [account for account in accounts if isinstance(account, User) and search_query.lower() in account.username.lower()]
         total_pages = (len(users) + per_page - 1) // per_page
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_users = users[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/user_changes.html", users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page,type=admin_type)
+        return render_template("./admin/user_changes.html", users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'admins':
         accounts = database.get_accounts()
-        admins = [account for account in accounts if isinstance(account, Admin)]
+        admins = [account for account in accounts if isinstance(account, Admin) and search_query.lower() in account.username.lower()]
         total_pages = (len(admins) + per_page - 1) // per_page
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_admins = admins[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/admin_changes.html", admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page,type=admin_type)
+        return render_template("./admin/admin_changes.html", admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     else:
         return render_template("./admin/admin.html")
+
 
 
 

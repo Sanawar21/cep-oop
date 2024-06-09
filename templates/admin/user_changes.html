@@ -91,16 +91,16 @@
         .content {
             flex: 1;
             display: flex;
-            justify-content: center;
+            justify-content: space-evenly;
             align-items: center;
             padding: 20px;
             background-color: #f4f4f4;
             text-align: center;
-
+            margin-bottom: -20px;
 
         }
 
-        .content a {
+        .content a:not(.cross-button) {
             display: inline-block;
             padding: 15px 30px;
             font-size: 1.5em;
@@ -112,15 +112,16 @@
             text-decoration: none;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            margin-right: -20px;
         }
 
-        .content a:hover {
+        .content a:not(.cross-button) .hover {
             opacity: 0.8;
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
-        .content a:active {
+        .content a:not(.cross-button) :active {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
@@ -340,6 +341,49 @@
             pointer-events: none;
             opacity: 0.5;
         }
+
+        .search-form {
+            display: flex;
+            justify-content: center;
+            position: relative;
+
+        }
+
+        .search-input {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+            outline: none;
+            transition: box-shadow 0.3s ease;
+            width: 300px;
+            height: 28px;
+            font-size: 16px;
+            margin-right: 10px;
+            margin-left: -26px;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-button {
+            background-color: transparent;
+            border: none;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+        }
+
+        .cross-button {
+            color: black;
+            text-decoration: none;
+            font-size: 26px;
+            font-weight: bold;
+            position: absolute;
+            right: 10px;
+            top: -2px;
+        }
     </style>
 </head>
 
@@ -363,8 +407,21 @@
 
 
     <div class="content">
-        <a href="#addUserModal" id="add-user-button">Add User</a>
+        <form action="{{ url_for('admin', type='users') }}" method="get" class="search-form">
+            <input type="text" name="search" placeholder="Search users..." value="{{ request.args.get('search', '') }}"
+                class="search-input">
+            <input type="hidden" name="type" value="users">
+            <button type="submit" class="search-button">
+                {% if not request.args.get('search', '') %}
+                <img class='search-logo' src="static/images/search.png" alt="searchlogo">
+                {% else %}
+                <a class="cross-button" href="{{url_for('admin',type='products')}}">&times;</a>
+                {% endif %}
+            </button>
+        </form>
+        <a href="#myModal" id="add-product-button">Add Product</a>
     </div>
+
 
     <div class="item-list">
         {% for user in users %}
