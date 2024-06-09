@@ -22,7 +22,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            background: linear-gradient(to top, #007bff, #00ABE4);
+            background: linear-gradient(to top, #42a983d7,#174132d7);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -45,7 +45,7 @@
         .navbar {
             display: flex;
             justify-content: space-evenly;
-            background-color: #00ABE4;
+            background-color:#2f8062d7;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -62,6 +62,21 @@
         .navbar a:hover {
             transform: translateY(-5px);
         }
+
+        /* Add these styles to your existing CSS */
+
+        .navbar .active {
+            background-color: #0056b3;
+            color: #fff;
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .navbar .disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
 
         .content {
             flex: 1;
@@ -106,10 +121,14 @@
     </div>
 
     <div class="navbar">
-        <a href="{{ url_for('admin', type='products') }}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}">Users</a>
-        <a href="{{ url_for('admin', type='admins') }}">Admins</a>
+        <a href="{{ url_for('admin', type='products') }}"
+            class="{% if type == 'products' %}active disabled{% endif %}">Products</a>
+        <a href="{{ url_for('admin', type='users') }}"
+            class="{% if type == 'users' %}active disabled{% endif %}">Users</a>
+        <a href="{{ url_for('admin', type='admins') }}"
+            class="{% if type == 'admins' %}active disabled{% endif %}">Admins</a>
     </div>
+
 
 
 </body>

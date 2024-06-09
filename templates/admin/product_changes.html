@@ -19,7 +19,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            background: linear-gradient(to top, #007bff, #00ABE4);
+            background: linear-gradient(to top, #42a983d7,#174132d7);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -41,7 +41,7 @@
         .navbar {
             display: flex;
             justify-content: space-evenly;
-            background-color: #00ABE4;
+            background-color:#2f8062d7;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -75,7 +75,7 @@
             font-size: 1.5em;
             font-weight: bold;
             color: white;
-            background: linear-gradient(to right, #007bff, #00ABE4);
+            background-image: linear-gradient(to left, #2f8062d7, #a57e2f);
             border: none;
             border-radius: 50px;
             text-decoration: none;
@@ -84,7 +84,7 @@
         }
 
         .content a:hover {
-            background: linear-gradient(to right, #0d4580, #00ABE4);
+            opacity: 0.8;
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
@@ -160,7 +160,7 @@
         }
 
         .modal-content {
-            background-color: #00ABE4;
+            background-image: linear-gradient(to bottom, #2f8062d7, #a57e2f);
             padding: 40px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -218,7 +218,7 @@
 
         .form-input:focus {
             outline: none;
-            border-color: #00ABE4;
+            border-color:#2f8062d7;
             box-shadow: 0 0 10px rgba(0, 171, 228, 0.5);
         }
 
@@ -271,6 +271,41 @@
             margin-top: 5px;
 
         }
+
+
+        /* Pagination styles */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 5px;
+            color: #333;
+            background-color: #f4f4f4;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+        }
+
+        .pagination .active {
+            background-color: #2f8062d7;;
+            color: white;
+        }
+
+        .pagination .disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
     </style>
 </head>
 
@@ -298,8 +333,8 @@
         {% for product in products %}
         <div class="item">
             <div class="info-container">
-                <div>Title: <strong style="color: #00ABE4;">{{ product.title }}</strong></div>
-                <div>ID: <strong style="color: #00ABE4;">{{ product.uid }}</strong></div>
+                <div>Title: <strong style="color:#2f8062d7;">{{ product.title }}</strong></div>
+                <div>ID: <strong style="color:#2f8062d7;">{{ product.uid }}</strong></div>
             </div>
             <div class="item-buttons">
                 <form action="{{ url_for('add_product') }}" method="get" style="display:inline;">
@@ -338,6 +373,16 @@
                 <button class="checkout-button" type="submit">Submit</button>
             </form>
         </div>
+    </div>
+    <div class="pagination">
+        <a class="prev-button{% if page == 1 %} disabled{% endif %}"
+            href="{{ url_for('admin', type='products', page=page-1) }}">&lt;</a>
+        {% for p in range(start_page, end_page + 1) %}
+        <a class="page-number{% if page == p %} active{% endif %}"
+            href="{{ url_for('admin', type='products', page=p) }}">{{ p }}</a>
+        {% endfor %}
+        <a class="next-button{% if page == total_pages %} disabled{% endif %}"
+            href="{{ url_for('admin', type='products', page=page+1) }}">&gt;</a>
     </div>
 
 </body>

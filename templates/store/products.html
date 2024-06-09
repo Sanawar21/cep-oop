@@ -10,7 +10,7 @@
             text-align: center;
             font-size: 50px;
             margin-bottom: -10px;
-            background-image: linear-gradient(to bottom right, #00ABE4, #000000);
+            background-image: linear-gradient(to bottom, #2f8062d7, #a57e2f);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -90,7 +90,7 @@
         }
 
         .product:hover img {
-            border-color: #00ABE4;
+            border-color:#2f8062d7;
         }
 
         .product-info {
@@ -112,18 +112,18 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
-            background-color: #00ABE4;
+            background-color:#2f8062d7;
             width: 250px;
             font-weight: bold;
         }
 
         .add-to-cart {
-            background-color: #00ABE4;
+            background-color:#2f8062d7;
             color: #333;
         }
 
         .cart-button:hover {
-            background-color: #0c7395;
+            background-color:#42a983d7;
         }
 
         .remove-from-cart {
@@ -217,7 +217,7 @@
             text-decoration: none;
             margin: 0 5px;
             color: #333;
-            background-color: #00ABE4;
+            background-color:#2f8062d7;
             border-radius: 5px;
             transition: background-color 0.3s ease;
             display: inline-block;
@@ -227,7 +227,7 @@
         }
 
         .pagination a:hover {
-            background-color: #0c7395;
+            background-color:#42a983d7;
         }
 
         .prev-button,
@@ -247,7 +247,7 @@
         }
 
         .page-number:hover {
-            background-color: #0c7395;
+            background-color:#42a983d7;
         }
 
         .disabled {
@@ -272,12 +272,12 @@
             color: black;
             font-weight: bold;
             text-align: center;
-            background-color: #00ABE4;
+            background-color:#2f8062d7;
             margin-left: 410px;
         }
 
         .back-to-products:hover {
-            background-color: #0c7395;
+            background-color:#42a983d7;
         }
 
         .new-arrivals {
@@ -291,7 +291,17 @@
         .arrival-header {
             font-size: 30px;
             font-weight: bold;
-            color: #0b3f72;
+            color: #0b4731d7;
+        }
+
+        .cross-button {
+            color: black;
+            text-decoration: none;
+            font-size: 26px;
+            font-weight: bold;
+            position: absolute;
+            top: 8px;
+            right: 45px;
         }
     </style>
 </head>
@@ -302,9 +312,14 @@
         <div class="header">
             <div class="search-container">
                 <form action="{{ url_for('products') }}" method="get">
-                    <input type="text" class="search-input" name="query" placeholder="Search products...">
+                    <input value="{{ query | default('', true) }}" type="text" class="search-input" name="query"
+                        placeholder="Search products...">
                     <button type="submit" class="search-button">
+                        {% if not query %}
                         <img class="search-logo" src="static/images/search.png" alt="Search Logo">
+                        {% else %}
+                        <a class="cross-button" href="{{url_for('products')}}">&times;</a>
+                        {% endif %}
                     </button>
                 </form>
             </div>
@@ -360,9 +375,6 @@
                     </form>
                 </li>
                 {% endfor %}
-                {% if query %}
-                <a class="back-to-products" href="{{url_for('products')}}">Back to Products</a>
-                {% endif %}
                 {% else %}
                 <div class="no-product-found">
                     <img src="../static/images/no-product-found.jpg" alt="">
