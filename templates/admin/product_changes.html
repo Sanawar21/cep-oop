@@ -40,13 +40,14 @@
 
         .navbar {
             display: flex;
+            flex-direction: row;
             justify-content: space-evenly;
             background-color: #2f8062d7;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .navbar a {
-            display: inline-block;
+            display: flex;
             padding: 15px 25px;
             color: white;
             text-decoration: none;
@@ -54,6 +55,15 @@
             font-size: 1.2em;
             font-weight: bold;
         }
+
+        .navbar .current-page {
+            cursor: default;
+            pointer-events: none;
+            transform: none;
+            font-size: 1.3em;
+            opacity: 0.8;
+        }
+
 
         .navbar a:hover {
             transform: translateY(-5px);
@@ -321,9 +331,11 @@
 
 
     <div class="navbar">
-        <a href="{{ url_for('admin', type='products') }}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}">Users</a>
-        <a href="{{ url_for('admin', type='admins') }}">Admins</a>
+        <a href="{{ url_for('admin', type='products') }}"
+            class="{% if type == 'products' %}current-page{% endif %}">Products</a>
+        <a href="{{ url_for('admin', type='users') }}" class="{% if type == 'users' %}current-page{% endif %}">Users</a>
+        <a href="{{ url_for('admin', type='admins') }}"
+            class="{% if type == 'admins' %}current-page{% endif %}">Admins</a>
     </div>
 
     <div class="content">

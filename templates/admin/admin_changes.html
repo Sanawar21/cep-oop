@@ -18,7 +18,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            background: linear-gradient(to top, #42a983d7,#174132d7);
+            background: linear-gradient(to top, #42a983d7, #174132d7);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -43,7 +43,7 @@
         .navbar {
             display: flex;
             justify-content: space-evenly;
-            background-color:#2f8062d7;
+            background-color: #2f8062d7;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -61,19 +61,15 @@
             transform: translateY(-5px);
         }
 
-        /* Add these styles to your existing CSS */
-
-        .navbar .active {
-            background-color: #0056b3;
-            color: #fff;
+        .navbar .current-page {
             cursor: default;
             pointer-events: none;
+            transform: none;
+            font-size: 1.3em;
+            opacity: 0.8;
         }
 
-        .navbar .disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
+
 
 
         .content {
@@ -270,7 +266,7 @@
 
         .form-input:focus {
             outline: none;
-            border-color:#2f8062d7;
+            border-color: #2f8062d7;
             box-shadow: 0 0 10px rgba(0, 171, 228, 0.5);
         }
 
@@ -349,7 +345,8 @@
         }
 
         .pagination .active {
-            background-color: #2f8062d7;;
+            background-color: #2f8062d7;
+            ;
             color: white;
         }
 
@@ -372,12 +369,12 @@
 
     <div class="navbar">
         <a href="{{ url_for('admin', type='products') }}"
-            class="{% if type == 'products' %}active disabled{% endif %}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}"
-            class="{% if type == 'users' %}active disabled{% endif %}">Users</a>
+            class="{% if type == 'products' %}current-page{% endif %}">Products</a>
+        <a href="{{ url_for('admin', type='users') }}" class="{% if type == 'users' %}current-page{% endif %}">Users</a>
         <a href="{{ url_for('admin', type='admins') }}"
-            class="{% if type == 'admins' %}active disabled{% endif %}">Admins</a>
+            class="{% if type == 'admins' %}current-page{% endif %}">Admins</a>
     </div>
+
 
     <div class="content">
         <a href="#addAdminModal" id="add-admin-button">Add Admin</a>
