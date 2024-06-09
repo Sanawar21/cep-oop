@@ -46,24 +46,26 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        
         .navbar a {
-            display: flex;
+            text-align: center;
+            display: inline-block;
             padding: 15px 25px;
             color: white;
             text-decoration: none;
             transition: background-color 0.3s, transform 0.3s;
             font-size: 1.2em;
             font-weight: bold;
+            width: 100%;
         }
+
 
         .navbar .current-page {
             cursor: default;
             pointer-events: none;
             transform: none;
-            font-size: 1.3em;
-            opacity: 0.8;
+            background-color: #1f6149d7;
         }
-
 
         .navbar a:hover {
             transform: translateY(-5px);
