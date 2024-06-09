@@ -207,55 +207,39 @@
             height: 40px;
             margin-top: 5px;
         }
-
         .pagination {
-            text-align: center;
             margin-top: 20px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .pagination a {
-            text-decoration: none;
-            margin: 0 5px;
-            color: #333;
-            background-color:#2f8062d7;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
             display: inline-block;
-            text-align: center;
+            padding: 8px 16px;
+            margin: 0 5px;
+            border-radius: 5px;
+            color: #333;
+            background-color: #ffffff;
+            text-decoration: none;
+            transition: background-color 0.3s;
             font-weight: bold;
             font-size: 18px;
         }
 
         .pagination a:hover {
-            background-color:#42a983d7;
+            background-color: #ddd;
         }
 
-        .prev-button,
-        .next-button {
-            font-weight: bold;
-            padding: 10px 20px;
+        .pagination .active {
+            background-color: #2f8062d7;
+            ;
+            color: white;
         }
 
-        .page-number {
-            text-decoration: none;
-            padding: 10px 10px;
-            margin: 0 5px;
-            color: #333;
-            background-color: black;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .page-number:hover {
-            background-color:#42a983d7;
-        }
-
-        .disabled {
+        .pagination .disabled {
             pointer-events: none;
             opacity: 0.5;
-
         }
-
         .no-product-found {
             margin-left: 320px;
         }
@@ -383,26 +367,18 @@
             </ul>
         </div>
         {% if products %}
+    
         <div class="pagination">
             <a class="prev-button{% if page == 1 %} disabled{% endif %}"
-                href="{{ url_for('products', page=page-1) }}">&lt;</a>
-
-            {% if page > 1 %}
-            <a class="page-number" href="{{ url_for('products', page=1) }}">1</a>
-            <span class="ellipsis">...</span>
-            {% endif %}
-
-            {% for p in range(page + 1, min(page + 4, total_pages + 1)) %}
-            <a class="page-number" href="{{ url_for('products', page=p) }}">{{ p }}</a>
+                href="{{ url_for('products',page=page-1) }}">&lt;</a>
+            {% for p in range(start_page, end_page + 1) %}
+            <a class="page-number{% if page == p %} active{% endif %}"
+                href="{{ url_for('products',page=p) }}">{{ p }}</a>
             {% endfor %}
-
-            {% if page + 3 < total_pages %} <span class="ellipsis">...</span>
-                <a class="page-number" href="{{ url_for('products', page=total_pages) }}">{{ total_pages }}</a>
-                {% endif %}
-
-                <a class="next-button{% if page == total_pages %} disabled{% endif %}"
-                    href="{{ url_for('products', page=page+1) }}">&gt;</a>
+            <a class="next-button{% if page == total_pages %} disabled{% endif %}"
+                href="{{ url_for('products', page=page+1) }}">&gt;</a>
         </div>
+    
         {% else %}
         <a class="back-to-products" href="{{url_for('products')}}">Back to Products</a>
         {% endif %}
