@@ -23,7 +23,7 @@
     }
 
     .checkout-container {
-      background-color:#2f8062d7;
+      background-color: #2f8062d7;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
       margin-top: 20px;
@@ -96,12 +96,12 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      color: rgb(154,22,22);
+      color: rgb(154, 22, 22);
       margin: 10px;
     }
 
     .error {
-      color: rgb(154,22,22);
+      color: rgb(154, 22, 22);
       text-align: center;
       padding-bottom: 10px;
       font-weight: 600;
@@ -176,11 +176,11 @@
       <br>
 
       <label class="form-label" for="password">Password</label>
-      <input class="form-input no-margin" type="password" id="password" name="user.password" value="">
+      <input class="form-input no-margin" type="password" id="password" name="password" value="{{ user.password }}">
       <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Submit</button>
     </form>
-    <a class="back-link" href="{{ url_for('admin') }}">Back to admin panel</a>
+    <a class="back-link" href="{{ url_for('admin', type='users') }}">Back to admin panel</a>
   </div>
 </body>
 

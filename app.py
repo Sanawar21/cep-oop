@@ -8,7 +8,8 @@ from classes.account import User, Admin, Privilege
 from classes.bank_details import BankDetails
 from classes.order import BankOrder, CodOrder
 
-import random
+import os
+
 app = Flask(__name__)
 app.secret_key = "pIQ89naMqA21"
 database = Database()
@@ -22,6 +23,8 @@ account = None
 #       use a focus.
 # TODO: Save cart if user logs out before checking out.
 # TODO: Encrypt database (rb, wb, ab)
+# TODO: Disable own admin button to delete and edit
+# TODO: Create admin profile and user profile
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
 # only then will the decorator be returned.
@@ -95,6 +98,11 @@ def check_privilege(func):
     return wrapper
 
 
+def failure(action_detail, back_link):
+    template = "./admin/failure.html"
+    return render_template(template, action_detail=action_detail, back_link=back_link)
+
+
 def completion(action_detail, back_link):
     template = "./admin/completion.html"
     return render_template(template, action_detail=action_detail, back_link=back_link)
@@ -133,8 +141,11 @@ def add_admin():
         if not privileges:
             return render_with_error("Select at least one privilege.")
 
+        if privileges == Privilege.ALL:
+            return render_with_error("Cannot create another superadmin.")
+
         authenticator.add_admin(username, password, full_name, privileges)
-        return completion("Admin added successfully.", url_for("admin"))
+        return completion("Admin added successfully.", url_for("admin", type="admins"))
 
     return render_template(template)
 
@@ -189,7 +200,7 @@ def add_user():
 
         authenticator.sign_up(username, password,
                               full_name, address, bank_details)
-        return completion("User added successfully.", url_for("admin"))
+        return completion("User added successfully.", url_for("admin", type="users"))
 
     return render_template(template)
 
@@ -229,9 +240,39 @@ def add_product():
                 image.save(f"./static/images/{uid}.jpg")
 
         database.save_product(Product(title, price, uid))
-        return completion("Product added successfully.", url_for("admin"))
+        return completion("Product added successfully.", url_for("admin", type="products"))
 
     return render_template(template)
+
+# Delete routes
+
+
+@app.route("/delete_admin/<uid>")
+@only_allow(Admin)
+@check_privilege
+def delete_admin(uid):
+    if uid != account.uid:
+        database.delete_account(uid)
+        return completion("Admin deleted successfully.", url_for("admin", type="admins"))
+    else:
+        return failure("Cannot delete your own account.", url_for("admin", type="admins"))
+
+
+@app.route("/delete_user/<uid>")
+@only_allow(Admin)
+@check_privilege
+def delete_user(uid):
+    database.delete_account(uid)
+    return completion("User deleted successfully.", url_for("admin", type="users"))
+
+
+@app.route("/delete_product/<uid>")
+@only_allow(Admin)
+@check_privilege
+def delete_product(uid):
+    database.delete_product(uid)
+    return completion("Product deleted successfully.", url_for("admin", type="products"))
+
 
 # Edit routes
 
@@ -241,13 +282,133 @@ def add_product():
 @check_privilege
 def edit_admin(uid):
 
-    template = "./admin/edit_admin.html"
-    account = database.get_account(uid)
-    if type(account) != Admin:
-        return render_template("./admin/failure.html", action_detail="The account is not an admin.")
+    template = "./admin/edit/admin.html"
 
     if request.method == "POST":
-        pass
+        username = request.form.get("username")
+        full_name = request.form.get("full_name")
+        privileges = request.form.getlist('privileges[]')
+        old_admin = database.get_account(uid)
+        password = old_admin.password
+
+        def render_with_error(error):
+            dummy_admin = Admin(uid, username, password, full_name, privileges)
+            return render_template(template, admin=dummy_admin, error=error)
+
+        if not username or not password or not full_name:
+            return render_with_error("All fields are required.")
+
+        if username != old_admin.username and not authenticator.unique_username(username):
+            return render_with_error("This username is taken.")
+
+        if not authenticator.validate_username(username):
+            return render_with_error("Username cannot contain any special characters.")
+
+        if not privileges:
+            return render_with_error("Select at least one privilege.")
+
+        if privileges == Privilege.ALL:
+            return render_with_error("Cannot create another superadmin.")
+
+        database.overwrite_account(
+            Admin(uid, username, password, full_name, privileges)
+        )
+        return completion("Admin edited successfully.", url_for("admin", type="admins"))
+
+    if uid != account.uid:
+        return render_template(template, admin=database.get_account(uid))
+    else:
+        return failure("Cannot edit your own account.", url_for("admin", type="admins"))
+
+
+@app.route("/edit_user/<uid>", methods=["GET", "POST"])
+@only_allow(Admin)
+@check_privilege
+def edit_user(uid):
+    template = "./admin/edit/user.html"
+
+    if request.method == "POST":
+
+        old_user = database.get_account(uid)
+
+        username = request.form.get("username")
+        full_name = request.form.get("full_name")
+        address = request.form.get('address')
+
+        def render_with_error(error):
+            dummy_user = User(old_user.uid, username, old_user.password,
+                              full_name, address, old_user.bank_details)
+            return render_template(template, user=dummy_user, error=error)
+
+        if not username or not full_name or not address:
+            return render_with_error("All fields are required.")
+
+        if username != old_user.username and not authenticator.unique_username(username):
+            return render_with_error("This username is taken.")
+
+        if not authenticator.validate_username(username):
+            return render_with_error("Username cannot contain any special characters.")
+
+        database.overwrite_account(User(
+            old_user.uid, username, old_user.password, full_name, address, old_user.bank_details))
+        return completion("User edited successfully.", url_for("admin", type="users"))
+
+    return render_template(template, user=database.get_account(uid))
+
+
+@app.route("/edit_product/<uid>", methods=["GET", "POST"])
+@only_allow(Admin)
+@check_privilege
+def edit_product(uid):
+    template = "./admin/edit/product.html"
+
+    if request.method == "POST":
+
+        old_product = database.get_product(uid)
+
+        title = request.form.get("title")
+        price = request.form.get("price")
+        image = request.files.get("image")
+        image_choice = request.form.get("image_choice")
+
+        # for state management
+        def render_with_error(error):
+            return render_template(template, product=Product(title, price, uid), error=error)
+
+        if not title or not price:
+            return render_with_error("All fields are required.")
+
+        # title not unique
+        if title != old_product.title and title in [p.title for p in all_products]:
+            return render_with_error("This product title has been used.")
+
+        try:
+            price = int(price)
+        except ValueError:
+            return render_with_error("The price must be an integer.")
+
+        # if there is an image in the form, overwrite the existing product image
+        # if the user wants to remove the image, delete the existing image
+        # if he wants to keep it, pass
+
+        if image:
+            if not image.filename.endswith(('png', 'jpg', 'jpeg')):
+                return render_with_error("Invalid image format. Only png, jpg and jpeg is allowed.")
+            else:
+                image.save(f"./static/images/{uid}.jpg")
+        else:
+            if image_choice == "remove":
+                try:
+                    os.remove(f"./static/images/{uid}.jpg")
+                except FileNotFoundError:
+                    pass
+            else:
+                pass
+
+        database.overwrite_product(Product(title, price, uid))
+        return completion("Product edited successfully.", url_for("admin", type="products"))
+
+    return render_template(template, product=database.get_product(uid))
 
 
 @app.route('/admin')

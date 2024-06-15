@@ -1,4 +1,3 @@
-{'title': "Girls' Skye Pajamas", 'price': 27, 'uid': 'B01MQ3F5HW'}
 {'title': "Men's Hines Sneaker", 'price': 62, 'uid': 'B0BQTCF22V'}
 {'title': 'Boys Salute T-Shirt', 'price': 15, 'uid': 'B0BHHZNJKZ'}
 {'title': 'Unisex-Child Frosty', 'price': 44, 'uid': 'B004QLAN92'}
@@ -91,4 +90,4 @@
 {'title': 'Boundary Sunglasses', 'price': 54, 'uid': 'B08R111BWL'}
 {'title': "Women's Mona Sandal", 'price': 89, 'uid': 'B0BF2P66KP'}
 {'title': 'Dead Rising 2 (PS3)', 'price': 35, 'uid': 'B002BWONEO'}
-{'title': 'Basket Sub-Assembly', 'price': 13, 'uid': 'B00JU7G6J8'}
+{'title': 'Basket Sub-Assembly', 'price': 14, 'uid': 'B00JU7G6J8'}

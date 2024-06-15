@@ -38,7 +38,9 @@ class Database:
         return products
 
     def get_product(self, uid):
-        return [product for product in self.get_products() if product.uid == uid][0]
+        for product in self.get_products():
+            if product.uid == uid:
+                return product
 
     @staticmethod
     def save_product(product: Product):
@@ -69,6 +71,11 @@ class Database:
         products[index] = new_product
         self.save_products(products)
         return new_product
+
+    def delete_product(self, uid):
+        products = self.get_products()
+        products.remove(self.get_product(uid))
+        self.save_products(products)
 
     # account methods
 
@@ -118,6 +125,14 @@ class Database:
         """
         with open("database/accounts.txt", "a") as file:
             file.write(str(account.to_dict()) + "\n")
+
+    def delete_account(self, uid):
+        accounts = self.get_accounts()
+        for account in accounts:
+            if account.uid == uid:
+                accounts.remove(account)
+                break
+        self.save_accounts(accounts)
 
     # order methods
 

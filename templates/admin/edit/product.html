@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Product</title>
+  <title>Edit Product</title>
   <style>
     a:hover {
       text-decoration: none;
@@ -80,7 +80,6 @@
       display: block;
       margin-top: 10px;
       text-align: center;
-      color: #000000;
       text-decoration: none;
     }
 
@@ -102,6 +101,7 @@
 
     .error {
       color: rgb(154, 22, 22);
+      color: #000000;
       text-align: center;
       padding-bottom: 10px;
       font-weight: 600;
@@ -147,12 +147,21 @@
 
 <body>
   <div class="checkout-container">
-    <h1 class="checkout-title">Add Product</h1>
-    <form method="post" action="{{ url_for('add_product') }}" enctype="multipart/form-data">
+    <h1 class="checkout-title">Edit Product</h1>
+    <form method="post" action="{{ url_for('edit_product', uid=product.uid) }}" enctype="multipart/form-data">
       <label class="form-label" for="title">Title</label>
       <input class="form-input" type="text" id="title" name="title" value="{{product.title}}">
 
+      <div class="privilege-item">
+        <input type="radio" id="keep_image" name="image_choice" value="keep" checked>
+        <label style="color: #000000; font-size: medium;" for="keep_image">Keep previous image.</label>
+      </div>
 
+      <div class="privilege-item">
+        <input type="radio" id="remove_image" name="image_choice" value="remove">
+        <label style="color: #000000; font-size: medium;" for="remove_image">Remove image.</label>
+      </div>
+      <br>
       <fieldset>
         <legend class="form-label">Image (optional)</legend>
         <input class="form-label" type="file" name="image" id="image" accept="image/*">

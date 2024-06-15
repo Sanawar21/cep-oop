@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Admin</title>
+  <title>Edit Admin</title>
   <style>
     a:hover {
       text-decoration: none;
@@ -147,8 +147,8 @@
 
 <body>
   <div class="checkout-container">
-    <h1 class="checkout-title">Add Admin</h1>
-    <form method="post" action="{{ url_for('add_admin') }}">
+    <h1 class="checkout-title">Edit Admin</h1>
+    <form method="post" action="{{ url_for('edit_admin', uid=admin.uid) }}">
       <label class="form-label" for="username">Username</label>
       <input class="form-input" type="text" id="username" name="username" value="{{admin.username}}">
 
@@ -205,8 +205,6 @@
       </fieldset>
       <br>
 
-      <label class="form-label" for="password">Password</label>
-      <input class="form-input no-margin" type="password" id="password" name="password" value="admin.password">
       <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Submit</button>
     </form>

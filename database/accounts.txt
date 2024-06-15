@@ -1,10 +1,3 @@
 {'type': 'user', 'uid': '1', 'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'bank_name': 'Faysal Bank', 'card_number': '1231231231', 'pin': '1234'}}
 {'type': 'user', 'uid': '2', 'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'L328', 'bank_details': None}
-{'type': 'admin', 'uid': '3', 'username': 'superadmin', 'password': 'superpassword', 'full_name': 'Super Admin', 'privileges': ['ADD_USER', 'ADD_PRODUCT', 'EDIT_USER', 'DELETE_PRODUCT', 'DELETE_USER', 'ADD_ADMIN', 'EDIT_PRODUCT', 'DELETE_ADMIN', 'EDIT_ADMIN']}
-{'type': 'admin', 'uid': '4', 'username': 'empty_admin', 'password': 'Sanawar21$$', 'full_name': 'Empty Admin', 'privileges': []}
-{'type': 'user', 'uid': '5', 'username': 'testuser', 'password': 'Sanawar21$$', 'full_name': 'test user', 'address': 'asdfasdf', 'bank_details': None}
-{'type': 'user', 'uid': '6', 'username': 'nobank', 'password': 'Sanawar21$$', 'full_name': 'No Bank', 'address': 'no bank', 'bank_details': None}
-{'type': 'user', 'uid': '7', 'username': 'yesbank', 'password': 'Sanawar21$$', 'full_name': 'Yes bank', 'address': 'Yes BANK ADDRESS', 'bank_details': {'bank_name': 'HBL Islamic', 'card_number': '1234123412', 'pin': '1234'}}
-{'type': 'user', 'uid': 'rsfWLdJ5Srm0', 'username': 'sanawar21', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'bank_name': 'HBL Islamic', 'card_number': '1231231231', 'pin': '1224'}}
-{'type': 'user', 'uid': 'ecdCNnmE82rR', 'username': 'new-test', 'password': 'Sanawar21$$', 'full_name': 'new test', 'address': 'new test address', 'bank_details': None}
-{'type': 'user', 'uid': '1xLgRsS3hZn6', 'username': 'test_user', 'password': 'hello1234##', 'full_name': 'asnaf', 'address': 'asdf', 'bank_details': None}
+{'type': 'admin', 'uid': '3', 'username': 'superadmin', 'password': 'superpassword', 'full_name': 'Super Admin', 'privileges': ['ADD_ADMIN', 'EDIT_ADMIN', 'DELETE_ADMIN', 'DELETE_USER', 'ADD_USER', 'EDIT_PRODUCT', 'DELETE_PRODUCT', 'EDIT_USER', 'ADD_PRODUCT']}
