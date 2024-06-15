@@ -150,32 +150,33 @@
     <h1 class="checkout-title">Add User</h1>
     <form method="post" action="{{ url_for('add_user') }}">
       <label class="form-label" for="username">Username</label>
-      <input class="form-input" type="text" id="username" name="username" value="{{username}}">
+      <input class="form-input" type="text" id="username" name="username" value="{{user.username}}">
 
       <label class="form-label" for="full_name">Full name</label>
-      <input class="form-input" type="text" id="full_name" name="full_name" value="{{full_name}}">
+      <input class="form-input" type="text" id="full_name" name="full_name" value="{{user.full_name}}">
 
       <label class="form-label" for="address">Address</label>
-      <input class="form-input" type="text" id="address" name="address" value="{{address}}">
+      <input class="form-input" type="text" id="address" name="address" value="{{user.address}}">
 
 
 
       <fieldset>
         <legend class="form-label">Bank Details (optional)</legend>
         <label class="form-label" for="bank_name">Bank name</label>
-        <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{bank_name}}">
+        <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}">
 
         <label class="form-label" for="card_number">Card number</label>
-        <input class="form-input" type="text" id="card_number" name="card_number" value="{{card_number}}">
+        <input class="form-input" type="text" id="card_number" name="card_number"
+          value="{{user.bank_details.card_number}}">
 
         <label class="form-label" for="pin">Pin</label>
-        <input class="form-input" type="text" id="pin" name="pin" value="{{pin}}">
+        <input class="form-input" type="text" id="pin" name="pin" value="{{user.bank_details.pin}}">
 
       </fieldset>
       <br>
 
       <label class="form-label" for="password">Password</label>
-      <input class="form-input no-margin" type="password" id="password" name="password" value="">
+      <input class="form-input no-margin" type="password" id="password" name="user.password" value="">
       <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Submit</button>
     </form>
