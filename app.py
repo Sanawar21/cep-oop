@@ -77,7 +77,7 @@ def only_allow(types_: list[type] | type):
 def check_privilege(func):
     """
     Uses the route name to determine whether the admin has the necessary privilege to 
-    perfomr the action and then reroutes accordingly.
+    perform the action and then reroutes accordingly.
     """
     def wrapper(*args, **kwargs):
         route_name = func.__name__
@@ -112,50 +112,27 @@ def add_admin():
         full_name = request.form.get("full_name")
         privileges = request.form.getlist('privileges[]')
 
+        def render_with_error(error):
+            dummy_admin = Admin(None, username, password,
+                                full_name, privileges)
+            return render_template(template, admin=dummy_admin, error=error)
+
         if not username or not password or not full_name:
-            return render_template(template,
-                                   error="All fields are required.",
-                                   username=username,
-                                   password=password,
-                                   full_name=full_name,
-                                   privileges=privileges,
-                                   )
+            return render_with_error("All fields are required.")
 
         if not authenticator.unique_username(username):
-            return render_template(template,
-                                   error="This username is taken.",
-                                   username=username,
-                                   password=password,
-                                   full_name=full_name,
-                                   privileges=privileges,
-                                   )
+            return render_with_error("This username is taken.")
 
         if not authenticator.validate_username(username):
-            return render_template(template,
-                                   error="Username cannot contain any special characters.",
-                                   username=username,
-                                   password=password,
-                                   full_name=full_name,
-                                   privileges=privileges,
-                                   )
-        if not authenticator.validate_password(password):
-            return render_template(template,
-                                   error="Password must be atleast 8 characters with a special character and a number.",
-                                   username=username,
-                                   password=password,
-                                   full_name=full_name,
-                                   privileges=privileges,
-                                   )
-        if not privileges:
-            return render_template(template,
-                                   error="Select at least one privilege.",
-                                   username=username,
-                                   password=password,
-                                   full_name=full_name,
-                                   privileges=privileges,
-                                   )
+            return render_with_error("Username cannot contain any special characters.")
 
-        authenticator.add_admin(username, password, full_name, [])
+        if not authenticator.validate_password(password):
+            return render_with_error("Password must be atleast 8 characters with a special character and a number.")
+
+        if not privileges:
+            return render_with_error("Select at least one privilege.")
+
+        authenticator.add_admin(username, password, full_name, privileges)
         return completion("Admin added successfully.", url_for("admin"))
 
     return render_template("./admin/add_admin.html")
@@ -169,6 +146,7 @@ def add_user():
     template = "./admin/add_user.html"
 
     if request.method == "POST":
+
         username = request.form.get("username")
         password = request.form.get("password")
         full_name = request.form.get("full_name")
@@ -178,42 +156,35 @@ def add_user():
         card_number = request.form.get("card_number")
         pin = request.form.get("pin")
 
-        # for state management
-        context = {
-            "template_name_or_list": template,
-            "username": username,
-            "password": password,
-            "full_name": full_name,
-            "address": address,
-            "bank_name": bank_name,
-            "card_number": card_number,
-            "pin": pin,
-        }
+        def render_with_error(error):
+            dummy_user = User(None, username, password, full_name,
+                              address, BankDetails(bank_name, card_number, pin))
+            return render_template(template, user=dummy_user, error=error)
 
         if not username or not password or not full_name or not address:
-            return render_template(**context, error="All fields are required.")
+            return render_with_error("All fields are required.")
 
         if not authenticator.unique_username(username):
-            return render_template(**context, error="This username is taken.")
+            return render_with_error("This username is taken.")
 
         if not authenticator.validate_username(username):
-            return render_template(**context, error="Username cannot contain any special characters.")
+            return render_with_error("Username cannot contain any special characters.")
 
         if not authenticator.validate_password(password):
-            return render_template(**context, error="Password must be atleast 8 characters with a special character and a number.")
+            return render_with_error("Password must be atleast 8 characters with a special character and a number.")
 
         # handle bank details
         bank_details = None
 
         if card_number and bank_name and pin:
             if not BankDetails.validate_card_number(card_number):
-                return render_template(**context, error="Card number must be 10 digits.")
+                return render_with_error("Card number must be 10 digits.")
             if not BankDetails.validate_pin(pin):
-                return render_template(**context, error="Pin must be 4 digit long.")
+                return render_with_error("Pin must be 4 digit long.")
             bank_details = BankDetails(bank_name, card_number, pin)
         else:
             if card_number or bank_name or pin:
-                return render_template(**context, error="All bank details should be filled or left empty.")
+                return render_with_error("All bank details should be filled or left empty.")
 
         authenticator.sign_up(username, password,
                               full_name, address, bank_details)
@@ -235,28 +206,24 @@ def add_product():
         image = request.files.get("image")
 
         # for state management
-        # cannot pass image
-        context = {
-            "template_name_or_list": template,
-            "title": title,
-            "price": price,
-        }
+        def render_with_error(error):
+            return render_template(template, product=Product(title, price, None), error=error)
 
         if not title or not price:
-            return render_template(**context, error="All fields are required.")
+            return render_with_error("All fields are required.")
 
         if title in [p.title for p in all_products]:  # title not unique
-            return render_template(**context, error="This product title has been used.")
+            return render_with_error("This product title has been used.")
 
         try:
             price = int(price)
         except ValueError:
-            return render_template(**context, error="The price must be an integer.")
+            return render_with_error("The price must be an integer.")
 
         uid = Database.generate_uid()
         if image:
             if not image.filename.endswith(('png', 'jpg', 'jpeg')):
-                return render_template(**context, error="Invalid image format. Only png, jpg and jpeg is allowed.")
+                return render_with_error("Invalid image format. Only png, jpg and jpeg is allowed.")
             else:
                 image.save(f"./static/images/{uid}.jpg")
 
@@ -268,16 +235,18 @@ def add_product():
 # Edit routes
 
 
-@app.route("/edit_admin/<username>", methods=["GET", "POST"])
+@app.route("/edit_admin/<uid>", methods=["GET", "POST"])
 @only_allow(Admin)
 @check_privilege
-def edit_admin(username):
+def edit_admin(uid):
 
     template = "./admin/edit_admin.html"
-
-    account = database.get_account(username)
+    account = database.get_account(uid)
     if type(account) != Admin:
         return render_template("./admin/failure.html", action_detail="The account is not an admin.")
+
+    if request.method == "POST":
+        pass
 
 
 @app.route('/admin')
