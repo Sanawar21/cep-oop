@@ -150,7 +150,7 @@
     <h1 class="checkout-title">Add Product</h1>
     <form method="post" action="{{ url_for('add_product') }}" enctype="multipart/form-data">
       <label class="form-label" for="title">Title</label>
-      <input class="form-input" type="text" id="title" name="title" value="{{title}}">
+      <input class="form-input" type="text" id="title" name="title" value="{{product.title}}">
 
 
       <fieldset>
@@ -160,7 +160,7 @@
       <br>
 
       <label class="form-label" for="price">Price</label>
-      <input class="form-input no-margin" type="text" id="price" name="price" value="{{price}}">
+      <input class="form-input no-margin" type="text" id="price" name="price" value="{{product.price}}">
 
       <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Submit</button>
