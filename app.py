@@ -21,6 +21,7 @@ account = None
 # TODO: Scroll the submit button into view when a form is submitted in correctly to focus on the error.
 #       use a focus.
 # TODO: Save cart if user logs out before checking out.
+# TODO: Encrypt database (rb, wb, ab)
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
 # only then will the decorator be returned.
@@ -104,7 +105,7 @@ def completion(action_detail, back_link):
 @check_privilege
 def add_admin():
 
-    template = "./admin/add_admin.html"
+    template = "./admin/add/admin.html"
 
     if request.method == "POST":
         username = request.form.get("username")
@@ -135,7 +136,7 @@ def add_admin():
         authenticator.add_admin(username, password, full_name, privileges)
         return completion("Admin added successfully.", url_for("admin"))
 
-    return render_template("./admin/add_admin.html")
+    return render_template(template)
 
 
 @app.route('/add_user', methods=["GET", "POST"])
@@ -143,7 +144,7 @@ def add_admin():
 @check_privilege
 def add_user():
 
-    template = "./admin/add_user.html"
+    template = "./admin/add/user.html"
 
     if request.method == "POST":
 
@@ -190,7 +191,7 @@ def add_user():
                               full_name, address, bank_details)
         return completion("User added successfully.", url_for("admin"))
 
-    return render_template("./admin/add_user.html")
+    return render_template(template)
 
 
 @app.route('/add_product', methods=["GET", "POST"])
@@ -198,7 +199,7 @@ def add_user():
 @check_privilege
 def add_product():
 
-    template = "./admin/add_product.html"
+    template = "./admin/add/product.html"
 
     if request.method == "POST":
         title = request.form.get("title")
@@ -230,7 +231,7 @@ def add_product():
         database.save_product(Product(title, price, uid))
         return completion("Product added successfully.", url_for("admin"))
 
-    return render_template("./admin/add_product.html")
+    return render_template(template)
 
 # Edit routes
 
