@@ -237,7 +237,7 @@
         }
 
         .error {
-            color: rgb(154,22,22);
+            color: rgb(154, 22, 22);
             font-size: 16px;
             margin-top: -10px;
             margin-bottom: 10px;
@@ -399,7 +399,7 @@
                 {% endif %}
             </button>
         </form>
-        <a href="#myModal" id="add-product-button">Add Product</a>
+        <a href="#addProductModal" id="add-product-button">Add Product</a>
     </div>
 
     <div class="item-list">
@@ -425,7 +425,7 @@
         {% endfor %}
     </div>
 
-    <div id="myModal" class="modal">
+    <div id="addProductModal" class="modal">
         <div class="modal-content">
             <a href="{{ url_for('admin', type='products') }}" class="close-button" id="close-button">&times;</a>
             <h1 class="checkout-title">Add Product</h1>
