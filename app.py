@@ -428,7 +428,7 @@ def admin():
         end_page = min(start_page + 4, total_pages)
         paginated_products = filtered_products[(
             page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/product.html", products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/product.html", current_admin=account, products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'users':
         accounts = database.get_accounts()
         users = [account for account in accounts if isinstance(
@@ -437,7 +437,7 @@ def admin():
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_users = users[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/user.html", users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/user.html", current_admin=account, users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'admins':
         accounts = database.get_accounts()
         admins = [account for account in accounts if isinstance(
@@ -446,9 +446,9 @@ def admin():
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_admins = admins[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/admin.html", admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/admin.html", current_admin=account, admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     else:
-        return render_template("./admin/admin.html")
+        return render_template("./admin/admin.html", current_admin=account)
 
 
 @app.route('/')
