@@ -419,7 +419,9 @@
                 {% endif %}
             </button>
         </form>
+        {% if current_admin.has_privilege("ADD_USER") %}
         <a href="#addUserModal" id="add-product-button">Add User</a>
+        {% endif %}
     </div>
 
 
@@ -429,16 +431,20 @@
             <div style="font-size: 18px;font-style: italic;">Username: <strong style="color:#2f8062d7;">{{ user.username
                     }}</strong></div>
             <div class="item-buttons">
+                {% if current_admin.has_privilege("EDIT_USER") %}
                 <form action="{{ url_for('edit_user', uid=user.uid) }}" method="get" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
                     </button>
                 </form>
+                {% endif %}
+                {% if current_admin.has_privilege("DELETE_USER") %}
                 <form action="{{ url_for('delete_user', uid=user.uid) }}" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/delete.png" alt="Delete">
                     </button>
                 </form>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
