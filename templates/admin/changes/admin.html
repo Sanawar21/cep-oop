@@ -437,28 +437,41 @@
                 {% endif %}
             </button>
         </form>
+        {% if current_admin.has_privilege("ADD_ADMIN") %}
         <a href="#addAdminModal" id="add-product-button">Add Admin</a>
+        {% endif %}
     </div>
 
 
     <div class="item-list">
+        <div class="item">
+            <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color:#2f8062d7;">{{
+                    current_admin.username }} (You)</strong>
+            </div>
+        </div>
         {% for admin in admins %}
+        {% if admin.uid != current_admin.uid %}
         <div class="item">
             <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color:#2f8062d7;">{{
                     admin.username }}</strong></div>
             <div class="item-buttons">
+                {% if current_admin.has_privilege("EDIT_ADMIN") %}
                 <form action="{{ url_for('edit_admin', uid=admin.uid) }}" method="get" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
                     </button>
                 </form>
+                {% endif %}
+                {% if current_admin.has_privilege("DELETE_ADMIN") %}
                 <form action="{{ url_for('delete_admin', uid=admin.uid) }}" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/delete.png" alt="Delete">
                     </button>
                 </form>
+                {% endif %}
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 
