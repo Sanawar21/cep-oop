@@ -1,3 +1,5 @@
 {'type': 'user', 'uid': '1', 'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'bank_name': 'Faysal Bank', 'card_number': '1231231231', 'pin': '1234'}}
 {'type': 'user', 'uid': '2', 'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'L328', 'bank_details': None}
 {'type': 'admin', 'uid': '3', 'username': 'superadmin', 'password': 'superpassword', 'full_name': 'Super Admin', 'privileges': ['ADD_ADMIN', 'EDIT_ADMIN', 'DELETE_ADMIN', 'DELETE_USER', 'ADD_USER', 'EDIT_PRODUCT', 'DELETE_PRODUCT', 'EDIT_USER', 'ADD_PRODUCT']}
+{'type': 'admin', 'uid': '2oJLv51bGFzC', 'username': 'sanawaradmin', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'privileges': ['ADD_USER', 'DELETE_PRODUCT', 'ADD_PRODUCT', 'EDIT_PRODUCT', 'EDIT_USER', 'DELETE_USER']}
+{'type': 'admin', 'uid': '7nN1t6NNn03G', 'username': 'talhaadmin', 'password': '12345678@', 'full_name': 'Talha Adil', 'privileges': ['ADD_USER', 'DELETE_PRODUCT', 'ADD_PRODUCT', 'EDIT_PRODUCT', 'EDIT_USER', 'DELETE_USER']}
