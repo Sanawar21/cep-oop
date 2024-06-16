@@ -88,8 +88,7 @@ def check_privilege(func):
         if route_name not in Privilege.ALL or account.has_privilege(route_name.upper()):
             return func(*args, **kwargs)
         else:
-            # TODO: Think of a better way to tell that the admin does not have the necessary privilege
-            return "You do not have the privilege to perform this action."
+            return failure("You do not have the privilege to perform this action.", url_for("admin"))
 
     wrapper.__name__ = func.__name__
     wrapper.__doc__ = func.__doc__
