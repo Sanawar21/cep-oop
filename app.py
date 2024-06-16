@@ -23,7 +23,6 @@ account = None
 #       use a focus.
 # TODO: Save cart if user logs out before checking out.
 # TODO: Encrypt database (rb, wb, ab)
-# TODO: Disable own admin button to delete and edit
 # TODO: Create admin profile and user profile
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
@@ -88,8 +87,7 @@ def check_privilege(func):
         if route_name not in Privilege.ALL or account.has_privilege(route_name.upper()):
             return func(*args, **kwargs)
         else:
-            # TODO: Think of a better way to tell that the admin does not have the necessary privilege
-            return "You do not have the privilege to perform this action."
+            return failure("You do not have the privilege to perform this action.", url_for("admin"))
 
     wrapper.__name__ = func.__name__
     wrapper.__doc__ = func.__doc__
@@ -429,7 +427,7 @@ def admin():
         end_page = min(start_page + 4, total_pages)
         paginated_products = filtered_products[(
             page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/product.html", products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/product.html", current_admin=account, products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'users':
         accounts = database.get_accounts()
         users = [account for account in accounts if isinstance(
@@ -438,7 +436,7 @@ def admin():
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_users = users[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/user.html", users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/user.html", current_admin=account, users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'admins':
         accounts = database.get_accounts()
         admins = [account for account in accounts if isinstance(
@@ -447,9 +445,9 @@ def admin():
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_admins = admins[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/admin.html", admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/admin.html", current_admin=account, admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     else:
-        return render_template("./admin/admin.html")
+        return render_template("./admin/admin.html", current_admin=account)
 
 
 @app.route('/')

@@ -18,7 +18,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-           background: linear-gradient(to top, #42a983d7, #00c57fd7);
+            background: linear-gradient(to top, #42a983d7, #00c57fd7);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -101,12 +101,13 @@
             margin-right: -20px;
         }
 
-        .content a:not(.cross-button):hover{
+        .content a:not(.cross-button):hover {
             opacity: 0.8;
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
-        .add-button:hover{
+
+        .add-button:hover {
             opacity: 0.8;
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -408,7 +409,6 @@
             right: 10px;
             top: -2px;
         }
-        
     </style>
 </head>
 
@@ -444,28 +444,41 @@
                 {% endif %}
             </button>
         </form>
+        {% if current_admin.has_privilege("ADD_ADMIN") %}
         <a href="#addAdminModal" id="add-product-button" class="add-button">Add Admin</a>
+        {% endif %}
     </div>
 
 
     <div class="item-list">
+        <div class="item">
+            <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color:#2f8062d7;">{{
+                    current_admin.username }} (You)</strong>
+            </div>
+        </div>
         {% for admin in admins %}
+        {% if admin.uid != current_admin.uid %}
         <div class="item">
             <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color:#2f8062d7;">{{
                     admin.username }}</strong></div>
             <div class="item-buttons">
+                {% if current_admin.has_privilege("EDIT_ADMIN") %}
                 <form action="{{ url_for('edit_admin', uid=admin.uid) }}" method="get" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
                     </button>
                 </form>
+                {% endif %}
+                {% if current_admin.has_privilege("DELETE_ADMIN") %}
                 <form action="{{ url_for('delete_admin', uid=admin.uid) }}" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/delete.png" alt="Delete">
                     </button>
                 </form>
+                {% endif %}
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 
