@@ -23,7 +23,6 @@ account = None
 #       use a focus.
 # TODO: Save cart if user logs out before checking out.
 # TODO: Encrypt database (rb, wb, ab)
-# TODO: Disable own admin button to delete and edit
 # TODO: Create admin profile and user profile
 
 # when only_allow is called like this @only_allow(Admin), it will execute and
