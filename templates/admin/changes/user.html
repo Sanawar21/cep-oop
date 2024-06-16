@@ -36,7 +36,7 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            background: linear-gradient(to top, #42a983d7, #174132d7);
+           background: linear-gradient(to top, #42a983d7, #00c57fd7);
             padding: 20px;
             color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -106,7 +106,7 @@
             font-size: 1.5em;
             font-weight: bold;
             color: white;
-            background-image: linear-gradient(to left, #2f8062d7, #a57e2f);
+            background-color: #2f8062d7;
             border: none;
             border-radius: 50px;
             text-decoration: none;
@@ -115,7 +115,7 @@
             margin-right: -20px;
         }
 
-        .content a:not(.cross-button) .hover {
+        .content a:not(.cross-button) :hover {
             opacity: 0.8;
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
@@ -303,7 +303,13 @@
             width: 40px;
             height: 40px;
             margin-top: 5px;
+            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(107deg) brightness(106%) contrast(102%);
 
+        }
+        .add-button:hover{
+            opacity: 0.8;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
 
@@ -419,7 +425,7 @@
                 {% endif %}
             </button>
         </form>
-        <a href="#addUserModal" id="add-product-button">Add User</a>
+        <a href="#addUserModal" id="add-product-button" class="add-button">Add User</a>
     </div>
 
 
