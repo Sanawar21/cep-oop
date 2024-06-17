@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
-from classes.authenticate import Authenticator
-from classes.database import Database
-from classes.cart import Cart
-from classes.product import Product
-from classes.product import Product
-from classes.account import User, Admin, Privilege
-from classes.bank_details import BankDetails
-from classes.order import BankOrder, CodOrder
+from models.authenticate import Authenticator
+from models.database import Database
+from models.cart import Cart
+from models.product import Product
+from models.product import Product
+from models.account import User, Admin, Privilege
+from models.bank_details import BankDetails
+from models.order import BankOrder, CodOrder
 
 import os
 
