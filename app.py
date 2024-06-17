@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session, flash
-from classes.authenticate import Authenticator
-from classes.database import Database
-from classes.cart import Cart
-from classes.product import Product
-from classes.product import Product
-from classes.account import User, Admin, Privilege
-from classes.bank_details import BankDetails
-from classes.order import BankOrder, CodOrder
-import json
+from models.authenticate import Authenticator
+from models.database import Database
+from models.cart import Cart
+from models.product import Product
+from models.product import Product
+from models.account import User, Admin, Privilege
+from models.bank_details import BankDetails
+from models.order import BankOrder, CodOrder
+
 import os
 
 app = Flask(__name__)
@@ -436,7 +436,7 @@ def admin():
         start_page = max(1, page - 2)
         end_page = min(start_page + 4, total_pages)
         paginated_users = users[(page - 1) * per_page:page * per_page]
-        return render_template("./admin/changes/user.html",current_admin=account,  users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+        return render_template("./admin/changes/user.html", current_admin=account,  users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
     elif admin_type == 'admins':
         accounts = database.get_accounts()
         admins = [account for account in accounts if isinstance(
@@ -450,7 +450,7 @@ def admin():
         return render_template("./admin/admin.html", current_admin=account)
 
 # def get_product_by_uid(uid):
-   
+
 #     products = database.get_products()
 #     for product in products:
 #         if product.uid == uid:
@@ -468,6 +468,7 @@ def admin():
 #         })
 #     else:
 #         return jsonify({'error': 'Product not found'}), 404
+
 
 @app.route('/')
 def index():
