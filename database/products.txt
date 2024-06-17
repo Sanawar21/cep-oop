@@ -1,5 +1,4 @@
-{'title': "Men's Hines Sneaker", 'price': 62, 'uid': 'B0BQTCF22V'}
-{'title': 'Boys Salute T-Shirt', 'price': 15, 'uid': 'B0BHHZNJKZ'}
+{'title': 'Boys Salute T-Shirt', 'price': 50, 'uid': 'B0BHHZNJKZ'}
 {'title': 'Unisex-Child Frosty', 'price': 44, 'uid': 'B004QLAN92'}
 {'title': 'Vapor Crossbody Bag', 'price': 79, 'uid': 'B08R2LWSN8'}
 {'title': "Big Boys' Solid Tie", 'price': 8, 'uid': 'B00BHY3W44'}
@@ -91,3 +90,4 @@
 {'title': "Women's Mona Sandal", 'price': 89, 'uid': 'B0BF2P66KP'}
 {'title': 'Dead Rising 2 (PS3)', 'price': 35, 'uid': 'B002BWONEO'}
 {'title': 'Basket Sub-Assembly', 'price': 14, 'uid': 'B00JU7G6J8'}
+{'title': 'Head Phones', 'price': 100, 'uid': 'rOYB5mQmMVIY'}

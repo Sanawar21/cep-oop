@@ -457,7 +457,7 @@
         {% endfor %}
     </div>
 
-    <!-- Add User Modal -->
+
     <div id="addUserModal" class="modal">
         <div class="modal-content">
             <a href="#" class="close-button">&times;</a>
@@ -496,6 +496,7 @@
             </form>
         </div>
     </div>
+    
     <div class="pagination">
         <a class="prev-button{% if page == 1 %} disabled{% endif %}"
             href="{{ url_for('admin', type='users', page=page-1) }}">&lt;</a>
