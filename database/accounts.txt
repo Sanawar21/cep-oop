@@ -3,3 +3,4 @@
 {'type': 'admin', 'uid': '2oJLv51bGFzC', 'username': 'sanawaradmin', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'privileges': ['ADD_USER', 'EDIT_USER', 'ADD_PRODUCT', 'DELETE_USER', 'EDIT_PRODUCT', 'DELETE_PRODUCT']}
 {'type': 'admin', 'uid': '7nN1t6NNn03G', 'username': 'talhaadmin', 'password': '12345678@', 'full_name': 'Talha Adil', 'privileges': ['ADD_USER', 'EDIT_USER', 'ADD_PRODUCT', 'DELETE_USER', 'EDIT_PRODUCT', 'DELETE_PRODUCT']}
 {'type': 'admin', 'uid': 'nGAsYs4Nl7Jt', 'username': 'weakadmin', 'password': 'Sanawar21$$', 'full_name': 'Weak Admin', 'privileges': ['DELETE_USER', 'ADD_USER', 'EDIT_PRODUCT']}
+{'type': 'user', 'uid': '6iCJOCbQ5fMy', 'username': 'superadmin12123', 'password': 'password12212!', 'full_name': 'dssahdjhs', 'address': '12928928', 'bank_details': None}
