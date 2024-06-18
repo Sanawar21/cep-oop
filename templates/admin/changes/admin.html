@@ -7,8 +7,8 @@
     <title>Admin Panel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
     <script>
-        function openEditModal(uid, username, fullName,privileges) {
-        
+        function openEditModal(uid, username, fullName, privileges) {
+
             // Construct unique modal ID
             var modalId = "editProductModal_" + uid;
 
@@ -20,7 +20,7 @@
             <!-- Edit Product Modal -->
             <div id="${modalId}" class="modal">
                 <div style=" height:580px;margin-left: 400px; margin-top: 40px;margin-bottom:20px;" class="modal-content">
-                    <a href="{{ url_for('admin', type='admins') }}" class="close-button">&times;</a>
+                    <a href="{{ url_for('admin.edit_admin', type='admins') }}" class="close-button">&times;</a>
                     <h1 class="checkout-title">Edit Admins</h1>
                     <form method="post" action="${formAction}" enctype="multipart/form-data">
                         <label class="form-label" for="username">Username</label>
@@ -97,7 +97,7 @@
 
 <body>
     <div class="header">
-        <a href="{{url_for('admin')}}">
+        <a href="{{url_for('admin.index')}}">
             <h1>Admin Panel</h1>
         </a>
         <a href="{{url_for('logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
@@ -106,16 +106,17 @@
 
 
     <div class="navbar">
-        <a href="{{ url_for('admin', type='products') }}"
+        <a href="{{ url_for('admin.index', type='products') }}"
             class="{% if type == 'products' %}current-page{% endif %}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}" class="{% if type == 'users' %}current-page{% endif %}">Users</a>
-        <a href="{{ url_for('admin', type='admins') }}"
+        <a href="{{ url_for('admin.index', type='users') }}"
+            class="{% if type == 'users' %}current-page{% endif %}">Users</a>
+        <a href="{{ url_for('admin.index', type='admins') }}"
             class="{% if type == 'admins' %}current-page{% endif %}">Admins</a>
     </div>
 
 
     <div class="content">
-        <form action="{{ url_for('admin', type='admins') }}" method="get" class="search-form">
+        <form action="{{ url_for('admin.index', type='admins') }}" method="get" class="search-form">
             <input type="text" name="search" placeholder="Search admins..." value="{{ request.args.get('search', '') }}"
                 class="search-input">
             <input type="hidden" name="type" value="admins">
@@ -123,7 +124,7 @@
                 {% if not request.args.get('search', '') %}
                 <img class='search-logo' src="static/images/search.png" alt="searchlogo">
                 {% else %}
-                <a class="cross-button" href="{{url_for('admin',type='products')}}">&times;</a>
+                <a class="cross-button" href="{{url_for('admin.index',type='products')}}">&times;</a>
                 {% endif %}
             </button>
         </form>
@@ -145,13 +146,14 @@
             <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color:#2f8062d7;">{{
                     admin.username }}</strong></div>
             <div class="item-buttons">
-                {% if current_admin.has_privilege("EDIT_ADMIN") %}   
-                    <button type="button" class="action-button" onclick='openEditModal("{{ admin.uid }}", "{{ admin.username }}", "{{ admin.full_name }}","{{ admin.privileges }}");'>
-                        <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
-                    </button>
+                {% if current_admin.has_privilege("EDIT_ADMIN") %}
+                <button type="button" class="action-button"
+                    onclick='openEditModal("{{ admin.uid }}", "{{ admin.username }}", "{{ admin.full_name }}","{{ admin.privileges }}");'>
+                    <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
+                </button>
                 {% endif %}
                 {% if current_admin.has_privilege("DELETE_ADMIN") %}
-                <form action="{{ url_for('delete_admin', uid=admin.uid) }}" style="display:inline;">
+                <form action="{{ url_for('admin.delete_admin', uid=admin.uid) }}" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/delete.png" alt="Delete">
                     </button>
@@ -170,7 +172,7 @@
         margin-top: 240px;" class="modal-content">
             <a href="#" class="close-button">&times;</a>
             <h2>Add Admin</h2>
-            <form method="post" action="{{ url_for('add_admin') }}">
+            <form method="post" action="{{ url_for('admin.add_admin') }}">
                 <label class="form-label" for="username">Username</label>
                 <input class="form-input" type="text" id="username" name="username">
 
@@ -236,13 +238,13 @@
     </div>
     <div class="pagination">
         <a class="prev-button{% if page == 1 %} disabled{% endif %}"
-            href="{{ url_for('admin', type='admins', page=page-1) }}">&lt;</a>
+            href="{{ url_for('admin.index', type='admins', page=page-1) }}">&lt;</a>
         {% for p in range(start_page, end_page + 1) %}
         <a class="page-number{% if page == p %} active{% endif %}"
-            href="{{ url_for('admin', type='admins', page=p) }}">{{ p }}</a>
+            href="{{ url_for('admin.index', type='admins', page=p) }}">{{ p }}</a>
         {% endfor %}
         <a class="next-button{% if page == total_pages %} disabled{% endif %}"
-            href="{{ url_for('admin', type='admins', page=page+1) }}">&gt;</a>
+            href="{{ url_for('admin.index', type='admins', page=page+1) }}">&gt;</a>
     </div>
 </body>
 

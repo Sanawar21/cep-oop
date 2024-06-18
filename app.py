@@ -249,11 +249,11 @@ def add_product():
 @only_allow(Admin)
 @check_privilege
 def delete_admin(uid):
-    if uid != account.uid:
+    if "superadmin" != database.get_account(uid).username:
         database.delete_account(uid)
         return completion("Admin deleted successfully.", url_for("admin", type="admins"))
     else:
-        return failure("Cannot delete your own account.", url_for("admin", type="admins"))
+        return failure("Cannot delete the superadmin account.", url_for("admin", type="admins"))
 
 
 @app.route("/delete_user/<uid>")

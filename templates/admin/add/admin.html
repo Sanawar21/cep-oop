@@ -12,7 +12,7 @@
 <body>
   <div class="checkout-container">
     <h1 class="checkout-title">Add Admin</h1>
-    <form method="post" action="{{ url_for('add_admin') }}">
+    <form method="post" action="{{ url_for('admin.add_admin') }}">
       <label class="form-label" for="username">Username</label>
       <input class="form-input" type="text" id="username" name="username">
 
@@ -74,7 +74,7 @@
       <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Submit</button>
     </form>
-    <a class="back-link" href="{{ url_for('admin', type='admins') }}">Back to admin panel</a>
+    <a class="back-link" href="{{ url_for('admin.index', type='admins') }}">Back to admin panel</a>
   </div>
 </body>
 

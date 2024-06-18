@@ -1,4 +1,77 @@
 import os
+from .models.cart import Cart
+from .models.account import Privilege, Admin, User
+
+from flask import redirect, url_for, render_template
+from collections.abc import Callable
+
+
+def failure(action_detail, back_link):
+    template = "./admin/failure.html"
+    return render_template(template, action_detail=action_detail, back_link=back_link)
+
+
+def completion(action_detail, back_link):
+    template = "./admin/completion.html"
+    return render_template(template, action_detail=action_detail, back_link=back_link)
+
+
+def only_allow(account: Admin | User, types_: list[type] | type):
+    """
+    Some routes are only accessible to specific account types.
+    For example, only a User account can checkout, Only a privileged Admin can
+    edit products list.
+
+    This wrapper forces this functionality. It reroutes the app to the login page
+    if the current account type is not the allowed account type passed in the `types_` argument.
+
+    The programmer can also add a list of allowed types.
+    """
+    if type(types_) != list:
+        types_ = [types_]  # Convert the types_ argument into a list
+
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            if type(account) not in types_:
+                return redirect(url_for('logout'))
+            else:
+                return func(*args, **kwargs)
+
+        # This is important because flask searches endpoints with the function names.
+        # So if all functions are named `wrapper`, flask cannot differentiate between routes.
+        wrapper.__name__ = func.__name__
+        wrapper.__doc__ = func.__doc__
+        wrapper.__module__ = func.__module__
+
+        return wrapper
+    return decorator
+
+
+def check_privilege(account: Admin | User, privilege: str = None):
+    """
+    THIS DECORATOR IS OVERLOADED
+    if arg is passed, then the route for which the privilege will be checked will be the
+    arg.
+    else the function name will be checked
+    """
+
+    def decorator(func: Callable):
+
+        route_name = func.__name__ if not privilege else privilege
+
+        def wrapper(*args, **kwargs):
+            if route_name not in Privilege.ALL or account.has_privilege(route_name.upper()):
+                return func(*args, **kwargs)
+            else:
+                return failure("You do not have the privilege to perform this action.", url_for("admin"))
+
+        wrapper.__name__ = func.__name__
+        wrapper.__doc__ = func.__doc__
+        wrapper.__module__ = func.__module__
+
+        return wrapper
+
+    return decorator
 
 
 class Path(str):
