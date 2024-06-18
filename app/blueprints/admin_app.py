@@ -1,9 +1,7 @@
-from ..models.authenticate import Authenticator
-from ..models.database import Database
 from ..models.product import Product
 from ..models.account import User, Admin, Privilege
 from ..models.bank_details import BankDetails
-from ..utils import only_allow, check_privilege, completion, failure, Paths as paths
+from ..utils import only_allow, completion, failure, Paths as paths
 from .base_app import BaseApp
 
 import os
@@ -266,7 +264,7 @@ class AdminApp(BaseApp):
             except ValueError:
                 return render_with_error("The price must be an integer.")
 
-            uid = Database.generate_uid()
+            uid = self.database.generate_uid()
             if image:
                 if not image.filename.endswith(('png', 'jpg', 'jpeg')):
                     return render_with_error("Invalid image format. Only png, jpg and jpeg is allowed.")
