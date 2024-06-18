@@ -4,45 +4,32 @@ from ..models.product import Product
 from ..models.account import User, Admin, Privilege
 from ..models.bank_details import BankDetails
 from ..utils import only_allow, check_privilege, completion, failure, Paths as paths
+from .base_app import BaseApp
 
 import os
 
-from flask import Blueprint, render_template, request, url_for
+from flask import render_template, request, url_for
 
 
-class AdminApp(Blueprint):
+class AdminApp(BaseApp):
 
     def __init__(self, admin: Admin):
         super().__init__(
+            admin,
             "admin",
             __name__,
-            static_folder=paths.static,
-            template_folder=paths.admin_templates_base,
+            paths.admin_templates_base,
         )
-        self.database = Database()
-        self.authenticator = Authenticator()
-        self.admin = admin
-        self.add_routes()
 
-    def register_route(self, route, type_=Admin):
-        self.add_url_rule(f"/{route.__name__}", view_func=only_allow(
-            self.admin, [type_])(check_privilege(self.admin)(route)))
+    def register_route(self, route):
+        super().register_route(route, [Admin])
 
     def add_routes(self):
         self.add_url_rule("/", view_func=self.index)
-        self.index = only_allow(self.admin, [Admin])(self.index)
+        self.index = only_allow(self.account, [Admin])(self.index)
 
-        all_routes = [
-            self.add_admin,
-            self.edit_admin,
-            self.delete_admin,
-            self.add_user,
-            self.edit_user,
-            self.delete_user,
-            self.add_product,
-            self.edit_product,
-            self.delete_product,
-        ]
+        all_routes = [self.add_admin, self.edit_admin, self.delete_admin, self.add_user,
+                      self.edit_user, self.delete_user, self.add_product, self.edit_product, self.delete_product,]
 
         for route in all_routes:
             self.register_route(route)
@@ -63,7 +50,7 @@ class AdminApp(Blueprint):
             end_page = min(start_page + 4, total_pages)
             paginated_products = filtered_products[(
                 page - 1) * per_page:page * per_page]
-            return render_template("./changes/product.html", current_admin=self.admin, products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+            return render_template("./changes/product.html", current_admin=self.account, products=paginated_products, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
         elif admin_type == 'users':
             accounts = self.database.get_accounts()
             users = [account for account in accounts if isinstance(
@@ -72,7 +59,7 @@ class AdminApp(Blueprint):
             start_page = max(1, page - 2)
             end_page = min(start_page + 4, total_pages)
             paginated_users = users[(page - 1) * per_page:page * per_page]
-            return render_template("./changes/user.html", current_admin=self.admin, users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+            return render_template("./changes/user.html", current_admin=self.account, users=paginated_users, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
         elif admin_type == 'admins':
             accounts = self.database.get_accounts()
             admins = [account for account in accounts if isinstance(
@@ -81,9 +68,9 @@ class AdminApp(Blueprint):
             start_page = max(1, page - 2)
             end_page = min(start_page + 4, total_pages)
             paginated_admins = admins[(page - 1) * per_page:page * per_page]
-            return render_template("./changes/admin.html", current_admin=self.admin, admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
+            return render_template("./changes/admin.html", current_admin=self.account, admins=paginated_admins, page=page, total_pages=total_pages, start_page=start_page, end_page=end_page, type=admin_type)
         else:
-            return render_template("admin.html", current_admin=self.admin)
+            return render_template("admin.html", current_admin=self.account)
 
     def add_admin(self):
         template = "./admin/add/admin.html"
@@ -159,7 +146,7 @@ class AdminApp(Blueprint):
             )
             return completion("Admin edited successfully.", url_for("admin.index", type="admins"))
 
-        if uid != self.admin.uid:
+        if uid != self.account.uid:
             return render_template(template, admin=self.database.get_account(uid))
         else:
             return failure("Cannot edit your own account.", url_for("admin.index", type="admins"))
