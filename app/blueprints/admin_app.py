@@ -8,6 +8,7 @@ from ..models.bank_details import BankDetails
 from ..models.order import BankOrder, CodOrder
 from ..utils import only_allow, check_privilege, completion, failure, Paths as paths
 
+import os
 
 from flask import Flask, Blueprint, jsonify, render_template, request, redirect, url_for, session, flash
 
@@ -25,10 +26,16 @@ class AdminApp(Blueprint):
         self.authenticator = Authenticator()
         AdminApp.admin = admin
         self.add_routes()
+        self.apply_decorators()
+
+    def register_route(self, route):
+        self.add_url_rule(f"/{route.__name__}", view_func=only_allow(
+            self.admin, [Admin])(check_privilege(self.admin)(route)))
 
     def add_routes(self):
 
         self.add_url_rule("/", view_func=self.index)
+
         self.add_url_rule(
             "/add_admin", view_func=self.add_admin, methods=['GET', 'POST'])
         self.add_url_rule(
@@ -36,14 +43,43 @@ class AdminApp(Blueprint):
         self.add_url_rule(
             "/delete_admin/<uid>", view_func=self.delete_admin, methods=['GET', 'POST'])
 
+        self.add_url_rule(
+            "/add_user", view_func=self.add_user, methods=['GET', 'POST'])
+        self.add_url_rule(
+            "/edit_user/<uid>", view_func=self.edit_user, methods=['GET', 'POST'])
+        self.add_url_rule(
+            "/delete_user/<uid>", view_func=self.delete_user, methods=['GET', 'POST'])
+
+        self.add_url_rule(
+            "/add_product", view_func=self.add_product, methods=['GET', 'POST'])
+        self.add_url_rule(
+            "/edit_product/<uid>", view_func=self.edit_product, methods=['GET', 'POST'])
+        self.add_url_rule(
+            "/delete_product/<uid>", view_func=self.delete_product, methods=['GET', 'POST'])
+
     def apply_decorators(self):
-        self.index = only_allow([Admin])(self.index)
-        self.add_admin = only_allow([Admin])(
+        self.index = only_allow(self.admin, [Admin])(self.index)
+
+        self.add_admin = only_allow(self.admin, [Admin])(
             check_privilege(self.admin)(self.add_admin))
-        self.edit_admin = only_allow([Admin])(
+        self.edit_admin = only_allow(self.admin, [Admin])(
             check_privilege(self.admin)(self.edit_admin))
-        self.delete_admin = only_allow([Admin])(
+        self.delete_admin = only_allow(self.admin, [Admin])(
             check_privilege(self.admin)(self.delete_admin))
+
+        self.add_user = only_allow(self.admin, [Admin])(
+            check_privilege(self.admin)(self.add_user))
+        self.edit_user = only_allow(self.admin, [Admin])(
+            check_privilege(self.admin)(self.edit_user))
+        self.delete_user = only_allow(self.admin, [Admin])(
+            check_privilege(self.admin)(self.delete_user))
+
+        self.add_product = only_allow(self.admin, [Admin])(
+            check_privilege(self.admin)(self.add_product))
+        self.edit_product = only_allow(self.admin, [Admin])(
+            check_privilege(self.admin)(self.edit_product))
+        self.delete_product = only_allow(self.admin, [Admin])(
+            check_privilege(self.admin)(self.delete_product))
 
     def index(self):
         admin_type = request.args.get('type')
@@ -168,3 +204,178 @@ class AdminApp(Blueprint):
             return completion("Admin deleted successfully.", url_for("admin.index", type="admins"))
         else:
             return failure("Cannot delete the superadmin account.", url_for("admin.index", type="admins"))
+
+    def add_user(self):
+        template = "./admin/add/user.html"
+
+        if request.method == "POST":
+
+            username = request.form.get("username")
+            password = request.form.get("password")
+            full_name = request.form.get("full_name")
+            address = request.form.get('address')
+
+            bank_name = request.form.get("bank_name")
+            card_number = request.form.get("card_number")
+            pin = request.form.get("pin")
+
+            def render_with_error(error):
+                dummy_user = User(None, username, password, full_name,
+                                  address, BankDetails(bank_name, card_number, pin))
+                return render_template(template, user=dummy_user, error=error)
+
+            if not username or not password or not full_name or not address:
+                return render_with_error("All fields are required.")
+
+            if not self.authenticator.unique_username(username):
+                return render_with_error("This username is taken.")
+
+            if not self.authenticator.validate_username(username):
+                return render_with_error("Username cannot contain any special characters.")
+
+            if not self.authenticator.validate_password(password):
+                return render_with_error("Password must be atleast 8 characters with a special character and a number.")
+
+            # handle bank details
+            bank_details = None
+
+            if card_number and bank_name and pin:
+                if not BankDetails.validate_card_number(card_number):
+                    return render_with_error("Card number must be 10 digits.")
+                if not BankDetails.validate_pin(pin):
+                    return render_with_error("Pin must be 4 digit long.")
+                bank_details = BankDetails(bank_name, card_number, pin)
+            else:
+                if card_number or bank_name or pin:
+                    return render_with_error("All bank details should be filled or left empty.")
+
+            self.authenticator.sign_up(username, password,
+                                       full_name, address, bank_details)
+            return completion("User added successfully.", url_for("admin.index", type="users"))
+
+        return render_template(template)
+
+    def edit_user(self, uid):
+        template = "./admin/edit/user.html"
+
+        if request.method == "POST":
+
+            old_user = self.database.get_account(uid)
+
+            username = request.form.get("username")
+            full_name = request.form.get("full_name")
+            address = request.form.get('address')
+
+            def render_with_error(error):
+                dummy_user = User(old_user.uid, username, old_user.password,
+                                  full_name, address, old_user.bank_details)
+                return render_template(template, user=dummy_user, error=error)
+
+            if not username or not full_name or not address:
+                return render_with_error("All fields are required.")
+
+            if username != old_user.username and not self.authenticator.unique_username(username):
+                return render_with_error("This username is taken.")
+
+            if not self.authenticator.validate_username(username):
+                return render_with_error("Username cannot contain any special characters.")
+
+            self.database.overwrite_account(User(
+                old_user.uid, username, old_user.password, full_name, address, old_user.bank_details))
+            return completion("User edited successfully.", url_for("admin.index", type="users"))
+
+        return render_template(template, user=self.database.get_account(uid))
+
+    def delete_user(self, uid):
+        self.database.delete_account(uid)
+        return completion("User deleted successfully.", url_for("admin.index", type="users"))
+
+    def add_product(self):
+        template = "./admin/add/product.html"
+
+        if request.method == "POST":
+            title = request.form.get("title")
+            price = request.form.get("price")
+            image = request.files.get("image")
+
+            # for state management
+            def render_with_error(error):
+                return render_template(template, product=Product(title, price, None), error=error)
+
+            if not title or not price:
+                return render_with_error("All fields are required.")
+
+            if title in [p.title for p in self.database.get_products()]:  # title not unique
+                return render_with_error("This product title has been used.")
+
+            try:
+                price = int(price)
+            except ValueError:
+                return render_with_error("The price must be an integer.")
+
+            uid = Database.generate_uid()
+            if image:
+                if not image.filename.endswith(('png', 'jpg', 'jpeg')):
+                    return render_with_error("Invalid image format. Only png, jpg and jpeg is allowed.")
+                else:
+                    image.save(f"./static/images/{uid}.jpg")
+
+            self.database.save_product(Product(title, price, uid))
+            return completion("Product added successfully.", url_for("admin.index", type="products"))
+
+        return render_template(template)
+
+    def edit_product(self, uid):
+        template = "./admin/edit/product.html"
+
+        if request.method == "POST":
+
+            old_product = self.database.get_product(uid)
+
+            title = request.form.get("title")
+            price = request.form.get("price")
+            image = request.files.get("image")
+            image_choice = request.form.get("image_choice")
+
+            # for state management
+            def render_with_error(error):
+                return render_template(template, product=Product(title, price, uid), error=error)
+
+            if not title or not price:
+                return render_with_error("All fields are required.")
+
+            # title not unique
+            if title != old_product.title and title in [p.title for p in self.database.get_products()]:
+                return render_with_error("This product title has been used.")
+
+            try:
+                price = int(price)
+            except ValueError:
+                return render_with_error("The price must be an integer.")
+
+            # if there is an image in the form, overwrite the existing product image
+            # if the user wants to remove the image, delete the existing image
+            # if he wants to keep it, pass
+
+            if image:
+                if not image.filename.endswith(('png', 'jpg', 'jpeg')):
+                    return render_with_error("Invalid image format. Only png, jpg and jpeg is allowed.")
+                else:
+                    image.save(f"./static/images/{uid}.jpg")
+            else:
+                if image_choice == "remove":
+                    try:
+                        os.remove(f"./static/images/{uid}.jpg")
+                    except FileNotFoundError:
+                        pass
+                else:
+                    pass
+
+            self.database.overwrite_product(Product(title, price, uid))
+            return completion("Product edited successfully.", url_for("admin.index", type="products"))
+
+        return render_template(template, product=self.database.get_product(uid))
+
+    def delete_product(self, uid):
+        self.database.delete_product(uid)
+        return completion("Product deleted successfully.", url_for("admin.index", type="products"))
