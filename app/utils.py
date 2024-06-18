@@ -2,11 +2,15 @@ import os
 
 
 class Path(str):
-    # weak function, not robust but works for our case.
+    # weak class, not robust but works for our case.
     # removes the need to import addtional package (pathlib).
+
+    @property
+    def name(self):
+        return os.path.basename(self)
+
     def __truediv__(self, other):
-        if isinstance(other, (Path, str)):
-            return Path(os.path.join(self, other))
+        return Path(os.path.join(self, other))
 
 
 class Paths:
@@ -55,3 +59,10 @@ class Paths:
     history_template = store_templates_base / "history.html"
     products_template = store_templates_base / "products.html"
     product_detail_template = store_templates_base / "product_detail.html"
+
+    # auth paths
+    authentication_templates_base = templates / "user_authentication"
+    bank_details_template = authentication_templates_base / "bank_detail.html"
+    index_template = authentication_templates_base / "index.html"
+    login_template = authentication_templates_base / "login.html"
+    sign_up_template = authentication_templates_base / "signup.html"
