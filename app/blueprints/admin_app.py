@@ -1,16 +1,13 @@
 from ..models.authenticate import Authenticator
 from ..models.database import Database
-from ..models.cart import Cart
-from ..models.product import Product
 from ..models.product import Product
 from ..models.account import User, Admin, Privilege
 from ..models.bank_details import BankDetails
-from ..models.order import BankOrder, CodOrder
 from ..utils import only_allow, check_privilege, completion, failure, Paths as paths
 
 import os
 
-from flask import Flask, Blueprint, jsonify, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, url_for
 
 
 class AdminApp(Blueprint):
@@ -24,62 +21,31 @@ class AdminApp(Blueprint):
         )
         self.database = Database()
         self.authenticator = Authenticator()
-        AdminApp.admin = admin
+        self.admin = admin
         self.add_routes()
-        self.apply_decorators()
 
-    def register_route(self, route):
+    def register_route(self, route, type_=Admin):
         self.add_url_rule(f"/{route.__name__}", view_func=only_allow(
-            self.admin, [Admin])(check_privilege(self.admin)(route)))
+            self.admin, [type_])(check_privilege(self.admin)(route)))
 
     def add_routes(self):
-
         self.add_url_rule("/", view_func=self.index)
-
-        self.add_url_rule(
-            "/add_admin", view_func=self.add_admin, methods=['GET', 'POST'])
-        self.add_url_rule(
-            "/edit_admin/<uid>", view_func=self.edit_admin, methods=['GET', 'POST'])
-        self.add_url_rule(
-            "/delete_admin/<uid>", view_func=self.delete_admin, methods=['GET', 'POST'])
-
-        self.add_url_rule(
-            "/add_user", view_func=self.add_user, methods=['GET', 'POST'])
-        self.add_url_rule(
-            "/edit_user/<uid>", view_func=self.edit_user, methods=['GET', 'POST'])
-        self.add_url_rule(
-            "/delete_user/<uid>", view_func=self.delete_user, methods=['GET', 'POST'])
-
-        self.add_url_rule(
-            "/add_product", view_func=self.add_product, methods=['GET', 'POST'])
-        self.add_url_rule(
-            "/edit_product/<uid>", view_func=self.edit_product, methods=['GET', 'POST'])
-        self.add_url_rule(
-            "/delete_product/<uid>", view_func=self.delete_product, methods=['GET', 'POST'])
-
-    def apply_decorators(self):
         self.index = only_allow(self.admin, [Admin])(self.index)
 
-        self.add_admin = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.add_admin))
-        self.edit_admin = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.edit_admin))
-        self.delete_admin = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.delete_admin))
+        all_routes = [
+            self.add_admin,
+            self.edit_admin,
+            self.delete_admin,
+            self.add_user,
+            self.edit_user,
+            self.delete_user,
+            self.add_product,
+            self.edit_product,
+            self.delete_product,
+        ]
 
-        self.add_user = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.add_user))
-        self.edit_user = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.edit_user))
-        self.delete_user = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.delete_user))
-
-        self.add_product = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.add_product))
-        self.edit_product = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.edit_product))
-        self.delete_product = only_allow(self.admin, [Admin])(
-            check_privilege(self.admin)(self.delete_product))
+        for route in all_routes:
+            self.register_route(route)
 
     def index(self):
         admin_type = request.args.get('type')
