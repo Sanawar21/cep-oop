@@ -45,7 +45,7 @@
         .navbar {
             display: flex;
             justify-content: space-evenly;
-            background-color:#2f8062d7;
+            background-color: #2f8062d7;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -122,11 +122,11 @@
     </div>
 
     <div class="navbar">
-        <a href="{{ url_for('admin', type='products') }}"
+        <a href="{{ url_for('admin.index', type='products') }}"
             class="{% if type == 'products' %}active disabled{% endif %}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}"
+        <a href="{{ url_for('admin.index', type='users') }}"
             class="{% if type == 'users' %}active disabled{% endif %}">Users</a>
-        <a href="{{ url_for('admin', type='admins') }}"
+        <a href="{{ url_for('admin.index', type='admins') }}"
             class="{% if type == 'admins' %}active disabled{% endif %}">Admins</a>
     </div>
 
