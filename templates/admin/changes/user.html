@@ -396,7 +396,7 @@
 
 <body>
     <div class="header">
-        <a href="{{url_for('admin')}}">
+        <a href="{{url_for('admin.index')}}">
             <h1>Admin Panel</h1>
         </a>
         <a href="{{url_for('logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
@@ -405,16 +405,17 @@
 
 
     <div class="navbar">
-        <a href="{{ url_for('admin', type='products') }}"
+        <a href="{{ url_for('admin.index', type='products') }}"
             class="{% if type == 'products' %}current-page{% endif %}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}" class="{% if type == 'users' %}current-page{% endif %}">Users</a>
-        <a href="{{ url_for('admin', type='admins') }}"
+        <a href="{{ url_for('admin.index', type='users') }}"
+            class="{% if type == 'users' %}current-page{% endif %}">Users</a>
+        <a href="{{ url_for('admin.index', type='admins') }}"
             class="{% if type == 'admins' %}current-page{% endif %}">Admins</a>
     </div>
 
 
     <div class="content">
-        <form action="{{ url_for('admin', type='users') }}" method="get" class="search-form">
+        <form action="{{ url_for('admin.index', type='users') }}" method="get" class="search-form">
             <input type="text" name="search" placeholder="Search users..." value="{{ request.args.get('search', '') }}"
                 class="search-input">
             <input type="hidden" name="type" value="users">
@@ -422,7 +423,7 @@
                 {% if not request.args.get('search', '') %}
                 <img class='search-logo' src="static/images/search.png" alt="searchlogo">
                 {% else %}
-                <a class="cross-button" href="{{url_for('admin',type='products')}}">&times;</a>
+                <a class="cross-button" href="{{url_for('admin.index',type='products')}}">&times;</a>
                 {% endif %}
             </button>
         </form>
@@ -439,14 +440,14 @@
                     }}</strong></div>
             <div class="item-buttons">
                 {% if current_admin.has_privilege("EDIT_USER") %}
-                <form action="{{ url_for('edit_user', uid=user.uid) }}" method="get" style="display:inline;">
+                <form action="{{ url_for('admin.edit_user', uid=user.uid) }}" method="get" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
                     </button>
                 </form>
                 {% endif %}
                 {% if current_admin.has_privilege("DELETE_USER") %}
-                <form action="{{ url_for('delete_user', uid=user.uid) }}" style="display:inline;">
+                <form action="{{ url_for('admin.delete_user', uid=user.uid) }}" style="display:inline;">
                     <button type="submit" class="action-button">
                         <img src="static/images/delete.png" alt="Delete">
                     </button>
@@ -462,7 +463,7 @@
         <div class="modal-content">
             <a href="#" class="close-button">&times;</a>
             <h2>Add User</h2>
-            <form method="post" action="{{ url_for('add_user') }}">
+            <form method="post" action="{{ url_for('admin.add_user') }}">
                 <label class="form-label" for="username">Username</label>
                 <input class="form-input" type="text" id="username" name="username" value="{{username}}">
 
@@ -496,16 +497,16 @@
             </form>
         </div>
     </div>
-    
+
     <div class="pagination">
         <a class="prev-button{% if page == 1 %} disabled{% endif %}"
-            href="{{ url_for('admin', type='users', page=page-1) }}">&lt;</a>
+            href="{{ url_for('admin.index', type='users', page=page-1) }}">&lt;</a>
         {% for p in range(start_page, end_page + 1) %}
         <a class="page-number{% if page == p %} active{% endif %}"
-            href="{{ url_for('admin', type='users', page=p) }}">{{ p }}</a>
+            href="{{ url_for('admin.index', type='users', page=p) }}">{{ p }}</a>
         {% endfor %}
         <a class="next-button{% if page == total_pages %} disabled{% endif %}"
-            href="{{ url_for('admin', type='users', page=page+1) }}">&gt;</a>
+            href="{{ url_for('admin.index', type='users', page=page+1) }}">&gt;</a>
     </div>
 </body>
 

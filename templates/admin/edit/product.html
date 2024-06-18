@@ -153,7 +153,7 @@
 <body>
   <div class="checkout-container">
     <h1 class="checkout-title">Edit Product</h1>
-    <form method="post" action="{{ url_for('edit_product', uid=product.uid) }}" enctype="multipart/form-data">
+    <form method="post" action="{{ url_for('admin.edit_product', uid=product.uid) }}" enctype="multipart/form-data">
       <label class="form-label" for="title">Title</label>
       <input class="form-input" type="text" id="title" name="title" value="{{product.title}}">
 
@@ -179,7 +179,7 @@
       <p class="error">{{ error }}</p>
       <button class="checkout-button" type="submit">Submit</button>
     </form>
-    <a class="back-link" href="{{ url_for('admin', type='products') }}">Back to admin panel</a>
+    <a class="back-link" href="{{ url_for('admin.index', type='products') }}">Back to admin panel</a>
   </div>
 </body>
 
