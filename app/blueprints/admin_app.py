@@ -104,7 +104,7 @@ class AdminApp(BaseApp):
                 username, password, full_name, privileges)
             return completion("Admin added successfully.", url_for("admin.index", type="admins"))
 
-        return render_template(template, admin=None)
+        return render_template(template)
 
     def edit_admin(self, uid):
 
