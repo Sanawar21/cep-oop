@@ -17,10 +17,8 @@ class AdminApp(BaseApp):
             "admin",
             __name__,
             paths.admin_templates_base,
+            [Admin],
         )
-
-    def register_route(self, route):
-        super().register_route(route, [Admin], ["GET", "POST"])
 
     def add_routes(self):
         self.add_url_rule("/", view_func=self.index)
@@ -106,7 +104,7 @@ class AdminApp(BaseApp):
                 username, password, full_name, privileges)
             return completion("Admin added successfully.", url_for("admin.index", type="admins"))
 
-        return render_template(template)
+        return render_template(template, admin=None)
 
     def edit_admin(self, uid):
 
