@@ -20,7 +20,7 @@ class AdminApp(BaseApp):
         )
 
     def register_route(self, route):
-        super().register_route(route, [Admin])
+        super().register_route(route, [Admin], ["GET", "POST"])
 
     def add_routes(self):
         self.add_url_rule("/", view_func=self.index)
