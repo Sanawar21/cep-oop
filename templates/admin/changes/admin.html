@@ -410,6 +410,93 @@
             top: -2px;
         }
     </style>
+    <script>
+        function openEditModal(uid, username, fullName,privileges) {
+        
+            // Construct unique modal ID
+            var modalId = "editProductModal_" + uid;
+
+            // Construct dynamic form action URL
+            var formAction = "{{ url_for('edit_admin', uid='') }}" + uid;
+
+            // Create modal HTML
+            var modalHtml = `
+            <!-- Edit Product Modal -->
+            <div id="${modalId}" class="modal">
+                <div style=" height:620px;margin-left: 400px; margin-top: 40px;" class="modal-content">
+                    <a href="{{ url_for('admin', type='admins') }}" class="close-button">&times;</a>
+                    <h1 class="checkout-title">Edit Admins</h1>
+                    <form method="post" action="${formAction}" enctype="multipart/form-data">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-input" type="text" id="username" name="username" value="${username}">
+
+                        <label class="form-label" for="full_name">Full name</label>
+                        <input class="form-input" type="text" id="full_name" name="full_name" value="${fullName}">
+
+                        <fieldset>
+                            <legend class="form-label">Select Privileges</legend>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'ADD_USER' in privileges }} type="checkbox" id="ADD_USER" name="privileges[]"
+                                value="ADD_USER">
+                            <label for="ADD_USER">ADD USER</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'ADD_ADMIN' in privileges }} type="checkbox" id="ADD_ADMIN" name="privileges[]"
+                                value="ADD_ADMIN">
+                            <label for="ADD_ADMIN">ADD ADMIN</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'ADD_PRODUCT' in privileges }} type="checkbox" id="ADD_PRODUCT"
+                                name="privileges[]" value="ADD_PRODUCT">
+                            <label for="ADD_PRODUCT">ADD PRODUCT</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'EDIT_USER' in privileges }} type="checkbox" id="EDIT_USER" name="privileges[]"
+                                value="EDIT_USER">
+                            <label for="EDIT_USER">EDIT USER</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'EDIT_ADMIN' in privileges }} type="checkbox" id="EDIT_ADMIN" name="privileges[]"
+                                value="EDIT_ADMIN">
+                            <label for="EDIT_ADMIN">EDIT ADMIN</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'EDIT_PRODUCT' in privileges }} type="checkbox" id="EDIT_PRODUCT"
+                                name="privileges[]" value="EDIT_PRODUCT">
+                            <label for="EDIT_PRODUCT">EDIT PRODUCT</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'DELETE_USER' in privileges }} type="checkbox" id="DELETE_USER"
+                                name="privileges[]" value="DELETE_USER">
+                            <label for="DELETE_USER">DELETE USER</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'DELETE_ADMIN' in privileges }} type="checkbox" id="DELETE_ADMIN"
+                                name="privileges[]" value="DELETE_ADMIN">
+                            <label for="DELETE_ADMIN">DELETE ADMIN</label>
+                            </div>
+                            <div class="privilege-item">
+                            <input {{ 'checked' if 'DELETE_PRODUCT' in privileges }} type="checkbox" id="DELETE_PRODUCT"
+                                name="privileges[]" value="DELETE_PRODUCT">
+                            <label for="DELETE_PRODUCT">DELETE PRODUCT</label>
+                            </div>
+                        </fieldset>
+                        <br>
+
+                        <p class="error">{{ error }}</p>
+                        <button class="checkout-button" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>`;
+
+            // Append modal HTML to the body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Display the modal
+            document.getElementById(modalId).style.display = 'block';
+        }
+    </script>
+
 </head>
 
 <body>
@@ -462,12 +549,10 @@
             <div style="font-size: 18px;font-style: italic;">Admin name: <strong style="color:#2f8062d7;">{{
                     admin.username }}</strong></div>
             <div class="item-buttons">
-                {% if current_admin.has_privilege("EDIT_ADMIN") %}
-                <form action="{{ url_for('edit_admin', uid=admin.uid) }}" method="get" style="display:inline;">
-                    <button type="submit" class="action-button">
+                {% if current_admin.has_privilege("EDIT_ADMIN") %}   
+                    <button type="button" class="action-button" onclick='openEditModal("{{ admin.uid }}", "{{ admin.username }}", "{{ admin.full_name }}","{{ admin.privileges }}");'>
                         <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
                     </button>
-                </form>
                 {% endif %}
                 {% if current_admin.has_privilege("DELETE_ADMIN") %}
                 <form action="{{ url_for('delete_admin', uid=admin.uid) }}" style="display:inline;">
