@@ -1,6 +1,6 @@
-{'type': 'user', 'uid': '2', 'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil JODODOD', 'address': 'L327 5c3 north karachi', 'bank_details': None}
-{'type': 'admin', 'uid': '3', 'username': 'superadmin', 'password': 'superpassword', 'full_name': 'Super Admin', 'privileges': ['EDIT_PRODUCT', 'EDIT_ADMIN', 'EDIT_USER', 'ADD_PRODUCT', 'DELETE_USER', 'ADD_USER', 'DELETE_ADMIN', 'ADD_ADMIN', 'DELETE_PRODUCT']}
-{'type': 'admin', 'uid': '2oJLv51bGFzC', 'username': 'sanawaradmin123', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'privileges': ['ADD_USER', 'ADD_PRODUCT', 'ADD_ADMIN', 'EDIT_USER']}
-{'type': 'admin', 'uid': '7nN1t6NNn03G', 'username': 'talhaadmin', 'password': '12345678@', 'full_name': 'Talha Adil', 'privileges': ['EDIT_PRODUCT', 'EDIT_USER', 'ADD_PRODUCT', 'DELETE_USER', 'ADD_USER', 'DELETE_PRODUCT']}
-{'type': 'admin', 'uid': 'nGAsYs4Nl7Jt', 'username': 'weakadmin', 'password': 'Sanawar21$$', 'full_name': 'Weak Admin', 'privileges': ['EDIT_PRODUCT', 'DELETE_USER', 'ADD_USER']}
+{'type': 'user', 'uid': '2', 'username': 'talhaadil48', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'L327 5c3 north karachi', 'bank_details': None}
+{'type': 'admin', 'uid': '3', 'username': 'superadmin', 'password': 'superpassword', 'full_name': 'Super Admin', 'privileges': ['EDIT_PRODUCT', 'EDIT_ADMIN', 'EDIT_USER', 'DELETE_ADMIN', 'ADD_USER', 'ADD_PRODUCT', 'DELETE_PRODUCT', 'ADD_ADMIN', 'DELETE_USER']}
+{'type': 'admin', 'uid': '2oJLv51bGFzC', 'username': 'sanawaradmin123', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'privileges': ['ADD_USER', 'ADD_PRODUCT', 'EDIT_USER', 'ADD_ADMIN']}
+{'type': 'admin', 'uid': '7nN1t6NNn03G', 'username': 'talhaadmin', 'password': '12345678@', 'full_name': 'Talha Adil', 'privileges': ['EDIT_PRODUCT', 'EDIT_USER', 'ADD_USER', 'ADD_PRODUCT', 'DELETE_PRODUCT', 'DELETE_USER']}
+{'type': 'admin', 'uid': 'nGAsYs4Nl7Jt', 'username': 'weakadmin', 'password': 'Sanawar21$$', 'full_name': 'Weak Admin', 'privileges': ['ADD_USER', 'EDIT_PRODUCT', 'DELETE_USER']}
 {'type': 'user', 'uid': '6iCJOCbQ5fMy', 'username': 'superadmin12123', 'password': 'password12212!', 'full_name': 'dssahdjhs', 'address': '12928928', 'bank_details': None}
