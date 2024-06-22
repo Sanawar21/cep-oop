@@ -5,133 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout</title>
-  <style>
-    a:hover {
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background-color: rgb(49, 49, 49);
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .checkout-container {
-      background-image: linear-gradient(to bottom, #2f8062d7, #a57e2f);
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      padding: 40px;
-      max-width: 600px;
-      width: 100%;
-    }
-
-    .checkout-title {
-      color: #000000;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      color: #000000;
-      font-size: large;
-      font-weight: 400;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      background-color: #ffffff;
-      margin-bottom: 20px;
-      box-sizing: border-box;
-    }
-
-    .checkout-button {
-      background-color: #000000;
-      color: #ffffff;
-      font-size: large;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
-      margin-top: 5px;
-    }
-
-    .checkout-button:hover {
-      background-color: #333333;
-    }
-
-    .back-link {
-      display: block;
-      margin-top: 10px;
-      text-align: center;
-      color: #000000;
-      text-decoration: none;
-    }
-
-    .no-margin {
-      margin-bottom: 0px;
-    }
-
-    #invisible {
-      visibility: hidden;
-    }
-
-
-    .error {
-      color: rgb(154, 22, 22);
-      text-align: center;
-      padding-bottom: 10px;
-      font-weight: 600;
-      font-style: italic;
-    }
-
-    .switch-method-row {
-      display: flex;
-      justify-content: space-evenly;
-      gap: 10px;
-    }
-
-    .switch-method-row a {
-      display: block;
-      margin-top: 10px;
-      text-align: center;
-      color: #000000;
-      text-decoration: none;
-    }
-
-    .switch-method-row a:hover {
-      font-weight: bold;
-
-
-    }
-
-
-    .active {
-      font-weight: bold;
-      pointer-events: none;
-      cursor: default;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 </head>
 
 <body>
-  <div class="checkout-container">
-    <h1 class="checkout-title">Payment method</h1>
+  <div class="container">
+    <h1 class="title">Payment method</h1>
     <div class="switch-method-row">
       <a href="{{ url_for('checkout_cod') }}">Cash on delivery</a>
       <a class="active">Bank payment</a>
@@ -160,7 +39,7 @@
       <label class="form-label" for="pin">PIN:</label>
       <input class="form-input no-margin" type="password" id="address" name="pin" value="{{user.pin}}">
       <p class="error">{{ error }}</p>
-      <button class="checkout-button" type="submit">Checkout</button>
+      <button class="button" type="submit">Checkout</button>
     </form>
     <a class="back-link" href="{{ url_for('cart_') }}">Back to Cart</a>
   </div>

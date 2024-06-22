@@ -5,110 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: rgb(49, 49, 49);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-style: bold;
-        }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 
-        .login-container {
-            background-image: linear-gradient(to bottom, #2f8062d7, #a57e2f);
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .login-title {
-            color: #000000;
-            font-size: 36px;
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .login-form {
-            width: 100%;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            color: #000000;
-            font-size: large;
-            font-weight: 400;
-            margin-bottom: 15px;
-        }
-
-        .form-input {
-            font-weight: bold;
-            width: 380px;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            background-color: #FFFFFF;
-            margin-top: 5px;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #000000;
-        }
-
-        .login-button {
-            background-color: #000000;
-            color: #FFFFFF;
-            font-size: large;
-            font-weight: bold;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 20px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-button:hover {
-            background-color: #333333;
-        }
-
-        .back-link {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            color: #000000;
-            text-decoration: none;
-        }
-
-        .back-link:hover {
-            font-weight: 600;
-        }
-
-        .error {
-            color: rgb(154,22,22);
-            text-align: center;
-            padding-bottom: 10px;
-            font-weight: 600;
-            font-style: italic;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="login-container">
-        <h1 class="login-title">Login</h1>
-        <form class="login-form" method="post">
+    <div class="container">
+        <h1 class="title">Login</h1>
+        <form class="form" method="post">
             <div class="form-group">
                 <label class="form-label" for="username">Username:</label>
                 <input class="form-input" type="text" id="username" name="username">
@@ -118,7 +22,7 @@
                 <input class="form-input" type="password" id="password" name="password">
             </div>
             <p class="error">{{ error }}</p>
-            <button class="login-button" type="submit">Login</button>
+            <button class="button" type="submit">Login</button>
         </form>
         <a class="back-link" href="{{ url_for('index') }}">Back to Home</a>
     </div>

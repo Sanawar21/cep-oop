@@ -5,122 +5,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bank Details</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: rgb(49, 49, 49);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .details-container {
-      background-image: linear-gradient(to bottom, #2f8062d7, #a57e2f);
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-      padding: 40px;
-      max-width: 400px;
-      width: 100%;
-      height: 430px;
-      
-    }
-
-    .details-title {
-      color: #000000;
-      font-size: 36px;
-      text-align: center;
-      margin-bottom: 20px;
-      font-weight: bold;
-      margin-top: -3px;
-    }
-
-    .details-form {
-      width: 100%;
-      margin-top: -20px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      color: #000000;
-      font-size: large;
-      font-weight: 400;
-      margin-bottom: 5px;
-      display: block;
-    }
-
-    .form-input {
-      font-weight: bold;
-      width: 100%;
-      padding: 10px;
-      border: none;
-      /* Black border */
-      border-radius: 4px;
-      font-size: 16px;
-      background-color: #FFFFFF;
-      transition: border-color 0.3s ease;
-      box-sizing: border-box;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #000000;
-    }
-
-    .details-button {
-      background-color: #000000;
-      color: #FFFFFF;
-      font-size: large;
-      font-weight: bold;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-
-    .details-button:hover {
-      background-color: #333333;
-    }
-
-    .back-link {
-      display: block;
-      margin-top: 10px;
-      text-align: center;
-      color: #000000;
-      text-decoration: none;
-    }
-
-    .back-link:hover {
-      text-decoration-line: underline;
-    }
-
-    padding {
-      padding: 50px;
-    }
-
-    .error {
-      color: rgb(154,22,22);
-      text-align: center;
-      padding-bottom: 10px;
-      font-weight: bold;
-      font-style: italic;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 </head>
 
 <body>
-  <div class="details-container">
-    <h1 class="details-title">Bank Details</h1>
-    <p class="error">{{ error }}</p>
+  <div class="container">
+    <h1 class="title">Bank Details</h1>
     <padding />
-    <form class="details-form" method="post">
+    <form class="form" method="post">
       <div class="form-group">
         <label class="form-label" for="bank_name">Bank name:</label>
         <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{bank_name}}">
@@ -133,7 +25,8 @@
         <label class="form-label" for="pin">Pin:</label>
         <input class="form-input" type="text" id="pin" name="pin" value="{{pin}}">
       </div>
-      <button class="details-button" type="submit">Sign Up</button>
+      <p class="error">{{ error }}</p>
+      <button class="button" type="submit">Sign Up</button>
     </form>
     <a class="back-link" href="{{ url_for('no_bank_details') }}">Continue without bank details</a>
     <a class="back-link" href="{{ url_for('signup') }}">Back to sign up page</a>
