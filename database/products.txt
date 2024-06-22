@@ -1,4 +1,4 @@
-{'title': 'Trendy T-Shirt', 'price': 8000, 'uid': 'B0BHHZNJKZ'}
+{'title': 'Trendy T-Shirt', 'price': 100, 'uid': 'B0BHHZNJKZ'}
 {'title': 'Unisex-Child Frosty', 'price': 44, 'uid': 'B004QLAN92'}
 {'title': 'Vapor Crossbody Bag', 'price': 79, 'uid': 'B08R2LWSN8'}
 {'title': "Big Boys' Solid Tie", 'price': 8, 'uid': 'B00BHY3W44'}
