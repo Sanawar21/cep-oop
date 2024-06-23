@@ -67,7 +67,7 @@
         </ul>
         <p class="cart-total">Total Bill: ${{ cart.bill }}</p>
         <div class="cart-actions">
-            <a href="{{ url_for('checkout') }}">Checkout</a>
+            <a href="{{ url_for('checkout.index') }}">Checkout</a>
             <a href="{{ url_for('logout') }}">Logout</a>
         </div>
         {% else %}

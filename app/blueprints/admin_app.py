@@ -21,11 +21,20 @@ class AdminApp(BaseApp):
         )
 
     def add_routes(self):
-        self.add_url_rule("/", view_func=self.index)
         self.index = only_allow(self.account, [Admin])(self.index)
+        self.add_url_rule("/", view_func=self.index)
 
-        all_routes = [self.add_admin, self.edit_admin, self.delete_admin, self.add_user,
-                      self.edit_user, self.delete_user, self.add_product, self.edit_product, self.delete_product,]
+        all_routes = [
+            self.add_admin,
+            self.edit_admin,
+            self.delete_admin,
+            self.add_user,
+            self.edit_user,
+            self.delete_user,
+            self.add_product,
+            self.edit_product,
+            self.delete_product,
+        ]
 
         for route in all_routes:
             self.register_route(route)

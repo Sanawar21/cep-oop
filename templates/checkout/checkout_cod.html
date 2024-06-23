@@ -14,9 +14,9 @@
     <h1 class="title">Payment method</h1>
     <div class="switch-method-row">
       <a class="active">Cash on delivery</a>
-      <a href="{{ url_for('checkout_bank') }}">Bank payment</a>
+      <a href="{{ url_for('checkout.bank') }}">Bank payment</a>
     </div>
-    <form method="post" action="{{ url_for('checkout_cod') }}">
+    <form method="post" action="{{ url_for('checkout.cod') }}">
       <label class="form-label" for="email">Email</label>
       <input class="form-input" type="text" id="email" name="email" value="{{email}}">
       <label class="form-label" for="phone">Phone number</label>
@@ -32,7 +32,7 @@
       <p class="error">{{ error }}</p>
       <button class="button" type="submit">Checkout</button>
     </form>
-    <a class="back-link" href="{{ url_for('cart_') }}">Back to Cart</a>
+    <a class="back-link" href="{{ url_for('user.cart') }}">Back to Cart</a>
   </div>
 </body>
 

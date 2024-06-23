@@ -26,7 +26,7 @@ class BaseApp(Blueprint, ABC):
 
     def register_route(self, route_handler: Callable):
         """
-        Applies
+        Applies decorators to the routes and adds them to the blueprint
         """
         route_code = route_handler.__code__
         route_name = f"/{route_handler.__name__}/" + "/".join(
@@ -48,5 +48,17 @@ class BaseApp(Blueprint, ABC):
         )
 
     @abstractmethod
-    def add_routes():
+    def add_routes(self):
+        """
+        format:
+        all_routes = [
+            self.route1,
+            self.route2,
+            self.route3,
+        ]
+
+        for route in all_routes:
+            self.register_route(route)
+
+        """
         pass
