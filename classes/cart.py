@@ -21,8 +21,7 @@ class Item:
             return False
 
     def __str__(self) -> str:
-        as_string = f"Title: {self.product.title}\nPrice: Rs.{
-            self.product.price}\nQuantity: {self.quantity}"
+        as_string = f"Title: {self.product.title}\nPrice: Rs.{self.product.price}\nQuantity: {self.quantity}"
 
         return as_string
 
