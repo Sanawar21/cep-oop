@@ -7,7 +7,7 @@
     <title>Products</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/products.css') }}">
 
-    
+
 </head>
 
 <body>
@@ -15,27 +15,27 @@
     <div class="container">
         <div class="header">
             <div class="search-container">
-                <form action="{{ url_for('products') }}" method="get">
+                <form action="{{ url_for('user.products') }}" method="get">
                     <input value="{{ query | default('', true) }}" type="text" class="search-input" name="query"
                         placeholder="Search products...">
                     <button type="submit" class="search-button">
                         {% if not query %}
-                        <img class="search-logo" src="static/images/search.png" alt="Search Logo">
+                        <img class="search-logo" src="../static/images/search.png" alt="Search Logo">
                         {% else %}
-                        <a class="cross-button" href="{{url_for('products')}}">&times;</a>
+                        <a class="cross-button" href="{{url_for('user.products')}}">&times;</a>
                         {% endif %}
                     </button>
                 </form>
             </div>
             <div class="logos">
-                <a class="to-cart" href="{{ url_for('cart_') }}">
-                    <img class="cart-logo" src="static/images/cartLogo.png" alt="Cart Logo">
+                <a class="to-cart" href="{{ url_for('user.cart') }}">
+                    <img class="cart-logo" src="../static/images/cartLogo.png" alt="Cart Logo">
                 </a>
-                <a class="to-cart" href="{{ url_for('history') }}">
-                    <img class="history-logo" src="static/images/orderHistoryLogo.png" alt="Order History Logo">
+                <a class="to-cart" href="{{ url_for('user.history') }}">
+                    <img class="history-logo" src="../static/images/orderHistoryLogo.png" alt="Order History Logo">
                 </a>
                 <a class="to-cart" href="{{ url_for('logout') }}">
-                    <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+                    <img class="logout-logo" src="../static/images/logoutLogo.png" alt="Logout Logo">
                 </a>
             </div>
         </div>
@@ -45,12 +45,12 @@
             <ul class="product-list">
                 {% for product in new_arrivals_list %}
                 <li class="product">
-                    <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
+                    <img class="product-image" src="../{{ product.image_path }}" alt="{{ product.title }}">
                     <div class="product-info">
                         <p class="product-name">{{ product.title }}</p>
                         <p class="product-price">${{ product.price }}</p>
                     </div>
-                    <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}"
+                    <form class="cart-form" action="{{ url_for('user.product_detail', product_id=product.uid) }}"
                         method="get">
                         <button class="cart-button" type="submit">View product</button>
                     </form>
@@ -68,12 +68,12 @@
                 {% if products %}
                 {% for product in products %}
                 <li class="product">
-                    <img class="product-image" src="{{ product.image_path }}" alt="{{ product.title }}">
+                    <img class="product-image" src="../{{ product.image_path }}" alt="{{ product.title }}">
                     <div class="product-info">
                         <p class="product-name">{{ product.title }}</p>
                         <p class="product-price">${{ product.price }}</p>
                     </div>
-                    <form class="cart-form" action="{{ url_for('product_detail', product_id=product.uid) }}"
+                    <form class="cart-form" action="{{ url_for('user.product_detail', product_id=product.uid) }}"
                         method="get">
                         <button class="cart-button" type="submit">View product</button>
                     </form>
@@ -87,20 +87,20 @@
             </ul>
         </div>
         {% if products %}
-    
+
         <div class="pagination">
             <a class="prev-button{% if page == 1 %} disabled{% endif %}"
-                href="{{ url_for('products',page=page-1) }}">&lt;</a>
+                href="{{ url_for('user.products',page=page-1) }}">&lt;</a>
             {% for p in range(start_page, end_page + 1) %}
-            <a class="page-number{% if page == p %} active{% endif %}"
-                href="{{ url_for('products',page=p) }}">{{ p }}</a>
+            <a class="page-number{% if page == p %} active{% endif %}" href="{{ url_for('user.products',page=p) }}">{{ p
+                }}</a>
             {% endfor %}
             <a class="next-button{% if page == total_pages %} disabled{% endif %}"
-                href="{{ url_for('products', page=page+1) }}">&gt;</a>
+                href="{{ url_for('user.products', page=page+1) }}">&gt;</a>
         </div>
-    
+
         {% else %}
-        <a class="back-to-products" href="{{url_for('products')}}">Back to Products</a>
+        <a class="back-to-products" href="{{url_for('user.products')}}">Back to Products</a>
         {% endif %}
 
     </div>
