@@ -5,377 +5,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            color: #333;
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <script>
+
+        function openEditModal(title, uid, price) {
+            // Construct unique modal ID
+            var modalId = "editProductModal_" + uid;
+
+            // Construct dynamic form action URL
+            var formAction = "{{ url_for('edit_product', uid='') }}" + uid;
+
+            // Create modal HTML
+            var modalHtml = `
+            <!-- Edit Product Modal -->
+            <div id="${modalId}" class="modal">
+                <div style="margin-left:400px;margin-top:40px" class="modal-content">
+                   <a href="{{ url_for('admin', type='products') }}" class="close-button">&times;</a>
+                    <h1 class="checkout-title">Edit Product</h1>
+                    <form  method="post" action="${formAction}" enctype="multipart/form-data">
+                        <input type="hidden" id="edit-uid" name="uid">
+                        <label style="font-size: 16px;font-weight: bold;" class="form-label" for="edit-title">Title</label>
+                        <input class="form-input" type="text" id="edit-title" value="${title}" name="title">
+
+                        <fieldset>
+                            <legend class="form-label">Image (optional)</legend>
+                            <input class="form-label" type="file" name="image" id="edit-image" accept="image/*">
+                        </fieldset>
+                        <br>
+
+                        <label style="font-size: 16px;font-weight: bold;" class="form-label" for="edit-price">Price</label>
+                        <input class="form-input no-margin" type="text" id="edit-price" value="${price}" name="price">
+
+                        <p class="error">{{ error }}</p>
+                        <button class="checkout-button" type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+        `;
+
+            // Append modal HTML to the body
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+            // Display the modal
+            document.getElementById(modalId).style.display = 'block';
         }
+        /*  */
 
-
-        .header {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            background: linear-gradient(to top, #42a983d7, #00c57fd7);
-            padding: 20px;
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-        }
-
-        .add-button:hover {
-            opacity: 0.8;
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 2.5em;
-            margin-left: 20px;
-
-        }
-
-        .header a {
-            text-decoration: none;
-            color: #ffffff;
-        }
-
-        .navbar {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-            background-color: #2f8062d7;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-
-        .navbar a {
-            text-align: center;
-            display: inline-block;
-            padding: 15px 25px;
-            color: white;
-            text-decoration: none;
-            transition: background-color 0.3s, transform 0.3s;
-            font-size: 1.2em;
-            font-weight: bold;
-            width: 100%;
-        }
-
-
-        .navbar .current-page {
-            cursor: default;
-            pointer-events: none;
-            transform: none;
-            background-color: #1f6149d7;
-        }
-
-        .navbar a:hover {
-            transform: translateY(-5px);
-        }
-
-        .content {
-            flex: 1;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            padding: 20px;
-            background-color: #f4f4f4;
-            text-align: center;
-
-        }
-
-        .content a:not(.cross-button) {
-            display: inline-block;
-            padding: 15px 30px;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: white;
-            background-color: #2f8062d7;
-            border: none;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            margin-right: -20px;
-        }
-
-        .content a:not(.cross-button) :hover {
-            opacity: 0.8;
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .content a:not(.cross-button) :active {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .item-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 20px;
-            max-width: 800px;
-            margin: auto;
-            margin-top: -20px;
-        }
-
-        .item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .item:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-
-        .action-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            margin-right: 12px;
-        }
-
-        .action-button img {
-            width: 26px;
-            height: 26px;
-            transition: transform 0.3s;
-        }
-
-        .action-button img:hover {
-            transform: scale(1.2);
-        }
-
-        .info-container {
-            font-size: 18px;
-            font-style: italic;
-        }
-
-        /* Modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 500;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7);
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background-image: linear-gradient(to bottom, #2f8062d7, #a57e2f);
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            width: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #000;
-            position: relative;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 4px;
-            right: 10px;
-            text-decoration: none;
-            color: black;
-            z-index: 1200;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .close-button:hover,
-        .close-button:focus {
-            color: #333;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Form styles */
-        .modal-content form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        .form-label {
-            font-size: 18px;
-            margin-bottom: 10px;
-            color: #333;
-
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #2f8062d7;
-            box-shadow: 0 0 10px rgba(0, 171, 228, 0.5);
-        }
-
-        .error {
-            color: rgb(154, 22, 22);
-            font-size: 16px;
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-
-        .checkout-button {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .checkout-button:hover {
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        .checkout-button:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal:target {
-            display: flex;
-        }
-
-        .modal:target {
-            filter: none;
-        }
-
-        .modal:target body {
-            overflow: hidden;
-            filter: blur(5px);
-            transition: filter 0.3s ease;
-        }
-
-
-        .logout-logo {
-            object-fit: contain;
-            width: 40px;
-            height: 40px;
-            margin-top: 5px;
-            filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(107deg) brightness(106%) contrast(102%);
-
-        }
-
-
-
-        .pagination {
-            margin-top: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .pagination a {
-            display: inline-block;
-            padding: 8px 16px;
-            margin: 0 5px;
-            border-radius: 5px;
-            color: #333;
-            background-color: #f4f4f4;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .pagination a:hover {
-            background-color: #ddd;
-        }
-
-        .pagination .active {
-            background-color: #2f8062d7;
-            ;
-            color: white;
-        }
-
-        .pagination .disabled {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        .search-form {
-            display: flex;
-            justify-content: center;
-            position: relative;
-
-        }
-
-        .search-input {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 20px;
-            box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
-            outline: none;
-            transition: box-shadow 0.3s ease;
-            width: 300px;
-            height: 28px;
-            font-size: 16px;
-            margin-right: 10px;
-            margin-left: -26px;
-        }
-
-        .search-input:focus {
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .search-button {
-            background-color: transparent;
-            border: none;
-            position: absolute;
-            top: 10px;
-            right: 15px;
-        }
-
-        .cross-button {
-            color: black;
-            text-decoration: none;
-            font-size: 26px;
-            font-weight: bold;
-            position: absolute;
-            right: 10px;
-            top: -2px;
-
-        }
-    </style>
+    </script>
 </head>
 
 <body>
+
     <div class="header">
         <a href="{{url_for('admin.index')}}">
             <h1>Admin Panel</h1>
@@ -421,9 +101,9 @@
             </div>
             <div class="item-buttons">
                 {% if current_admin.has_privilege("EDIT_PRODUCT") %}
-                <form action="{{ url_for('admin.edit_product', uid=product.uid) }}" method="get"
-                    style="display:inline;">
-                    <button type="submit" class="action-button">
+                <form action="{{ url_for('edit_product', uid=product.uid) }}" method="get" style="display:inline;">
+                    <button type="button" class="action-button"
+                        onclick='openEditModal("{{ product.title }}","{{ product.uid }}","{{ product.price }}");'>
                         <img src="static/images/pencil.png" style="width: 24px;height: 24px;" alt="Edit">
                     </button>
                 </form>
@@ -474,5 +154,6 @@
     </div>
 
 </body>
+
 
 </html>
