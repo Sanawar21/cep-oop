@@ -5,3 +5,4 @@
 {'type': 'admin', 'uid': 'nGAsYs4Nl7Jt', 'username': 'weakadmin', 'password': 'Sanawar21$$', 'full_name': 'Weak Admin', 'privileges': ['ADD_USER', 'EDIT_PRODUCT', 'DELETE_USER']}
 {'type': 'user', 'uid': '6iCJOCbQ5fMy', 'username': 'superadmin12123', 'password': 'password12212!', 'full_name': 'dssahdjhs', 'address': '12928928', 'bank_details': None}
 {'type': 'user', 'uid': 'aeIL5HpxTPqH', 'username': 'talhaadil481', 'password': '12345678@12', 'full_name': 'dsad', 'address': 'sakdsjask', 'bank_details': {'bank_name': 'Bank Al Habib', 'card_number': '1234567890', 'pin': '1234'}}
+{'type': 'user', 'uid': 'ztL8SfQBaBEf', 'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'bank_name': 'HBL Islamic', 'card_number': '1231231231', 'pin': '1234'}}
