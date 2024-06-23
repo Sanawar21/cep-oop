@@ -14,6 +14,8 @@ from flask import request, render_template, jsonify
 # TODO: Remove log out button from cart display page, and do not use text buttons there as well
 # TODO: Remove log out from order history page.
 # TODO: Look at other websites for inspiration for text buttons.
+# TODO: Fix form ui design bug in checkout, form has not margin
+# TODO: Fix bug, products not showing up in order history.
 
 class UserApp(BaseApp):
     def __init__(self, user: User):
@@ -25,8 +27,6 @@ class UserApp(BaseApp):
             [User],
             # not working; changes made in html template paths instead
             statics=paths.static + "/.."
-            # paths.static + "/.."
-            # os.path.join(paths.static, "..")
         )
         self.cart_ = Cart(self.database.generate_uid())
 
