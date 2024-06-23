@@ -8,6 +8,12 @@ from flask import request, render_template, jsonify
 
 
 # TODO: Fix add to cart and remove from cart buttons on product detail page @talha.
+# TODO: Remove view product button, instead click on the card itself.
+# TODO: Use back arrow button in top left of the container instead of text button for back to products
+# TODO: Do not use text buttons in product detail for back to products and add to / remove from cart
+# TODO: Remove log out button from cart display page, and do not use text buttons there as well
+# TODO: Remove log out from order history page.
+# TODO: Look at other websites for inspiration for text buttons.
 
 class UserApp(BaseApp):
     def __init__(self, user: User):
