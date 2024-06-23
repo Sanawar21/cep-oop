@@ -9,11 +9,11 @@ from collections.abc import Callable
 
 
 class BaseApp(Blueprint, ABC):
-    def __init__(self, account: User | Admin, name, import_name, templates, allowed_types: list[type], allowed_methods=["GET", "POST"]):
+    def __init__(self, account: User | Admin, name, import_name, templates, allowed_types: list[type], statics=paths.static, allowed_methods=["GET", "POST"]):
         super().__init__(
             name,
             import_name,
-            static_folder=paths.static,
+            static_folder=statics,
             template_folder=templates,
         )
 

@@ -86,13 +86,13 @@
         .cart-actions {
             text-align: center;
             margin-top: 15px;
-            
+
         }
 
         .cart-actions a {
             display: inline-block;
             text-decoration: none;
-            background-color:#2f8062d7;
+            background-color: #2f8062d7;
             border: none;
             border-radius: 5px;
             padding: 10px 20px;
@@ -106,7 +106,7 @@
         }
 
         .cart-actions a:hover {
-            background-color:#42a983d7;
+            background-color: #42a983d7;
         }
 
         .quantifier {
@@ -121,13 +121,13 @@
         .cart-button {
             width: 25px;
             height: 25px;
-            background-color:#42a983d7;
+            background-color: #42a983d7;
             border: none;
             text-align: center;
             cursor: pointer;
             font-weight: bold;
             border-radius: 6px;
-         
+
 
         }
 
@@ -175,18 +175,18 @@
         <ul class="cart-list">
             {% for item in cart.items %}
             <li class="cart-item">
-                <img src="{{ item.product.image_path }}" alt="{{ item.product.title }}">
+                <img src="../{{ item.product.image_path }}" alt="{{ item.product.title }}">
                 <div class="cart-info">
                     <p>{{ item.product.title }}</p>
                     <p>${{item.product.price}}
                     </p>
                     <div class="quantifier">
-                        <form class="cart-form" action="{{ url_for('add_to_cart')}}" method="post">
+                        <form class="cart-form" action="{{ url_for('user.add_to_cart')}}" method="post">
                             <input type="hidden" name="product_id" value="{{ item.product.uid }}">
                             <button class="cart-button" type="submit">+</button>
                         </form>
                         <p class="para">{{item.quantity}}</p>
-                        <form class="cart-form" action="{{ url_for('remove_from_cart')}}" method="post">
+                        <form class="cart-form" action="{{ url_for('user.remove_from_cart')}}" method="post">
                             <input type="hidden" name="product_id" value="{{ item.product.uid }}">
                             <button class="cart-button" type="submit">-</button>
                         </form>
@@ -204,7 +204,7 @@
         <p>Your cart is empty.</p>
         {% endif %}
         <div class="cart-actions">
-            <a href="{{ url_for('products')}}">Back to Products</a>
+            <a href="{{ url_for('user.products')}}">Back to Products</a>
         </div>
     </div>
 </body>

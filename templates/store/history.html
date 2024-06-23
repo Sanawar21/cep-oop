@@ -27,7 +27,7 @@
         }
 
         .order {
-            background-color:#2f8062d7;
+            background-color: #2f8062d7;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -50,7 +50,7 @@
         }
 
         .order-item {
-            background-color:#2f8062d7;
+            background-color: #2f8062d7;
             padding: 10px;
             margin-bottom: 5px;
             border-radius: 5px;
@@ -99,7 +99,7 @@
     <div class="container">
         <h1 class="title">Order History</h1>
         <div class="navbar">
-            <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
+            <a class="btn" href="{{ url_for('user.products') }}">Back to Products</a>
             <a class="btn" href="{{ url_for('logout') }}">Logout</a>
         </div>
         {% if orders %}
