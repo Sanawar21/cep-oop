@@ -32,7 +32,7 @@ def only_allow(account: Admin | User, types_: list[type] | type):
     def decorator(func):
         def wrapper(*args, **kwargs):
             if type(account) not in types_:
-                return redirect(url_for('logout'))
+                return redirect(url_for('authenticate.logout'))
             else:
                 return func(*args, **kwargs)
 
