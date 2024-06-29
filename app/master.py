@@ -9,7 +9,7 @@ class MasterApp(Flask):
     def __init__(self):
         super().__init__(__name__)
         self.secret_key = "beKxrYWowAlz"
-        self.register_blueprint(AdminApp(), url_prefix="")
+        self.register_blueprint(AuthenticationApp(), url_prefix="")
         self.register_blueprint(UserApp(), url_prefix="")
-        self.register_blueprint(CheckoutApp(), url_prefix="/admin")
-        self.register_blueprint(AuthenticationApp(), url_prefix="/checkout")
+        self.register_blueprint(AdminApp(), url_prefix="/admin")
+        self.register_blueprint(CheckoutApp(), url_prefix="/checkout")
