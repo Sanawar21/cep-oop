@@ -68,7 +68,6 @@
         <p class="cart-total">Total Bill: ${{ cart.bill }}</p>
         <div class="cart-actions">
             <a href="{{ url_for('checkout') }}">Checkout</a>
-            <a href="{{ url_for('logout') }}">Logout</a>
         </div>
         {% else %}
         <p>Your cart is empty.</p>
@@ -76,6 +75,9 @@
         <div class="cart-actions">
             <a href="{{ url_for('products')}}">Back to Products</a>
         </div>
+        <a class="to-cart" href="{{ url_for('logout') }}">
+            <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+        </a>
     </div>
 </body>
 

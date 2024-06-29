@@ -13,7 +13,6 @@
         <h1 class="title">Order History</h1>
         <div class="navbar">
             <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
-            <a class="btn" href="{{ url_for('logout') }}">Logout</a>
         </div>
         {% if orders %}
         {% for order in orders %}
@@ -43,6 +42,9 @@
         {% else %}
         <p class="no-history">You have no order history.</p>
         {% endif %}
+        <a class="to-cart" href="{{ url_for('logout') }}">
+            <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+        </a>
     </div>
 </body>
 

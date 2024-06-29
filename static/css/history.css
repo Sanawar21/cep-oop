@@ -1,86 +1,97 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    color: #000000;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
 .title {
-    text-align: center;
-    color: #000000;
-    margin-bottom: 20px;
+  text-align: center;
+  color: #000000;
+  margin-bottom: 20px;
 }
 
 .order {
-    background-color:#2f8062d7;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-
+  background-color: #2f8062d7;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
 .order-id {
-    background-color: #000000;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    margin-top: 0;
-    display: inline-block;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  margin-top: 0;
+  display: inline-block;
 }
 
 .order-items {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 10px;
+  list-style-type: none;
+  padding: 0;
+  margin-top: 10px;
 }
 
 .order-item {
-    background-color:#2f8062d7;
-    padding: 10px;
-    margin-bottom: 5px;
-    border-radius: 5px;
+  background-color: #2f8062d7;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
 }
 
 .total-bill {
-    background-color: #000000;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 20px;
+  background-color: #000000;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 20px;
 }
 
 .no-history {
-    text-align: center;
-    color: #000000;
-    margin-top: 20px;
+  text-align: center;
+  color: #000000;
+  margin-top: 20px;
 }
 
 .btn {
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #000000;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-    margin: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #000000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 10px;
 }
 
 .btn:hover {
-    background-color: #333333;
+  background-color: #333333;
 }
 
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    background-color: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  background-color: #f7f7f7;
+}
+
+.to-cart {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+}
+.logout-logo {
+  width: 40px;
+  height: 40px;
+  margin-top: 5px;
 }
