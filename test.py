@@ -4,13 +4,13 @@ def decorator(func):
             "name": "Sanawar",
             "age": 19,
         }
-        func(*args, **kwargs)
+        func(*args, **kwargs, some_data=some_data)
 
     return wrapper
 
 
 @decorator
-def func():
+def func(some_data):
     print("I use some_data")
     print(some_data)
 
