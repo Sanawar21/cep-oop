@@ -49,7 +49,7 @@ def only_allow(account: Admin | User, types_: list[type] | type):
 
 def with_cart(func: Callable):
     """
-    Enables access to the cart of the current client, if any.
+    Enables access to the cart using `cart` variable of the current client, if any.
     """
     def wrapper(*args, **kwargs):
         cart = Cart.from_dict(session.get("cart"))
@@ -65,7 +65,7 @@ def with_cart(func: Callable):
 
 def with_account(func: Callable):
     """
-    Enables access to the account of the current client, if any.
+    Enables access to the account using `account` variable of the current client, if any.
     """
     def wrapper(*args, **kwargs):
         data = session.get("account")
