@@ -47,42 +47,6 @@ def only_allow(account: Admin | User, types_: list[type] | type):
     return decorator
 
 
-def with_cart(func: Callable):
-    """
-    Enables access to the cart using `cart` variable of the current client, if any.
-    """
-    def wrapper(*args, **kwargs):
-        cart = Cart.from_dict(session.get("cart"))
-        func(*args, **kwargs)
-        session["cart"] = cart.to_dict()
-
-    wrapper.__name__ = func.__name__
-    wrapper.__doc__ = func.__doc__
-    wrapper.__module__ = func.__module__
-
-    return wrapper
-
-
-def with_account(func: Callable):
-    """
-    Enables access to the account using `account` variable of the current client, if any.
-    """
-    def wrapper(*args, **kwargs):
-        data = session.get("account")
-        if data.get("type") == User.type:
-            account = User.from_dict(data)
-        elif data.get("type") == Admin.type:
-            account = Admin.from_dict(data)
-        func(*args, **kwargs)
-        session["account"] = account.to_dict()
-
-    wrapper.__name__ = func.__name__
-    wrapper.__doc__ = func.__doc__
-    wrapper.__module__ = func.__module__
-
-    return wrapper
-
-
 def check_privilege(account: Admin | User, privilege: str = None):
     """
     THIS DECORATOR IS OVERLOADED
@@ -175,3 +139,8 @@ class Paths:
     index_template = authentication_templates_base / "index.html"
     login_template = authentication_templates_base / "login.html"
     sign_up_template = authentication_templates_base / "signup.html"
+
+    # cache paths
+    cache_base = database / "cache"
+    accounts_cache = cache_base / "accounts.txt"
+    carts_cache = cache_base / "carts.txt"

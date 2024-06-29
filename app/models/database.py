@@ -5,6 +5,9 @@ Database handler for this project.
 from .product import Product
 from .account import User, Admin
 from .order import CodOrder, BankOrder
+from .cart import Cart
+
+from ..utils import Paths as paths
 
 import random
 
@@ -157,6 +160,78 @@ class Database:
         except FileNotFoundError:
             pass
         return orders
+
+    # cache
+
+    # cache carts
+    def read_cache_carts(self) -> list[Cart]:
+        with open(paths.carts_cache) as file:
+            return [Cart.from_dict(eval(line.strip())) for line in file.readlines()]
+
+    def write_cache_carts(self, carts: list[Cart]):
+        with open(paths.carts_cache, "w") as file:
+            for cart in carts:
+                file.write(f"{cart.to_dict}\n")
+
+    def write_cache_cart(self, cart: Cart):
+        with open(paths.carts_cache, "a") as file:
+            file.write(f"{cart.to_dict()}\n")
+
+    def get_cache_cart(self, uid: str):
+        for cart in self.read_cache_carts():
+            if cart.uid == uid:
+                return cart
+
+    def remove_cache_cart(self, uid: str):
+        carts = self.read_cache_carts()
+        for cart in carts:
+            if cart.uid == uid:
+                carts.remove(cart)
+                break
+        self.write_cache_carts(carts)
+
+    def update_cache_cart(self, cart: Cart):
+        self.remove_cache_cart(cart.uid)
+        self.write_cache_cart(cart)
+
+    # cache accounts
+
+    def read_cache_accounts(self) -> list[User | Admin]:
+        accounts = []
+        with open(paths.accounts_cache) as file:
+            for line in file.readlines():
+                data = eval(line.strip())
+                if data["type"] == User.type:
+                    accounts.append(User.from_dict(data))
+                elif data["type"] == Admin.type:
+                    accounts.append(Admin.from_dict(data))
+        return accounts
+
+    def write_cache_accounts(self, accounts: list[User | Admin]):
+        with open(paths.accounts_cache, "w") as file:
+            for account in accounts:
+                file.write(f"{account.to_dict}\n")
+
+    def write_cache_account(self, account: Admin | User):
+        with open(paths.accounts_cache, "a") as file:
+            file.write(f"{account.to_dict()}\n")
+
+    def get_cache_account(self, uid: str):
+        for account in self.read_cache_accounts():
+            if account.uid == uid:
+                return account
+
+    def remove_cache_account(self, uid: str):
+        accounts = self.read_cache_accounts()
+        for account in accounts:
+            if account.uid == uid:
+                accounts.remove(account)
+                break
+        self.write_cache_accounts(accounts)
+
+    def update_cache_account(self, account: Admin | User):
+        self.remove_cache_account(account.uid)
+        self.write_cache_account(account)
 
     # miscellaneous
 
