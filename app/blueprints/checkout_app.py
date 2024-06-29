@@ -1,5 +1,5 @@
 from .base_app import BaseApp
-from ..utils import only_allow, Paths as paths
+from ..utils import Paths as paths
 
 from ..models.cart import SessionCart
 from ..models.account import User
