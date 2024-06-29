@@ -1,7 +1,7 @@
 from .base_app import BaseApp
 from ..utils import Paths as paths
 
-from ..models.cart import Cart
+from ..models.cart import SessionCart
 from ..models.account import User
 
 from flask import request, render_template, jsonify
@@ -18,9 +18,8 @@ from flask import request, render_template, jsonify
 # TODO: Fix bug, products not showing up in order history.
 
 class UserApp(BaseApp):
-    def __init__(self, user: User):
+    def __init__(self):
         super().__init__(
-            user,
             "user",
             __name__,
             paths.templates,
@@ -28,7 +27,6 @@ class UserApp(BaseApp):
             # not working; changes made in html template paths instead
             statics=paths.static + "/.."
         )
-        self.cart_ = Cart(self.database.generate_uid())
 
     def add_routes(self):
 
@@ -50,6 +48,7 @@ class UserApp(BaseApp):
         per_page = 12
         products = self.database.get_products()
         filtered_products = products[:]
+        self.cart_ = SessionCart()
 
         if query:
             filtered_products = [

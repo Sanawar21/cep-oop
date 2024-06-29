@@ -1,7 +1,7 @@
 from .base_app import BaseApp
 from ..utils import only_allow, Paths as paths
 
-from ..models.cart import Cart
+from ..models.cart import SessionCart
 from ..models.account import User
 from ..models.order import CodOrder, BankOrder, BankDetails
 
@@ -9,9 +9,8 @@ from flask import request, render_template
 
 
 class CheckoutApp(BaseApp):
-    def __init__(self, user: User, cart: Cart):
+    def __init__(self):
         super().__init__(
-            user,
             "checkout",
             __name__,
             paths.templates,
@@ -19,10 +18,9 @@ class CheckoutApp(BaseApp):
             # not working; changes made in html template paths instead
             statics=paths.static + "/.."
         )
-        self.cart = cart
 
     def add_routes(self):
-        self.index = only_allow(self.account, [User])(self.index)
+        # self.index = only_allow(self.account, [User])(self.index)
         self.add_url_rule("/", view_func=self.index)
 
         all_routes = [
@@ -34,6 +32,7 @@ class CheckoutApp(BaseApp):
             self.register_route(route)
 
     def index(self):
+        self.cart = SessionCart()
         if self.account.bank_details:
             return render_template("./checkout/checkout_bank.html", user=self.account)
         else:
@@ -69,7 +68,7 @@ class CheckoutApp(BaseApp):
                 order = CodOrder(self.database.generate_uid(), self.cart,
                                  full_name, address, email, phone)
                 self.database.write_order(order, self.account.uid)
-                self.cart = Cart.null()
+                self.cart = SessionCart.null()
                 return render_template('./user_authentication/thankyou.html')
 
             else:
@@ -154,7 +153,7 @@ class CheckoutApp(BaseApp):
                               address, self.account.bank_details)
 
             self.database.write_order(order, self.account.uid)
-            self.cart = Cart.null()
+            self.cart = SessionCart.null()
             return render_template('./user_authentication/thankyou.html')
 
         return render_template('./checkout/checkout_bank.html', user=self.account)

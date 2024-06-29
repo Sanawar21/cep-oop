@@ -11,9 +11,8 @@ from flask import render_template, request, url_for
 
 class AdminApp(BaseApp):
 
-    def __init__(self, admin: Admin):
+    def __init__(self):
         super().__init__(
-            admin,
             "admin",
             __name__,
             paths.admin_templates_base,
@@ -21,7 +20,7 @@ class AdminApp(BaseApp):
         )
 
     def add_routes(self):
-        self.index = only_allow(self.account, [Admin])(self.index)
+        # self.index = only_allow(self.account, [Admin])(self.index)
         self.add_url_rule("/", view_func=self.index)
 
         all_routes = [

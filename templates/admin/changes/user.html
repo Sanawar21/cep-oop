@@ -13,14 +13,14 @@
             var modalId = "editProductModal_" + uid;
 
             // Construct dynamic form action URL
-            var formAction = "{{ url_for('edit_user', uid='') }}" + uid;
+            var formAction = "{{ url_for('admin.edit_user', uid='') }}" + uid;
 
             // Create modal HTML
             var modalHtml = `
         <!-- Edit Product Modal -->
         <div id="${modalId}" class="modal">
             <div style=" height:440px;margin-left: 400px; margin-top: 40px;" class="modal-content">
-                <a href="{{ url_for('admin', type='users') }}" class="close-button">&times;</a>
+                <a href="{{ url_for('admin.index', type='users') }}" class="close-button">&times;</a>
                 <h1 class="checkout-title">Edit Users</h1>
                 <form method="post" action="${formAction}" enctype="multipart/form-data">
                     <label class="form-label" for="username">Username</label>

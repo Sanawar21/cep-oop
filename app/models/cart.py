@@ -1,4 +1,5 @@
 from .product import Product
+from flask import session
 
 
 class Item:
@@ -33,10 +34,9 @@ class Cart:
     """
 
     def __init__(self, uid) -> None:
-        self.uid = uid
         # will save items as Item objects
         self.items: list[Item] = []
-        self.get_bill()
+        self.uid = uid
 
     def to_dict(self):
         return {
@@ -63,17 +63,17 @@ class Cart:
         """
         obj = cls.null()
         obj.uid = data["uid"]
-        obj.bill = data["bill"]
         obj.items = [
             Item(Product(attr["title"], attr["price"], attr["uid"]), attr["quantity"]) for attr in data["items"]
         ]
         return obj
 
-    def get_bill(self):
+    @property
+    def bill(self):
+        """Total bill of the current cart."""
         bill = 0
         for item in self.items:
             bill += item.product.price * item.quantity
-        self.bill = bill
         return bill
 
     def add_product(self, product: Product, quantity: int):
@@ -85,7 +85,6 @@ class Cart:
         else:
             index = self.items.index(product)
             self.items[index].quantity += quantity
-        self.get_bill()
 
     def remove_product(self, product: Product, quantity: int):
         """
@@ -100,4 +99,46 @@ class Cart:
             self.items.remove(in_items)
         else:
             in_items.quantity -= quantity
-        self.get_bill()
+
+
+class SessionCart(Cart):
+    """
+    For keeping track of the cart with respect to the current session.
+    """
+
+    def __init__(self) -> None:
+        data = session.get("cart")
+        if data:
+            self.items = [
+                Item(Product(attr["title"], attr["price"], attr["uid"]), attr["quantity"]) for attr in data["items"]
+            ]
+            self.uid = data["uid"]
+        else:
+            self.items = []
+            self.uid = None
+        self.update()
+
+    @property
+    def uid(self):
+        return self.__uid
+
+    @uid.setter
+    def uid(self, value):
+        self.__uid = value
+        self.update()
+
+    def update(self):
+        session["cart"] = self.to_dict()
+
+    @classmethod
+    def null(cls):
+        session["cart"] = None
+        return cls()
+
+    def add_product(self, product: Product, quantity: int):
+        super().add_product(product, quantity)
+        self.update()
+
+    def remove_product(self, product: Product, quantity: int):
+        super().remove_product(product, quantity)
+        self.update()
