@@ -1,8 +1,8 @@
 import os
 from .models.cart import Cart
-from .models.account import Privilege, Admin, User
+from .models.account import Privilege, Admin, User, Account
 
-from flask import redirect, url_for, render_template
+from flask import redirect, url_for, render_template, session
 from collections.abc import Callable
 
 
@@ -45,6 +45,42 @@ def only_allow(account: Admin | User, types_: list[type] | type):
 
         return wrapper
     return decorator
+
+
+def with_cart(func: Callable):
+    """
+    Enables access to the cart of the current client, if any.
+    """
+    def wrapper(*args, **kwargs):
+        cart = Cart.from_dict(session.get("cart"))
+        func(*args, **kwargs)
+        session["cart"] = cart.to_dict()
+
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
+    wrapper.__module__ = func.__module__
+
+    return wrapper
+
+
+def with_account(func: Callable):
+    """
+    Enables access to the account of the current client, if any.
+    """
+    def wrapper(*args, **kwargs):
+        data = session.get("account")
+        if data.get("type") == User.type:
+            account = User.from_dict(data)
+        elif data.get("type") == Admin.type:
+            account = Admin.from_dict(data)
+        func(*args, **kwargs)
+        session["account"] = account.to_dict()
+
+    wrapper.__name__ = func.__name__
+    wrapper.__doc__ = func.__doc__
+    wrapper.__module__ = func.__module__
+
+    return wrapper
 
 
 def check_privilege(account: Admin | User, privilege: str = None):
