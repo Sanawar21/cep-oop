@@ -139,8 +139,3 @@ class Paths:
     index_template = authentication_templates_base / "index.html"
     login_template = authentication_templates_base / "login.html"
     sign_up_template = authentication_templates_base / "signup.html"
-
-    # cache paths
-    cache_base = database / "cache"
-    accounts_cache = cache_base / "accounts.txt"
-    carts_cache = cache_base / "carts.txt"
