@@ -5,9 +5,6 @@ Database handler for this project.
 from .product import Product
 from .account import User, Admin
 from .order import CodOrder, BankOrder
-from .cart import Cart
-
-from ..utils import Paths as paths
 
 import random
 

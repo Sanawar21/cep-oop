@@ -1,8 +1,7 @@
 import os
-from .models.cart import Cart
-from .models.account import Privilege, Admin, User, Account
+from .models.account import Privilege, Admin, User
 
-from flask import redirect, url_for, render_template, session
+from flask import redirect, url_for, render_template
 from collections.abc import Callable
 
 

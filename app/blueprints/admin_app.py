@@ -1,7 +1,7 @@
 from ..models.product import Product
 from ..models.account import User, Admin, Privilege
 from ..models.bank_details import BankDetails
-from ..utils import only_allow, completion, failure, Paths as paths
+from ..utils import completion, failure, Paths as paths
 from .base_app import BaseApp
 
 import os

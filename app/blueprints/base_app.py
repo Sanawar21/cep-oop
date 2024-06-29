@@ -1,4 +1,4 @@
-from ..utils import only_allow, check_privilege, Paths as paths
+from ..utils import Paths as paths
 from ..models.database import Database
 from ..models.authenticate import Authenticator
 from ..models.account import Admin, User
