@@ -19,10 +19,10 @@
       {% if user.bank_details %}
       <label class="form-label" for="bank_name">Bank name</label>
       <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}"
-        disabled>
+        {{ "disabled" if not first_bank_checkout else "" }}>
       <label class="form-label" for="card_number">Card number</label>
       <input class="form-input" type="text" id="card_number" name="card_number"
-        value="{{user.bank_details.card_number}}" disabled>
+        value="{{user.bank_details.card_number}}" {{ "disabled" if not first_bank_checkout else "" }}>
       {% else %}
       <label class="form-label" for="bank_name">Bank name</label>
       <input class="form-input" type="text" id="bank_name" name="bank_name" value="{{user.bank_details.bank_name}}">

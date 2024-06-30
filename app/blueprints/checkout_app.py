@@ -115,6 +115,7 @@ class CheckoutApp(BaseApp):
                         './checkout/checkout_bank.html',
                         error="All fields are required.",
                         user=dummy_user,
+                        first_bank_checkout=self.account.bank_details == None,
                     )
 
                 if not self.account.check_pin(pin):
@@ -122,6 +123,7 @@ class CheckoutApp(BaseApp):
                         './checkout/checkout_bank.html',
                         error="Incorrect pin.",
                         user=dummy_user,
+                        first_bank_checkout=self.account.bank_details == None,
                     )
             else:
                 if not bank_name or not card_number or not pin or not address or not full_name:
@@ -129,12 +131,14 @@ class CheckoutApp(BaseApp):
                         "./checkout/checkout_bank.html",
                         error="All fields are required.",
                         user=dummy_user,
+                        first_bank_checkout=self.account.bank_details == None,
                     )
                 if not BankDetails.validate_card_number(card_number):
                     return render_template(
                         "./checkout/checkout_bank.html",
                         error="Card number must be 10 digits.",
                         user=dummy_user,
+                        first_bank_checkout=self.account.bank_details == None,
                     )
 
                 if not BankDetails.validate_pin(pin):
@@ -142,11 +146,15 @@ class CheckoutApp(BaseApp):
                         "./checkout/checkout_bank.html",
                         error="Pin must be 4 digit long.",
                         user=dummy_user,
+                        first_bank_checkout=self.account.bank_details == None,
                     )
 
             if not self.account.bank_details:
-                self.account.add_bank_details(bank_name, card_number, pin)
-                self.account = self.database.overwrite_account(self.account)
+                with_bank_details = self.account
+                with_bank_details.add_bank_details(bank_name, card_number, pin)
+                self.database.overwrite_account(
+                    with_bank_details)
+                self.account = with_bank_details
 
             # details are valid and usable
             order = BankOrder(self.database.generate_uid(), self.cart, self.account.full_name,
@@ -156,4 +164,4 @@ class CheckoutApp(BaseApp):
             self.cart = SessionCart.null()
             return render_template('./user_authentication/thankyou.html')
 
-        return render_template('./checkout/checkout_bank.html', user=self.account)
+        return render_template('./checkout/checkout_bank.html', user=self.account, first_bank_checkout=self.account.bank_details == None)
