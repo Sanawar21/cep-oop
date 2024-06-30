@@ -45,15 +45,14 @@
             <ul class="product-list">
                 {% for product in new_arrivals_list %}
                 <li class="product">
-                    <img class="product-image" src="../{{ product.image_path }}" alt="{{ product.title }}">
-                    <div class="product-info">
-                        <p class="product-name">{{ product.title }}</p>
-                        <p class="product-price">${{ product.price }}</p>
-                    </div>
-                    <form class="cart-form" action="{{ url_for('user.product_detail', product_id=product.uid) }}"
-                        method="get">
-                        <button class="cart-button" type="submit">View product</button>
-                    </form>
+                    <a style="text-decoration: none; color: inherit;"
+                        href="{{ url_for('user.product_detail', product_id=product.uid) }}">
+                        <img class="product-image" src="../{{ product.image_path }}" alt="{{ product.title }}">
+                        <div class="product-info">
+                            <p class="product-name">{{ product.title }}</p>
+                            <p class="product-price">${{ product.price }}</p>
+                        </div>
+                    </a>
                 </li>
                 {% endfor %}
             </ul>
@@ -68,15 +67,14 @@
                 {% if products %}
                 {% for product in products %}
                 <li class="product">
-                    <img class="product-image" src="../{{ product.image_path }}" alt="{{ product.title }}">
-                    <div class="product-info">
-                        <p class="product-name">{{ product.title }}</p>
-                        <p class="product-price">${{ product.price }}</p>
-                    </div>
-                    <form class="cart-form" action="{{ url_for('user.product_detail', product_id=product.uid) }}"
-                        method="get">
-                        <button class="cart-button" type="submit">View product</button>
-                    </form>
+                    <a style="text-decoration: none; color: inherit;"
+                        href="{{ url_for('user.product_detail', product_id=product.uid) }}">
+                        <img class="product-image" src="../{{ product.image_path }}" alt="{{ product.title }}">
+                        <div class="product-info">
+                            <p class="product-name">{{ product.title }}</p>
+                            <p class="product-price">${{ product.price }}</p>
+                        </div>
+                    </a>
                 </li>
                 {% endfor %}
                 {% else %}

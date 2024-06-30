@@ -14,8 +14,6 @@ from flask import request, render_template, jsonify
 # TODO: Remove log out button from cart display page, and do not use text buttons there as well
 # TODO: Remove log out from order history page.
 # TODO: Look at other websites for inspiration for text buttons.
-# TODO: Fix form ui design bug in checkout, form has not margin
-# TODO: On error with nobank account at checkout bank, the bank name and bank number fields become uneditable
 
 class UserApp(BaseApp):
     def __init__(self):
