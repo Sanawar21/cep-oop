@@ -85,6 +85,9 @@ class AdminApp(BaseApp):
             full_name = request.form.get("full_name")
             privileges = request.form.getlist('privileges[]')
 
+            if username:
+                username = username.lower()
+
             def render_with_error(error):
                 dummy_admin = Admin(None, username, password,
                                     full_name, privileges)
@@ -171,6 +174,9 @@ class AdminApp(BaseApp):
             password = request.form.get("password")
             full_name = request.form.get("full_name")
             address = request.form.get('address')
+
+            if username:
+                username = username.lower()
 
             bank_name = request.form.get("bank_name")
             card_number = request.form.get("card_number")
