@@ -21,10 +21,10 @@
                     .done(function (response) {
                         if (url.endsWith('add_to_cart')) {
                             button.text('Remove from Cart');
-                            form.attr('action', "{{ url_for('remove_from_cart') }}");
+                            form.attr('action', "{{ url_for('user.remove_from_cart') }}");
                         } else if (url.endsWith('remove_from_cart')) {
                             button.text('Add to Cart');
-                            form.attr('action', "{{ url_for('add_to_cart') }}");
+                            form.attr('action', "{{ url_for('user.add_to_cart') }}");
                         }
                     })
                     .fail(function () {
@@ -68,9 +68,10 @@
 
 
             <div class="button-container">
-                <a href="{{ url_for('products') }}">Back to products</a>
+                <a href="{{ url_for('user.products') }}">Back to products</a>
                 <form class="cart-form"
-                    action="{{ url_for('add_to_cart') if not in_cart else url_for('remove_from_cart') }}" method="post">
+                    action="{{ url_for('user.add_to_cart') if not in_cart else url_for('user.remove_from_cart') }}"
+                    method="post">
                     <input type="hidden" name="product_id" value="{{ product.uid }}">
                     <button class="add-to-cart" type="submit">{{ 'Add to cart' if not in_cart else 'Remove from cart'
                         }}</button>

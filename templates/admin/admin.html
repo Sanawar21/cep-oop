@@ -8,22 +8,23 @@
     <title>Admin Panel</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 
-       
+
 </head>
 
 <body>
     <div class="header">
         <h1>Admin Panel</h1>
-        <a href="{{url_for('logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png" alt="Logout Logo">
+        <a href="{{url_for('authenticate.logout')}}"> <img class="logout-logo" src="static/images/logoutLogo.png"
+                alt="Logout Logo">
         </a>
     </div>
 
     <div class="navbar">
-        <a href="{{ url_for('admin', type='products') }}"
+        <a href="{{ url_for('admin.index', type='products') }}"
             class="{% if type == 'products' %}active disabled{% endif %}">Products</a>
-        <a href="{{ url_for('admin', type='users') }}"
+        <a href="{{ url_for('admin.index', type='users') }}"
             class="{% if type == 'users' %}active disabled{% endif %}">Users</a>
-        <a href="{{ url_for('admin', type='admins') }}"
+        <a href="{{ url_for('admin.index', type='admins') }}"
             class="{% if type == 'admins' %}active disabled{% endif %}">Admins</a>
     </div>
 

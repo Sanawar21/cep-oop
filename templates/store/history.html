@@ -12,7 +12,8 @@
     <div class="container">
         <h1 class="title">Order History</h1>
         <div class="navbar">
-            <a class="btn" href="{{ url_for('products') }}">Back to Products</a>
+            <a class="btn" href="{{ url_for('user.products') }}">Back to Products</a>
+            <a class="btn" href="{{ url_for('authenticate.logout') }}">Logout</a>
         </div>
         {% if orders %}
         {% for order in orders %}
