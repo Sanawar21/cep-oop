@@ -7,6 +7,7 @@ body {
 }
 
 .container {
+    position: relative;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -86,3 +87,11 @@ p {
 .button-container button:hover {
     background-color:#42a983d7;
 }
+.arrow{
+    position: absolute;
+    top: 30px;
+    left: 20px;
+    width: 35px;
+    height: 35px;
+  
+  }

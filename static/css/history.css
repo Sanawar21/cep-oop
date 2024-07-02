@@ -95,3 +95,11 @@ body {
   height: 40px;
   margin-top: 5px;
 }
+
+.arrow {
+  position: absolute;
+  top: 45px;
+  left: 20px;
+  width: 35px;
+  height: 35px;
+}
