@@ -15,7 +15,7 @@
                 var form = $(this);
                 var button = form.find('.add-to-cart, .remove-from-cart');
                 var url = form.attr('action');
-                var formData = form.serialize();
+                var formData = form.serialize(); 
 
                 $.post(url, formData)
                     .done(function (response) {
@@ -36,6 +36,9 @@
 
 <body>
     <div class="container">
+        <a href="{{ url_for('user.products')}}">
+            <img src="../static/images/arrow.png" class="arrow">
+        </a>
         <h1>{{ product.title }}</h1>
         <img class="product-image" src="../{{product.image_path}}" alt="{{ product.title }}">
         <div class="product-info">
@@ -67,14 +70,14 @@
             </div>
 
 
+
             <div class="button-container">
-                <a href="{{ url_for('user.products') }}">Back to products</a>
                 <form class="cart-form"
-                    action="{{ url_for('user.add_to_cart') if not in_cart else url_for('user.remove_from_cart') }}"
+                    action="{{ url_for('user.add_to_cart')}}"
                     method="post">
+                    <button class="add-to-cart" type="submit">{{'Add to cart'}}</button>
+                    <input type="number" name="quantity" min="1" value="1" >
                     <input type="hidden" name="product_id" value="{{ product.uid }}">
-                    <button class="add-to-cart" type="submit">{{ 'Add to cart' if not in_cart else 'Remove from cart'
-                        }}</button>
                 </form>
             </div>
         </div>
