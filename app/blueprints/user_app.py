@@ -4,7 +4,7 @@ from ..utils import Paths as paths
 from ..models.cart import SessionCart
 from ..models.account import User
 
-from flask import request, render_template, jsonify
+from flask import request, render_template, jsonify, url_for
 
 
 # TODO: Fix add to cart and remove from cart buttons on product detail page @talha.
@@ -72,8 +72,15 @@ class UserApp(BaseApp):
 
     def product_detail(self, product_id):
         product = self.database.get_product(product_id)
-        in_cart = product in self.cart_.items
-        return render_template('./store/product_detail.html', product=product, in_cart=in_cart)
+
+        if request.args.get("method") == "POST":
+            cart = SessionCart()
+            quantity = int(request.args.get("quantity"))
+            cart.add_product(product, quantity)
+
+            return render_template("./admin/completion.html", action_detail="Product added successfully.", back_link=url_for("user.products"))
+
+        return render_template('./store/product_detail.html', product=product)
 
     def add_to_cart(self):
         product_uid = request.form.get('product_id')
