@@ -1,4 +1,4 @@
 from app.master import MasterApp
 
 if __name__ == "__main__":
-    MasterApp().run(debug=True)
+    MasterApp().run(host="0.0.0.0", debug=True)
