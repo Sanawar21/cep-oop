@@ -8,3 +8,4 @@
 {'type': 'user', 'uid': '2OCGpiuNVfaQ', 'username': 'nobank', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': None}
 {'type': 'user', 'uid': '34KossB7OXyl', 'username': 'sanawar', 'password': 'Sanawar21$$', 'full_name': 'Muhammad Sanawar', 'address': 'B-52, Block B, Kazimabad, Model Colony, Karachi.', 'bank_details': {'bank_name': 'HBL Islamic', 'card_number': '1231231231', 'pin': '1234'}}
 {'type': 'user', 'uid': '4bcZEXEQ08iJ', 'username': 'testuser', 'password': '12345678!', 'full_name': 'test user', 'address': 'NEDUET CIS', 'bank_details': {'bank_name': 'Bank Al Habib', 'card_number': '1234567890', 'pin': '1111'}}
+{'type': 'user', 'uid': 'ApmxwAbyvVOf', 'username': 'talhaadil4812', 'password': '12345678@', 'full_name': 'Talha Adil', 'address': 'asddas', 'bank_details': None}
