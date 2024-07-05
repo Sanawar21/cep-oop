@@ -68,7 +68,6 @@
         <p class="cart-total">Total Bill: ${{ cart.bill }}</p>
         <div class="cart-actions">
             <a href="{{ url_for('checkout.index') }}">Checkout</a>
-            <a href="{{ url_for('authenticate.logout') }}">Logout</a>
         </div>
         {% else %}
         <div style="display: flex; justify-content: center; align-items: center;">
