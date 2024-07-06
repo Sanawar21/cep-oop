@@ -4,7 +4,9 @@ Shopping app with GUI as a complex engineering project of OOP.
 Please do not manipulate the URL or use the browser arrows to navigate the website.
 
 Below are the credentials for the admin panel. You may type them in the 
-normal login page (`/login` route).<br />Username: superadmin<br />Password: superpassword
+normal login page (`/login` route).<br />
+_Username:_ **superadmin**<br />
+_Password:_ **superpassword** 
 
 This web application is also hosted at https://cep-oop.onrender.com/. You may have to wait one minute after requesting this URL.<br />
 The public github repository of this project can be found at https://github.com/Sanawar21/cep-oop
