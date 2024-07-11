@@ -17,5 +17,5 @@ class MasterApp(Flask):
         self.register_blueprint(CheckoutApp(), url_prefix="/checkout")
         self.register_error_handler(404, self.page_not_found)
 
-    def page_not_found(self):
+    def page_not_found(self, e):
         return render_template("./user_authentication/error404.html")
